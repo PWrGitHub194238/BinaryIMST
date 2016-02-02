@@ -19,19 +19,33 @@ private:
 
 	//************************************ PRIVATE CONSTANT FIELDS *************************************//
 
-	//***************************************** CLASS FIELDS *******************************************//
+	//************************************** PRIVATE CLASS FIELDS **************************************//
 
 	std::vector<EdgeIF*> edges;
 
+	std::vector<EdgeIF*>::const_iterator edgeIteratorBegin;
+
+	std::vector<EdgeIF*>::const_iterator edgeIteratorEnd;
+
 	//*************************************** PRIVATE FUNCTIONS ****************************************//
+
+protected:
+
+	//*********************************** PROTECTED CONSTANT FIELDS ************************************//
+
+	//************************************ PROTECTED CLASS FIELDS **************************************//
+
+	//************************************** PROTECTED FUNCTIONS ***************************************//
 
 public:
 
 	//************************************* PUBLIC CONSTANT FIELDS *************************************//
 
-	//**************************************** CONSTANT FIELDS *****************************************//
+	//************************************** PUBLIC CLASS FIELDS ***************************************//
 
 	//************************************ CONSTRUCTOR & DESTRUCTOR ************************************//
+
+	EdgeArray();
 
 	EdgeArray(EdgeCount numberOfEdges);
 
@@ -42,6 +56,14 @@ public:
 	void push_back(EdgeIF * const & edge);
 
 	EdgeCount size();
+
+	void begin();
+
+	bool hasNext();
+
+	bool hasNextNotHidden();
+
+	EdgeIF * next();
 
 	//*************************************** GETTERS & SETTERS ****************************************//
 

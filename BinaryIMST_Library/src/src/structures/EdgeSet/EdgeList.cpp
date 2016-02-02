@@ -9,6 +9,7 @@
 
 #include <log4cxx/helpers/messagebuffer.h>
 #include <log4cxx/logger.h>
+#include <memory>
 
 #include "../../../include/log/bundle/Bundle.hpp"
 #include "../../../include/log/utils/LogUtils.hpp"
@@ -17,22 +18,38 @@ const static log4cxx::LoggerPtr logger(log4cxx::Logger::getLogger("EdgeList"));
 
 //************************************ PRIVATE CONSTANT FIELDS *************************************//
 
-//***************************************** CLASS FIELDS *******************************************//
+//************************************** PRIVATE CLASS FIELDS **************************************//
 
 //*************************************** PRIVATE FUNCTIONS ****************************************//
 
+//*********************************** PROTECTED CONSTANT FIELDS ************************************//
+
+//************************************ PROTECTED CLASS FIELDS **************************************//
+
+//************************************** PROTECTED FUNCTIONS ***************************************//
+
 //************************************* PUBLIC CONSTANT FIELDS *************************************//
+
+//************************************** PUBLIC CLASS FIELDS ***************************************//
 
 //************************************ CONSTRUCTOR & DESTRUCTOR ************************************//
 
+EdgeList::EdgeList() :
+		EdgeSetIF() {
+}
+
 EdgeList::EdgeList(VertexCount numberOfEdges) :
 		EdgeSetIF(numberOfEdges) {
-	TRACE(logger, BundleKey::EDGE_LIST_CONSTRUCTOR, numberOfEdges)
+	TRACE(logger, BundleKey::EDGE_LIST_CONSTRUCTOR, numberOfEdges);
 	edges = std::list<EdgeIF*> { };
 }
 
 EdgeList::~EdgeList() {
-	// TODO Auto-generated destructor stub
+	begin();
+	while (hasNext()) {
+		delete next();
+	}
+	edges.clear();
 }
 
 //*************************************** PUBLIC FUNCTIONS *****************************************//
@@ -43,6 +60,27 @@ void EdgeList::push_back(EdgeIF * const & edge) {
 
 EdgeCount EdgeList::size() {
 	return (EdgeCount) edges.size();
+}
+
+void EdgeList::begin() {
+	this->edgeIteratorBegin = this->edges.begin();
+	this->edgeIteratorEnd = this->edges.end();
+}
+
+bool EdgeList::hasNext() {
+	return this->edgeIteratorBegin != this->edgeIteratorEnd;
+}
+
+bool EdgeList::hasNextNotHidden() {
+	while (this->edgeIteratorBegin != this->edgeIteratorEnd
+			|| (*this->edgeIteratorBegin)->isHidden()) {
+		++this->edgeIteratorBegin;
+	}
+	return this->edgeIteratorBegin != this->edgeIteratorEnd;
+}
+
+EdgeIF * EdgeList::next() {
+	return *(this->edgeIteratorBegin++);
 }
 
 //*************************************** GETTERS & SETTERS ****************************************//

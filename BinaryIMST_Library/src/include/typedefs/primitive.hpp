@@ -8,13 +8,11 @@
 #ifndef INCLUDE_TYPEDEFS_PRIMITIVE_HPP_
 #define INCLUDE_TYPEDEFS_PRIMITIVE_HPP_
 
-#include <string>
-
 typedef unsigned int VertexCount;
 
+typedef unsigned int VertexKey;
 
 typedef unsigned int EdgeCount;
-
 
 typedef unsigned int VertexIdx;
 typedef unsigned int EdgeIdx;

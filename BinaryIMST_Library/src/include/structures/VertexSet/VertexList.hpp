@@ -21,19 +21,33 @@ private:
 
 	//************************************ PRIVATE CONSTANT FIELDS *************************************//
 
-	//***************************************** CLASS FIELDS *******************************************//
+	//************************************** PRIVATE CLASS FIELDS **************************************//
 
 	std::list<VertexIF*> vertices;
 
+	std::list<VertexIF*>::const_iterator vertexIteratorBegin;
+
+	std::list<VertexIF*>::const_iterator vertexIteratorEnd;
+
 	//*************************************** PRIVATE FUNCTIONS ****************************************//
+
+protected:
+
+	//*********************************** PROTECTED CONSTANT FIELDS ************************************//
+
+	//************************************ PROTECTED CLASS FIELDS **************************************//
+
+	//************************************** PROTECTED FUNCTIONS ***************************************//
 
 public:
 
 	//************************************* PUBLIC CONSTANT FIELDS *************************************//
 
-	//**************************************** CONSTANT FIELDS *****************************************//
+	//************************************** PUBLIC CLASS FIELDS ***************************************//
 
 	//************************************ CONSTRUCTOR & DESTRUCTOR ************************************//
+
+	VertexList();
 
 	VertexList(VertexCount numberOfVertices);
 
@@ -46,6 +60,12 @@ public:
 	VertexIF * getElementAt(VertexIdx const vertexIdx);
 
 	VertexCount size();
+
+	void begin();
+
+	bool hasNext();
+
+	VertexIF * next();
 
 	//*************************************** GETTERS & SETTERS ****************************************//
 

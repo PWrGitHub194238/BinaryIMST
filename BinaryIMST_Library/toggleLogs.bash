@@ -52,10 +52,10 @@ INCLUDE_LOGGER='#include <(log4cxx\/.*)>'
 INCLUDE_LOG_BUNDLE='#include ".*?\/log\/bundle\/.*"'
 INCLUDE_LOG_UTILS='#include ".*?\/log\/utils\/.*"'
 
-LOG_POINTER='(const |const static |static const )?log4cxx::LoggerPtr \w*?\(\s*log4cxx::Logger::getLogger\(\s*".*?"\)\);'
-CONFIG_LOG='LogUtils::configureLog\(\s?".+?[.].+?"\);'
+LOG_POINTER='(const |const static |static const )?log4cxx::LoggerPtr \w*?\(\s*log4cxx::Logger::getLogger\(\s*".*?"\)\)\s*?;'
+CONFIG_LOG='LogUtils::configureLog\(\s?".+?[.].+?"\)\s*?;'
 	
-LOG_LINES='((TRACE|DEBUG|INFO|WARN|ERROR|FATAL)\(\s*.+?,(.|\s)*?\));'
+LOG_LINES='((TRACE|DEBUG|INFO|WARN|ERROR|FATAL)(_NOARG)?\(\s*.+?,(.|\s)*?\))\s*?;'
 COMMENT_START='\/\*'
 COMMENT_END='\*\/'
 

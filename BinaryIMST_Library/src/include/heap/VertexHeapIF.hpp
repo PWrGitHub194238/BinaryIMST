@@ -1,31 +1,25 @@
 /*
- * EdgeList.hpp
+ * VertexHeapIF.hpp
  *
- *  Created on: 2 sty 2016
+ *  Created on: 1 sty 2016
  *      Author: tomasz
  */
 
-#ifndef INCLUDE_STRUCTURES_EDGESET_EDGELIST_HPP_
-#define INCLUDE_STRUCTURES_EDGESET_EDGELIST_HPP_
+#ifndef INCLUDE_VERTEX_HEAP_HEAPIF_HPP_
+#define INCLUDE_VERTEX_HEAP_HEAPIF_HPP_
 
-#include <list>
+#include "../typedefs/primitive.hpp"
 
-#include "../../typedefs/primitive.hpp"
-#include "../EdgeIF.hpp"
-#include "../EdgeSetIF.hpp"
+class VertexHeapItem;
 
-class EdgeList: public EdgeSetIF {
+class VertexIF;
+
+class VertexHeapIF {
 private:
 
 	//************************************ PRIVATE CONSTANT FIELDS *************************************//
 
 	//************************************** PRIVATE CLASS FIELDS **************************************//
-
-	std::list<EdgeIF*> edges;
-
-	std::list<EdgeIF*>::const_iterator edgeIteratorBegin;
-
-	std::list<EdgeIF*>::const_iterator edgeIteratorEnd;
 
 	//*************************************** PRIVATE FUNCTIONS ****************************************//
 
@@ -45,28 +39,38 @@ public:
 
 	//************************************ CONSTRUCTOR & DESTRUCTOR ************************************//
 
-	EdgeList();
-
-	EdgeList(EdgeCount numberOfEdges);
-
-	virtual ~EdgeList();
+	virtual ~VertexHeapIF();
 
 	//*************************************** PUBLIC FUNCTIONS *****************************************//
 
-	void push_back(EdgeIF * const & edge);
+	virtual bool compare(VertexHeapItem * const vertexU,
+			VertexHeapItem * const vertexV);
 
-	EdgeCount size();
+	virtual void push(VertexHeapItem * const vertex) = 0;
 
-	void begin();
+	virtual VertexIF * pop() = 0;
 
-	bool hasNext();
+	virtual VertexHeapItem * peek() = 0;
 
-	bool hasNextNotHidden();
+	virtual void removeTop() = 0;
 
-	EdgeIF * next();
+	virtual void increaseKey(VertexHeapItem * heapItem, VertexKey newKey) = 0;
+
+	virtual void decreaseKey(VertexHeapItem * heapItem, VertexKey newKey) = 0;
+
+	/** Zwraca item w kompcu lub nullptr, jeśli nie ma
+	 *
+	 * @param vertexId
+	 * @return
+	 */
+	virtual VertexHeapItem * getItem(VertexIdx const vertexId) = 0;
+
+	virtual bool isVertexInsideHeap(VertexIF * const vertex) = 0;
+
+	virtual bool isVertexInsideHeap(VertexIdx const vertexId) = 0;
 
 	//*************************************** GETTERS & SETTERS ****************************************//
 
 };
 
-#endif /* INCLUDE_STRUCTURES_EDGESET_EDGELIST_HPP_ */
+#endif /* INCLUDE_VERTEX_HEAP_HEAPIF_HPP_ */

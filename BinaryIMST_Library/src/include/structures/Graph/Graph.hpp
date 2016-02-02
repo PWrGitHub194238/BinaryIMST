@@ -16,17 +16,26 @@ private:
 
 	//************************************ PRIVATE CONSTANT FIELDS *************************************//
 
-	//***************************************** CLASS FIELDS *******************************************//
-
-	EdgeSetIF * edgesWithRelaxedCost;
+	//************************************** PRIVATE CLASS FIELDS **************************************//
 
 	//*************************************** PRIVATE FUNCTIONS ****************************************//
+
+	void connectUndirectedEdgeToVertex(EdgeIF * const edge,
+			VertexIF * const vertex);
+
+protected:
+
+	//*********************************** PROTECTED CONSTANT FIELDS ************************************//
+
+	//************************************ PROTECTED CLASS FIELDS **************************************//
+
+	//************************************** PROTECTED FUNCTIONS ***************************************//
 
 public:
 
 	//************************************* PUBLIC CONSTANT FIELDS *************************************//
 
-	//**************************************** CONSTANT FIELDS *****************************************//
+	//************************************** PUBLIC CLASS FIELDS ***************************************//
 
 	//************************************ CONSTRUCTOR & DESTRUCTOR ************************************//
 
@@ -38,9 +47,7 @@ public:
 
 	//*************************************** PUBLIC FUNCTIONS *****************************************//
 
-	void addVertex(VertexIdx const vertexIdxV);
-
-	void addEdge(VertexIdx const vertexIdxV, VertexIdx const vertexIdxU,
+	void addEdge(VertexIdx const vertexIdxU, VertexIdx const vertexIdxV,
 			EdgeCost const edgeCost);
 
 	//*************************************** GETTERS & SETTERS ****************************************//

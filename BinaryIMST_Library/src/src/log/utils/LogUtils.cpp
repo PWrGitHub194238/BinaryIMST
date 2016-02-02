@@ -8,9 +8,10 @@
 #include "../../../include/log/utils/LogUtils.hpp"
 
 #include <log4cxx/xml/domconfigurator.h>
-#include <stdarg.h>     /* va_list, va_start, va_arg, va_end */
-#include <cstdio>
+#include <iostream>
+#include <memory>
 
+#include "../../../include/log/bundle/Bundle.hpp"
 #include "../../../include/utils/StringUtils.hpp"
 
 namespace LogUtils {
@@ -21,17 +22,8 @@ void configureLog(const char* xmlFileConfig) {
 
 namespace impl {
 
-const char* getBundle(BundleKey bundleKey) {
+std::unique_ptr<char[]> getBundle(BundleKey bundleKey) {
 	return StringUtils::parseStringFormatSpecifiers(dictionary[bundleKey]);
-}
-
-const char* formatBundle(const char* bundle, ...) {
-	va_list va { };
-	static char formatted[LOG_BUFFER_SIZE] { };
-	va_start(va, bundle);
-	vsnprintf(formatted, LOG_BUFFER_SIZE, bundle, va);
-	va_end(va);
-	return formatted;
 }
 
 }

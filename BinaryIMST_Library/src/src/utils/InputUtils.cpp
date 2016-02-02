@@ -14,7 +14,6 @@
 #include <log4cxx/helpers/messagebuffer.h>
 #include <log4cxx/logger.h>
 #include <cstddef>
-#include <cstdio>
 
 #include "../../include/exp/InputExceptions.hpp"
 #include "../../include/log/bundle/Bundle.hpp"
@@ -41,9 +40,33 @@ GraphIF * InputUtils::readGraph(char const * filename, InputMode inputMode) {
 GraphIF * InputUtils::Impl::readGraphWithoutFileMappping(
 		char const * const filename) {
 	GraphIF * graph { };
-	VertexSetIF * vertexSet { };
-	EdgeSetIF * edgeSet { };
-
+	FILE * dataFile = std::fopen(filename, "r");
+	if (dataFile == NULL) {
+		ERROR(logger, BundleKey::CANNOT_OPEN_FILE, filename);
+	} else {
+		TRACE(logger, BundleKey::START_READ_FILE_DATA, filename);
+		while (!feof(dataFile)) {
+			switch (fgetc(dataFile)) {
+			case InputUtils::Impl::COMMENT_LINE:
+				INFO_NOARG(logger,
+						BundleKey::IGNORING_COMMENT_LINE_WHILE_READING)
+				;
+				if (fscanf(dataFile, InputUtils::Impl::COMMENT_LINE_PATTERN)
+						!= InputUtils::Impl::COMMENT_LINE_PATTERN_ARGS) {
+					WARN_NOARG(logger,
+							BundleKey::IGNORING_UNRECOGNISED_LINE_WHILE_READING);
+				}
+				break;
+			case InputUtils::Impl::PROBLEM_DEF_LINE:
+				graph = InputUtils::Impl::createGraphFromFile(dataFile);
+				break;
+			case InputUtils::Impl::ARC_DEF_LINE:
+				InputUtils::Impl::addEdgeFromFile(dataFile, graph);
+				break;
+			}
+		}
+		fclose(dataFile);
+	}
 	return graph;
 }
 
@@ -70,6 +93,7 @@ GraphIF * InputUtils::Impl::readGraphWithFileMappping(
 		switch (input_stream.get()) {
 		case InputUtils::Impl::COMMENT_LINE:
 			INFO_NOARG(logger, BundleKey::IGNORING_COMMENT_LINE_WHILE_READING)
+			;
 			input_stream.ignore(InputUtils::Impl::MAX_STREAM_SIZE, '\n');
 			break;
 		case InputUtils::Impl::PROBLEM_DEF_LINE:
@@ -83,6 +107,7 @@ GraphIF * InputUtils::Impl::readGraphWithFileMappping(
 		default:
 			WARN_NOARG(logger,
 					BundleKey::IGNORING_UNRECOGNISED_LINE_WHILE_READING)
+			;
 			break;
 		}
 	}
@@ -90,16 +115,44 @@ GraphIF * InputUtils::Impl::readGraphWithFileMappping(
 	return graph;
 }
 
+GraphIF * InputUtils::Impl::createGraphFromFile(FILE * const dataFile)
+		throw (InputExceptions::InvalidProblemRead) {
+	VertexCount vCount { };
+	EdgeCount eCount { };
+	if (fscanf(dataFile, InputUtils::Impl::PROBLEM_DEF_LINE_PATTERN.get(), &vCount,
+			&eCount) != InputUtils::Impl::PROBLEM_DEF_LINE_PATTERN_ARGS) {
+		FATAL_NOARG(logger, BundleKey::INVALID_PROBLEM_LINE_READ);
+		throw InputExceptions::InvalidProblemRead();
+	}
+	INFO(logger, BundleKey::MST_PROBLEM_READ, vCount, eCount);
+	return new GraphImpl { vCount, eCount };
+}
+
 GraphIF * InputUtils::Impl::createGraphFromBuffer(char * const buffer)
 		throw (InputExceptions::InvalidProblemRead) {
 	VertexCount vCount { };
 	EdgeCount eCount { };
-	if (sscanf(buffer, InputUtils::Impl::PROBLEM_DEF_LINE_PATTERN, &vCount,
+	if (sscanf(buffer, InputUtils::Impl::PROBLEM_DEF_LINE_PATTERN.get(), &vCount,
 			&eCount) != InputUtils::Impl::PROBLEM_DEF_LINE_PATTERN_ARGS) {
-		FATAL_NOARG(logger, BundleKey::INVALID_PROBLEM_LINE_READ)
+		FATAL_NOARG(logger, BundleKey::INVALID_PROBLEM_LINE_READ);
 		throw InputExceptions::InvalidProblemRead();
 	}
+	INFO(logger, BundleKey::MST_PROBLEM_READ, vCount, eCount);
 	return new GraphImpl { vCount, eCount };
+}
+
+void InputUtils::Impl::addEdgeFromFile(FILE * const dataFile,
+		GraphIF * const graph) throw (InputExceptions::InvalidArcRead) {
+	VertexIdx vertexU { };
+	VertexIdx vertexV { };
+	EdgeCost eCost { };
+	if (fscanf(dataFile, InputUtils::Impl::ARC_DEF_LINE_PATTERN.get(), &vertexU,
+			&vertexV, &eCost) != InputUtils::Impl::ARC_DEF_LINE_PATTERN_ARGS) {
+		FATAL_NOARG(logger, BundleKey::INVALID_ARC_LINE_READ);
+		throw InputExceptions::InvalidArcRead();
+	}
+	INFO(logger, BundleKey::ARC_DEF_READ, vertexU, vertexV, eCost);
+	graph->addEdge(vertexU, vertexV, eCost);
 }
 
 void InputUtils::Impl::addEdgeFromBuffer(char * const buffer,
@@ -107,10 +160,11 @@ void InputUtils::Impl::addEdgeFromBuffer(char * const buffer,
 	VertexIdx vertexU { };
 	VertexIdx vertexV { };
 	EdgeCost eCost { };
-	if (sscanf(buffer, InputUtils::Impl::ARC_DEF_LINE_PATTERN, &vertexU,
+	if (sscanf(buffer, InputUtils::Impl::ARC_DEF_LINE_PATTERN.get(), &vertexU,
 			&vertexV, &eCost) != InputUtils::Impl::ARC_DEF_LINE_PATTERN_ARGS) {
-		FATAL_NOARG(logger, BundleKey::INVALID_ARC_LINE_READ)
+		FATAL_NOARG(logger, BundleKey::INVALID_ARC_LINE_READ);
 		throw InputExceptions::InvalidArcRead();
 	}
+	INFO(logger, BundleKey::ARC_DEF_READ, vertexU, vertexV, eCost);
 	graph->addEdge(vertexU, vertexV, eCost);
 }

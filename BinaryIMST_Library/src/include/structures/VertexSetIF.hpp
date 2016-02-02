@@ -9,35 +9,43 @@
 #define INCLUDE_STRUCTURES_VERTEXSETIF_HPP_
 
 #include "../typedefs/primitive.hpp"
+#include "Iterable.hpp"
+#include "VertexIF.hpp"
 
 class VertexIF;
 
-class VertexSetIF {
+class VertexSetIF: public Iterable<VertexIF *> {
 private:
 
 	//************************************ PRIVATE CONSTANT FIELDS *************************************//
 
-	//***************************************** CLASS FIELDS *******************************************//
+	//************************************** PRIVATE CLASS FIELDS **************************************//
+
+	//*************************************** PRIVATE FUNCTIONS ****************************************//
+
+protected:
+
+	//*********************************** PROTECTED CONSTANT FIELDS ************************************//
+
+	//************************************ PROTECTED CLASS FIELDS **************************************//
 
 	VertexCount numberOfVertices;
 
-	//*************************************** PRIVATE FUNCTIONS ****************************************//
+	//************************************** PROTECTED FUNCTIONS ***************************************//
 
 public:
 
 	//************************************* PUBLIC CONSTANT FIELDS *************************************//
 
-	//**************************************** CONSTANT FIELDS *****************************************//
+	//************************************** PUBLIC CLASS FIELDS ***************************************//
 
 	//************************************ CONSTRUCTOR & DESTRUCTOR ************************************//
 
-	VertexSetIF(VertexCount numberOfVertices) {
-		this->numberOfVertices = numberOfVertices;
-	}
+	VertexSetIF();
 
-	// Empty virtual destructor for proper cleanup
-	virtual ~VertexSetIF() {
-	}
+	VertexSetIF(VertexCount numberOfVertices);
+
+	virtual ~VertexSetIF();
 
 	//*************************************** PUBLIC FUNCTIONS *****************************************//
 
@@ -46,6 +54,12 @@ public:
 	virtual VertexIF * getElementAt(VertexIdx const vertexIdx) = 0;
 
 	virtual VertexCount size() = 0;
+
+	virtual void begin() = 0;
+
+	virtual bool hasNext() = 0;
+
+	virtual VertexIF * next() = 0;
 
 	//*************************************** GETTERS & SETTERS ****************************************//
 

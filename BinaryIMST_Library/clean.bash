@@ -13,7 +13,8 @@ appName="BinaryIMST_Library"
 #
 function pasreBash() {
 	if [[ $# -eq 0 ]]; then
-		cleanAll
+		printHelp
+		exit;
 	fi
 	while [[ $# > 0 ]]
 	do

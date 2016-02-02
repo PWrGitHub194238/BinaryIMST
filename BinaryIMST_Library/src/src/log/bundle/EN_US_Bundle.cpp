@@ -7,10 +7,39 @@
 
 const char* dictionary[] = {
 
+	//*********************************** FibonacciHeap ***********************************//
+	//**************** Trace ****************//
+	// VERTEX_PUSHED_INTO_FIB_HEAP
+	"Vertex: %s has been pushed into Fibonacci heap implementation.",
+
+	//**************** Debug ****************//
+	//**************** Info *****************//
+	//**************** Warn *****************//
+	//**************** Error ****************//
+	//**************** Fatal ****************//
+
+
+	//*********************************** GraphIF ***********************************//
+	//**************** Trace ****************//
+	// GRAPH_IF_CONSTRUCTOR,
+	"Calling 'GraphIF' constructor with %VertexCount% vertices and %EdgeCount% edges.",
+
+	//**************** Debug ****************//
+	//**************** Info *****************//
+	// VERTEX_TO_GRAPH_IF_ADDED
+	"Vertex with idx: %VertexIdx% has been added to graph.",
+	// EDGE_TO_GRAPH_IF_ADDED,
+	"Edge between vertices: (%VertexIdx%, %VertexIdx%) with cost: %EdgeCost% has been added to graph.",
+
+	//**************** Warn *****************//
+	//**************** Error ****************//
+	//**************** Fatal ****************//
+
+
 	//*********************************** Graph ***********************************//
 	//**************** Trace ****************//
 	// GRAPH_CONSTRUCTOR,
-	"Implementation of 'GraphIF' (Graph) has been created with %VertexCount% number of vertices and %EdgeCount% number of edges.",
+	"Implementation of 'GraphIF' (Graph) has been created with %VertexCount% vertices and %EdgeCount% edges.",
 
 	//**************** Debug ****************//
 
@@ -25,7 +54,7 @@ const char* dictionary[] = {
 	//*********************************** EdgeArray ***********************************//
 	//**************** Trace ****************//
 	// EDGE_ARRAY_CONSTRUCTOR,
-	"Implementation of 'EdgeSetIF' (EdgeArray) has been created with %EdgeCount% number of edges.",
+	"Implementation of 'EdgeSetIF' (EdgeArray) has been created with given number of edges: %EdgeCount%.",
 
 	//**************** Debug ****************//
 
@@ -54,12 +83,19 @@ const char* dictionary[] = {
 
 	//*********************************** InputUtils ***********************************//
 	//**************** Trace ****************//
+	// START_READ_FILE_DATA
+	"File '%s' has been opened.",
 
 	//**************** Debug ****************//
 
 	//**************** Info *****************//
 	// IGNORING_COMMENT_LINE_WHILE_READING
 	"The program encountered a comment line. Line has been skipped.",
+	// MST_PROBLEM_READ
+	"Now reading graph data for MST problem with given number of vertices: %VertexCount% and given number of edges: %EdgeCount%...",
+	// ARC_DEF_READ
+	"Edge between vertices: (%VertexIdx%, %VertexIdx%) with cost: %EdgeCost% has been read.",
+
 
 	//**************** Warn *****************//
 	// IGNORING_UNRECOGNISED_LINE_WHILE_READING
@@ -68,10 +104,12 @@ const char* dictionary[] = {
 	//**************** Error ****************//
 
 	//**************** Fatal ****************//
+	// CANNOT_OPEN_FILE
+	"Cannot open file: '%s'.",
 	// INVALID_PROBLEM_LINE_READ
-	"Unexpected line pattern while reading problem line. Graph cannot be read from this file."
+	"Unexpected line pattern while reading problem line. Graph cannot be read from this file.",
 	// INVALID_ARC_LINE_READ
-	"Unexpected line pattern while reading arc line. Graph cannot be read from this file."
+	"Unexpected line pattern while reading arc line. Graph cannot be read from this file.",
 
 
 	//*********************************** Test cases ***********************************//

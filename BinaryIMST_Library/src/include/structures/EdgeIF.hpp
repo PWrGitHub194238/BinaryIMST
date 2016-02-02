@@ -8,7 +8,7 @@
 #ifndef INCLUDE_STRUCTURES_EDGEIF_HPP_
 #define INCLUDE_STRUCTURES_EDGEIF_HPP_
 
-#include <utility>
+#include <string>
 
 #include "../typedefs/primitive.hpp"
 #include "../typedefs/struct.hpp"
@@ -20,36 +20,59 @@ private:
 
 	//************************************ PRIVATE CONSTANT FIELDS *************************************//
 
-	//***************************************** CLASS FIELDS *******************************************//
+	//************************************** PRIVATE CLASS FIELDS **************************************//
+
+	//*************************************** PRIVATE FUNCTIONS ****************************************//
+
+protected:
+
+	//*********************************** PROTECTED CONSTANT FIELDS ************************************//
+
+	//************************************ PROTECTED CLASS FIELDS **************************************//
 
 	VertexPair edgeConnection;
 
 	EdgeCost edgeCost;
 
-	//*************************************** PRIVATE FUNCTIONS ****************************************//
+	/** MST in graph means that every edge that is not in MST is hidden.
+	 *
+	 */
+	bool hidden;
+
+	//************************************** PROTECTED FUNCTIONS ***************************************//
 
 public:
 
 	//************************************* PUBLIC CONSTANT FIELDS *************************************//
 
-	//**************************************** CONSTANT FIELDS *****************************************//
+	//************************************** PUBLIC CLASS FIELDS ***************************************//
 
 	//************************************ CONSTRUCTOR & DESTRUCTOR ************************************//
 
-	EdgeIF(VertexPair const & edgeConnections, EdgeCost const edgeCost) {
-		this->edgeConnection = edgeConnections;
-		this->edgeCost = edgeCost;
-	}
+	EdgeIF(VertexPair const & edgeConnections, EdgeCost const edgeCost,
+			bool isHidden);
 
-	// Empty virtual destructor for proper cleanup
-	virtual ~EdgeIF() {
+	EdgeIF(VertexPair const & edgeConnections, EdgeCost const edgeCost);
 
-	}
+	virtual ~EdgeIF();
 
 	//*************************************** PUBLIC FUNCTIONS *****************************************//
 
+	void hide();
+
+	void show();
+
+	virtual std::string toString();
+
 	//*************************************** GETTERS & SETTERS ****************************************//
 
+	EdgeCost getEdgeCost() const;
+
+	VertexIF * getSourceVertex() const;
+
+	VertexIF * getTargetVertex() const;
+
+	bool isHidden() const;
 };
 
 #endif /* INCLUDE_STRUCTURES_EDGEIF_HPP_ */

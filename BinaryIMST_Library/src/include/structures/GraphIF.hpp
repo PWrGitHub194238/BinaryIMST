@@ -8,13 +8,8 @@
 #ifndef INCLUDE_STRUCTURES_GRAPHIF_HPP_
 #define INCLUDE_STRUCTURES_GRAPHIF_HPP_
 
-#include "../typedefs/struct.hpp"
-#include "EdgeInclude.hpp"
-#include "EdgeSetIF.hpp"
-#include "EdgeSetInclude.hpp"
-#include "VertexInclude.hpp"
-#include "VertexSetIF.hpp"
-#include "VertexSetInclude.hpp"
+class EdgeIF;
+class VertexIF;
 
 class EdgeSetIF;
 class VertexSetIF;
@@ -26,51 +21,67 @@ private:
 
 	//************************************ PRIVATE CONSTANT FIELDS *************************************//
 
-	//***************************************** CLASS FIELDS *******************************************//
+	//************************************** PRIVATE CLASS FIELDS **************************************//
+
+	//*************************************** PRIVATE FUNCTIONS ****************************************//
+
+protected:
+
+	//*********************************** PROTECTED CONSTANT FIELDS ************************************//
+
+	//************************************ PROTECTED CLASS FIELDS **************************************//
 
 	VertexSetIF * vertexSet;
 	EdgeSetIF * edgeSet;
 
-	//*************************************** PRIVATE FUNCTIONS ****************************************//
+	//************************************** PROTECTED FUNCTIONS ***************************************//
 
 public:
 
 	//************************************* PUBLIC CONSTANT FIELDS *************************************//
 
-	//**************************************** CONSTANT FIELDS *****************************************//
+	//************************************** PUBLIC CLASS FIELDS ***************************************//
 
 	//************************************ CONSTRUCTOR & DESTRUCTOR ************************************//
 
-	GraphIF(VertexCount const vertexCount, EdgeCount const edgeCount) {
-		VertexCount i { 0 };
-		this->vertexSet = new VertexSetImpl { vertexCount };
-		this->edgeSet = new EdgeSetImpl { edgeCount };
-		for (; i < vertexCount; i += 1) {
-			this->addVertex(i);
-		}
-	}
+	GraphIF(VertexCount const vertexCount, EdgeCount const edgeCount);
 
-	virtual ~GraphIF() {
-	}
+	virtual ~GraphIF();
 
 	//*************************************** PUBLIC FUNCTIONS *****************************************//
 
-	void addVertex(VertexIdx const vertexIdx) {
-		vertexSet->push_back(new VertexImpl { vertexIdx });
-	}
+	void addVertex(VertexIdx const vertexIdx);
 
-	void addEdge(VertexIdx const vertexIdxU, VertexIdx const vertexIdxV,
-			EdgeCost const edgeCost) {
-		edgeSet->push_back(
-				new EdgeImpl { VertexPair { this->getVertexByIdx(vertexIdxU),
-						this->getVertexByIdx(vertexIdxV) }, edgeCost });
-	}
+	/** Czy dodajemy do grafu skierowanego czy nie, dlatego pure virtual
+	 *
+	 * @param vertexIdxU
+	 * @param vertexIdxV
+	 * @param edgeCost
+	 */
+	virtual void addEdge(VertexIdx const vertexIdxU, VertexIdx const vertexIdxV,
+			EdgeCost const edgeCost) = 0;
 
-	VertexIF * getVertexByIdx(VertexIdx const vertexIdx) {
-		return this->vertexSet->getElementAt(vertexIdx);
-	}
+	VertexIF * getVertexByIdx(VertexIdx const vertexIdx);
+
+	void beginVertex();
+
+	bool hasNextVertex();
+
+	VertexIF * nextVertex();
+
+	void beginEdge();
+
+	bool hasNextEdge();
+
+	EdgeIF * nextEdge();
+
+	void hideAllEdges();
 
 	//*************************************** GETTERS & SETTERS ****************************************//
+
+	EdgeCount getNumberOfEdges() const;
+
+	VertexCount getNumberOfVertices() const;
 
 };
 
