@@ -1,0 +1,1838 @@
+<log4j:event logger="InputUtils" timestamp="1455461667712" level="TRACE" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[File '/home/tomasz/workspace/va.json' has been opened.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::readGraph" file="../src/src/utils/InputUtils.cpp" line="156"/>
+</log4j:event>
+
+<log4j:event logger="GraphIF" timestamp="1455461667712" level="TRACE" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Calling 'GraphIF' constructor with 7 vertices and 11 edges.]]></log4j:message>
+<log4j:locationInfo class="GraphIF" method="GraphIF" file="../src/src/structures/GraphIF.cpp" line="39"/>
+</log4j:event>
+
+<log4j:event logger="EdgeArray" timestamp="1455461667712" level="TRACE" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Implementation of 'EdgeSetIF' (EdgeArray) has been created with given number of edges: 11.]]></log4j:message>
+<log4j:locationInfo class="EdgeArray" method="EdgeArray" file="../src/src/structures/EdgeSet/EdgeArray.cpp" line="35"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455461667713" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Implementation of 'GraphIF' (Graph) has been created with 7 vertices and 11 edges.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="Graph" file="../src/src/structures/Graph/Graph.cpp" line="41"/>
+</log4j:event>
+
+<log4j:event logger="GraphIF" timestamp="1455461667713" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Vertex with idx: 0 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="GraphIF" method="addVertex" file="../src/src/structures/GraphIF.cpp" line="68"/>
+</log4j:event>
+
+<log4j:event logger="GraphIF" timestamp="1455461667713" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Vertex with idx: 1 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="GraphIF" method="addVertex" file="../src/src/structures/GraphIF.cpp" line="68"/>
+</log4j:event>
+
+<log4j:event logger="GraphIF" timestamp="1455461667713" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Vertex with idx: 2 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="GraphIF" method="addVertex" file="../src/src/structures/GraphIF.cpp" line="68"/>
+</log4j:event>
+
+<log4j:event logger="GraphIF" timestamp="1455461667713" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Vertex with idx: 3 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="GraphIF" method="addVertex" file="../src/src/structures/GraphIF.cpp" line="68"/>
+</log4j:event>
+
+<log4j:event logger="GraphIF" timestamp="1455461667713" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Vertex with idx: 4 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="GraphIF" method="addVertex" file="../src/src/structures/GraphIF.cpp" line="68"/>
+</log4j:event>
+
+<log4j:event logger="GraphIF" timestamp="1455461667713" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Vertex with idx: 5 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="GraphIF" method="addVertex" file="../src/src/structures/GraphIF.cpp" line="68"/>
+</log4j:event>
+
+<log4j:event logger="GraphIF" timestamp="1455461667713" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Vertex with idx: 6 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="GraphIF" method="addVertex" file="../src/src/structures/GraphIF.cpp" line="68"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455461667713" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (0, 1) with cost: 3 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455461667713" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (0, 1) with cost: 3 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455461667713" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (0, 4) with cost: 3 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455461667714" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (0, 4) with cost: 3 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455461667714" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (4, 2) with cost: 4 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455461667714" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (4, 2) with cost: 4 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455461667714" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (1, 2) with cost: 2 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455461667714" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (1, 2) with cost: 2 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455461667714" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (2, 3) with cost: 3 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455461667714" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (2, 3) with cost: 3 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455461667714" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (3, 4) with cost: 2 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455461667714" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (3, 4) with cost: 2 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455461667714" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (4, 5) with cost: 3 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455461667714" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (4, 5) with cost: 3 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455461667714" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (5, 6) with cost: 1 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455461667714" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (5, 6) with cost: 1 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455461667715" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (6, 0) with cost: 2 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455461667715" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (6, 0) with cost: 2 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455461667715" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (0, 5) with cost: 3 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455461667715" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (0, 5) with cost: 3 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455461667715" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (4, 1) with cost: 4 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455461667715" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (4, 1) with cost: 4 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="EdgeArray" timestamp="1455461754392" level="TRACE" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Implementation of 'EdgeSetIF' (EdgeArray) has been created with given number of edges: 6.]]></log4j:message>
+<log4j:locationInfo class="EdgeArray" method="EdgeArray" file="../src/src/structures/EdgeSet/EdgeArray.cpp" line="35"/>
+</log4j:event>
+
+<log4j:event logger="PrimeHeap" timestamp="1455461755998" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Creating edge heap for MST solver...
+	Initial vertex ID	:	$VertexIdx$,
+	Outgoing edges:
+(null).]]></log4j:message>
+<log4j:locationInfo class="PrimeHeap" method="createEdgeHeap" file="../src/src/mstsolver/PrimeHeap.cpp" line="52"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455461862105" level="TRACE" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[File '/home/tomasz/workspace/va.json' has been opened.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::readGraph" file="../src/src/utils/InputUtils.cpp" line="156"/>
+</log4j:event>
+
+<log4j:event logger="GraphIF" timestamp="1455461862106" level="TRACE" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Calling 'GraphIF' constructor with 7 vertices and 11 edges.]]></log4j:message>
+<log4j:locationInfo class="GraphIF" method="GraphIF" file="../src/src/structures/GraphIF.cpp" line="39"/>
+</log4j:event>
+
+<log4j:event logger="EdgeArray" timestamp="1455461862106" level="TRACE" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Implementation of 'EdgeSetIF' (EdgeArray) has been created with given number of edges: 11.]]></log4j:message>
+<log4j:locationInfo class="EdgeArray" method="EdgeArray" file="../src/src/structures/EdgeSet/EdgeArray.cpp" line="35"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455461862106" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Implementation of 'GraphIF' (Graph) has been created with 7 vertices and 11 edges.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="Graph" file="../src/src/structures/Graph/Graph.cpp" line="41"/>
+</log4j:event>
+
+<log4j:event logger="GraphIF" timestamp="1455461862106" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Vertex with idx: 0 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="GraphIF" method="addVertex" file="../src/src/structures/GraphIF.cpp" line="68"/>
+</log4j:event>
+
+<log4j:event logger="GraphIF" timestamp="1455461862106" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Vertex with idx: 1 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="GraphIF" method="addVertex" file="../src/src/structures/GraphIF.cpp" line="68"/>
+</log4j:event>
+
+<log4j:event logger="GraphIF" timestamp="1455461862106" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Vertex with idx: 2 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="GraphIF" method="addVertex" file="../src/src/structures/GraphIF.cpp" line="68"/>
+</log4j:event>
+
+<log4j:event logger="GraphIF" timestamp="1455461862106" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Vertex with idx: 3 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="GraphIF" method="addVertex" file="../src/src/structures/GraphIF.cpp" line="68"/>
+</log4j:event>
+
+<log4j:event logger="GraphIF" timestamp="1455461862106" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Vertex with idx: 4 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="GraphIF" method="addVertex" file="../src/src/structures/GraphIF.cpp" line="68"/>
+</log4j:event>
+
+<log4j:event logger="GraphIF" timestamp="1455461862106" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Vertex with idx: 5 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="GraphIF" method="addVertex" file="../src/src/structures/GraphIF.cpp" line="68"/>
+</log4j:event>
+
+<log4j:event logger="GraphIF" timestamp="1455461862106" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Vertex with idx: 6 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="GraphIF" method="addVertex" file="../src/src/structures/GraphIF.cpp" line="68"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455461862106" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (0, 1) with cost: 3 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455461862106" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (0, 1) with cost: 3 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455461862106" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (0, 4) with cost: 3 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455461862106" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (0, 4) with cost: 3 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455461862106" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (4, 2) with cost: 4 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455461862106" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (4, 2) with cost: 4 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455461862106" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (1, 2) with cost: 2 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455461862106" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (1, 2) with cost: 2 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455461862106" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (2, 3) with cost: 3 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455461862107" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (2, 3) with cost: 3 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455461862107" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (3, 4) with cost: 2 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455461862107" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (3, 4) with cost: 2 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455461862107" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (4, 5) with cost: 3 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455461862107" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (4, 5) with cost: 3 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455461862107" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (5, 6) with cost: 1 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455461862107" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (5, 6) with cost: 1 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455461862107" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (6, 0) with cost: 2 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455461862107" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (6, 0) with cost: 2 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455461862107" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (0, 5) with cost: 3 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455461862107" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (0, 5) with cost: 3 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455461862107" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (4, 1) with cost: 4 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455461862107" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (4, 1) with cost: 4 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="EdgeArray" timestamp="1455461863532" level="TRACE" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Implementation of 'EdgeSetIF' (EdgeArray) has been created with given number of edges: 6.]]></log4j:message>
+<log4j:locationInfo class="EdgeArray" method="EdgeArray" file="../src/src/structures/EdgeSet/EdgeArray.cpp" line="35"/>
+</log4j:event>
+
+<log4j:event logger="PrimeHeap" timestamp="1455461866203" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Creating edge heap for MST solver...
+	Initial vertex ID	:	$VertexIdx$,
+	Outgoing edges:
+(null).]]></log4j:message>
+<log4j:locationInfo class="PrimeHeap" method="createEdgeHeap" file="../src/src/mstsolver/PrimeHeap.cpp" line="53"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455461905653" level="TRACE" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[File '/home/tomasz/workspace/va.json' has been opened.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::readGraph" file="../src/src/utils/InputUtils.cpp" line="156"/>
+</log4j:event>
+
+<log4j:event logger="GraphIF" timestamp="1455461905653" level="TRACE" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Calling 'GraphIF' constructor with 7 vertices and 11 edges.]]></log4j:message>
+<log4j:locationInfo class="GraphIF" method="GraphIF" file="../src/src/structures/GraphIF.cpp" line="39"/>
+</log4j:event>
+
+<log4j:event logger="EdgeArray" timestamp="1455461905653" level="TRACE" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Implementation of 'EdgeSetIF' (EdgeArray) has been created with given number of edges: 11.]]></log4j:message>
+<log4j:locationInfo class="EdgeArray" method="EdgeArray" file="../src/src/structures/EdgeSet/EdgeArray.cpp" line="35"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455461905654" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Implementation of 'GraphIF' (Graph) has been created with 7 vertices and 11 edges.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="Graph" file="../src/src/structures/Graph/Graph.cpp" line="41"/>
+</log4j:event>
+
+<log4j:event logger="GraphIF" timestamp="1455461905654" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Vertex with idx: 0 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="GraphIF" method="addVertex" file="../src/src/structures/GraphIF.cpp" line="68"/>
+</log4j:event>
+
+<log4j:event logger="GraphIF" timestamp="1455461905654" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Vertex with idx: 1 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="GraphIF" method="addVertex" file="../src/src/structures/GraphIF.cpp" line="68"/>
+</log4j:event>
+
+<log4j:event logger="GraphIF" timestamp="1455461905654" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Vertex with idx: 2 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="GraphIF" method="addVertex" file="../src/src/structures/GraphIF.cpp" line="68"/>
+</log4j:event>
+
+<log4j:event logger="GraphIF" timestamp="1455461905654" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Vertex with idx: 3 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="GraphIF" method="addVertex" file="../src/src/structures/GraphIF.cpp" line="68"/>
+</log4j:event>
+
+<log4j:event logger="GraphIF" timestamp="1455461905654" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Vertex with idx: 4 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="GraphIF" method="addVertex" file="../src/src/structures/GraphIF.cpp" line="68"/>
+</log4j:event>
+
+<log4j:event logger="GraphIF" timestamp="1455461905654" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Vertex with idx: 5 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="GraphIF" method="addVertex" file="../src/src/structures/GraphIF.cpp" line="68"/>
+</log4j:event>
+
+<log4j:event logger="GraphIF" timestamp="1455461905654" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Vertex with idx: 6 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="GraphIF" method="addVertex" file="../src/src/structures/GraphIF.cpp" line="68"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455461905654" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (0, 1) with cost: 3 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455461905654" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (0, 1) with cost: 3 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455461905654" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (0, 4) with cost: 3 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455461905654" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (0, 4) with cost: 3 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455461905655" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (4, 2) with cost: 4 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455461905655" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (4, 2) with cost: 4 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455461905655" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (1, 2) with cost: 2 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455461905655" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (1, 2) with cost: 2 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455461905655" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (2, 3) with cost: 3 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455461905655" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (2, 3) with cost: 3 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455461905655" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (3, 4) with cost: 2 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455461905655" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (3, 4) with cost: 2 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455461905655" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (4, 5) with cost: 3 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455461905655" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (4, 5) with cost: 3 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455461905655" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (5, 6) with cost: 1 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455461905655" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (5, 6) with cost: 1 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455461905655" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (6, 0) with cost: 2 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455461905656" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (6, 0) with cost: 2 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455461905656" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (0, 5) with cost: 3 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455461905656" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (0, 5) with cost: 3 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455461905656" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (4, 1) with cost: 4 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455461905656" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (4, 1) with cost: 4 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="EdgeArray" timestamp="1455461906690" level="TRACE" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Implementation of 'EdgeSetIF' (EdgeArray) has been created with given number of edges: 6.]]></log4j:message>
+<log4j:locationInfo class="EdgeArray" method="EdgeArray" file="../src/src/structures/EdgeSet/EdgeArray.cpp" line="35"/>
+</log4j:event>
+
+<log4j:event logger="PrimeHeap" timestamp="1455461946534" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Creating edge heap for MST solver...
+	Initial vertex ID	:	$VertexIdx$,
+	Outgoing edges:
+(null).]]></log4j:message>
+<log4j:locationInfo class="PrimeHeap" method="createEdgeHeap" file="../src/src/mstsolver/PrimeHeap.cpp" line="53"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455461980279" level="TRACE" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[File '/home/tomasz/workspace/va.json' has been opened.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::readGraph" file="../src/src/utils/InputUtils.cpp" line="156"/>
+</log4j:event>
+
+<log4j:event logger="GraphIF" timestamp="1455461980279" level="TRACE" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Calling 'GraphIF' constructor with 7 vertices and 11 edges.]]></log4j:message>
+<log4j:locationInfo class="GraphIF" method="GraphIF" file="../src/src/structures/GraphIF.cpp" line="39"/>
+</log4j:event>
+
+<log4j:event logger="EdgeArray" timestamp="1455461980279" level="TRACE" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Implementation of 'EdgeSetIF' (EdgeArray) has been created with given number of edges: 11.]]></log4j:message>
+<log4j:locationInfo class="EdgeArray" method="EdgeArray" file="../src/src/structures/EdgeSet/EdgeArray.cpp" line="35"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455461980279" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Implementation of 'GraphIF' (Graph) has been created with 7 vertices and 11 edges.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="Graph" file="../src/src/structures/Graph/Graph.cpp" line="41"/>
+</log4j:event>
+
+<log4j:event logger="GraphIF" timestamp="1455461980279" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Vertex with idx: 0 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="GraphIF" method="addVertex" file="../src/src/structures/GraphIF.cpp" line="68"/>
+</log4j:event>
+
+<log4j:event logger="GraphIF" timestamp="1455461980279" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Vertex with idx: 1 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="GraphIF" method="addVertex" file="../src/src/structures/GraphIF.cpp" line="68"/>
+</log4j:event>
+
+<log4j:event logger="GraphIF" timestamp="1455461980279" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Vertex with idx: 2 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="GraphIF" method="addVertex" file="../src/src/structures/GraphIF.cpp" line="68"/>
+</log4j:event>
+
+<log4j:event logger="GraphIF" timestamp="1455461980279" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Vertex with idx: 3 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="GraphIF" method="addVertex" file="../src/src/structures/GraphIF.cpp" line="68"/>
+</log4j:event>
+
+<log4j:event logger="GraphIF" timestamp="1455461980279" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Vertex with idx: 4 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="GraphIF" method="addVertex" file="../src/src/structures/GraphIF.cpp" line="68"/>
+</log4j:event>
+
+<log4j:event logger="GraphIF" timestamp="1455461980280" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Vertex with idx: 5 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="GraphIF" method="addVertex" file="../src/src/structures/GraphIF.cpp" line="68"/>
+</log4j:event>
+
+<log4j:event logger="GraphIF" timestamp="1455461980280" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Vertex with idx: 6 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="GraphIF" method="addVertex" file="../src/src/structures/GraphIF.cpp" line="68"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455461980280" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (0, 1) with cost: 3 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455461980280" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (0, 1) with cost: 3 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455461980280" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (0, 4) with cost: 3 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455461980280" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (0, 4) with cost: 3 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455461980280" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (4, 2) with cost: 4 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455461980280" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (4, 2) with cost: 4 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455461980280" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (1, 2) with cost: 2 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455461980280" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (1, 2) with cost: 2 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455461980280" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (2, 3) with cost: 3 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455461980280" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (2, 3) with cost: 3 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455461980280" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (3, 4) with cost: 2 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455461980280" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (3, 4) with cost: 2 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455461980280" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (4, 5) with cost: 3 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455461980280" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (4, 5) with cost: 3 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455461980280" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (5, 6) with cost: 1 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455461980280" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (5, 6) with cost: 1 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455461980280" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (6, 0) with cost: 2 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455461980280" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (6, 0) with cost: 2 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455461980280" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (0, 5) with cost: 3 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455461980280" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (0, 5) with cost: 3 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455461980281" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (4, 1) with cost: 4 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455461980281" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (4, 1) with cost: 4 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="EdgeArray" timestamp="1455461981539" level="TRACE" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Implementation of 'EdgeSetIF' (EdgeArray) has been created with given number of edges: 6.]]></log4j:message>
+<log4j:locationInfo class="EdgeArray" method="EdgeArray" file="../src/src/structures/EdgeSet/EdgeArray.cpp" line="35"/>
+</log4j:event>
+
+<log4j:event logger="PrimeHeap" timestamp="1455461989524" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Creating edge heap for MST solver...
+	Initial vertex ID	:	$VertexIdx$,
+	Outgoing edges:
+(null).]]></log4j:message>
+<log4j:locationInfo class="PrimeHeap" method="createEdgeHeap" file="../src/src/mstsolver/PrimeHeap.cpp" line="53"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455462158175" level="TRACE" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[File '/home/tomasz/workspace/va.json' has been opened.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::readGraph" file="../src/src/utils/InputUtils.cpp" line="156"/>
+</log4j:event>
+
+<log4j:event logger="GraphIF" timestamp="1455462161560" level="TRACE" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Calling 'GraphIF' constructor with 7 vertices and 11 edges.]]></log4j:message>
+<log4j:locationInfo class="GraphIF" method="GraphIF" file="../src/src/structures/GraphIF.cpp" line="39"/>
+</log4j:event>
+
+<log4j:event logger="EdgeArray" timestamp="1455462164265" level="TRACE" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Implementation of 'EdgeSetIF' (EdgeArray) has been created with given number of edges: 11.]]></log4j:message>
+<log4j:locationInfo class="EdgeArray" method="EdgeArray" file="../src/src/structures/EdgeSet/EdgeArray.cpp" line="35"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455462166595" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Implementation of 'GraphIF' (Graph) has been created with 7 vertices and 11 edges.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="Graph" file="../src/src/structures/Graph/Graph.cpp" line="41"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455462185175" level="TRACE" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[File '/home/tomasz/workspace/va.json' has been opened.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::readGraph" file="../src/src/utils/InputUtils.cpp" line="156"/>
+</log4j:event>
+
+<log4j:event logger="GraphIF" timestamp="1455462185176" level="TRACE" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Calling 'GraphIF' constructor with 7 vertices and 11 edges.]]></log4j:message>
+<log4j:locationInfo class="GraphIF" method="GraphIF" file="../src/src/structures/GraphIF.cpp" line="39"/>
+</log4j:event>
+
+<log4j:event logger="EdgeArray" timestamp="1455462185176" level="TRACE" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Implementation of 'EdgeSetIF' (EdgeArray) has been created with given number of edges: 11.]]></log4j:message>
+<log4j:locationInfo class="EdgeArray" method="EdgeArray" file="../src/src/structures/EdgeSet/EdgeArray.cpp" line="35"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455462185176" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Implementation of 'GraphIF' (Graph) has been created with 7 vertices and 11 edges.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="Graph" file="../src/src/structures/Graph/Graph.cpp" line="41"/>
+</log4j:event>
+
+<log4j:event logger="GraphIF" timestamp="1455462185176" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Vertex with idx: 0 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="GraphIF" method="addVertex" file="../src/src/structures/GraphIF.cpp" line="68"/>
+</log4j:event>
+
+<log4j:event logger="GraphIF" timestamp="1455462185176" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Vertex with idx: 1 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="GraphIF" method="addVertex" file="../src/src/structures/GraphIF.cpp" line="68"/>
+</log4j:event>
+
+<log4j:event logger="GraphIF" timestamp="1455462185176" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Vertex with idx: 2 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="GraphIF" method="addVertex" file="../src/src/structures/GraphIF.cpp" line="68"/>
+</log4j:event>
+
+<log4j:event logger="GraphIF" timestamp="1455462185176" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Vertex with idx: 3 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="GraphIF" method="addVertex" file="../src/src/structures/GraphIF.cpp" line="68"/>
+</log4j:event>
+
+<log4j:event logger="GraphIF" timestamp="1455462185177" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Vertex with idx: 4 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="GraphIF" method="addVertex" file="../src/src/structures/GraphIF.cpp" line="68"/>
+</log4j:event>
+
+<log4j:event logger="GraphIF" timestamp="1455462185177" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Vertex with idx: 5 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="GraphIF" method="addVertex" file="../src/src/structures/GraphIF.cpp" line="68"/>
+</log4j:event>
+
+<log4j:event logger="GraphIF" timestamp="1455462185177" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Vertex with idx: 6 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="GraphIF" method="addVertex" file="../src/src/structures/GraphIF.cpp" line="68"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455462185177" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (0, 1) with cost: 3 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455462185177" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (0, 1) with cost: 3 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455462185177" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (0, 4) with cost: 3 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455462185177" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (0, 4) with cost: 3 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455462185177" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (4, 2) with cost: 4 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455462185177" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (4, 2) with cost: 4 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455462185177" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (1, 2) with cost: 2 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455462185177" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (1, 2) with cost: 2 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455462185177" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (2, 3) with cost: 3 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455462185177" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (2, 3) with cost: 3 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455462185178" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (3, 4) with cost: 2 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455462185178" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (3, 4) with cost: 2 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455462185178" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (4, 5) with cost: 3 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455462185178" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (4, 5) with cost: 3 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455462185178" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (5, 6) with cost: 1 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455462185178" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (5, 6) with cost: 1 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455462185178" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (6, 0) with cost: 2 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455462185178" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (6, 0) with cost: 2 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455462185178" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (0, 5) with cost: 3 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455462185178" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (0, 5) with cost: 3 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455462185178" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (4, 1) with cost: 4 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455462185178" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (4, 1) with cost: 4 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="EdgeArray" timestamp="1455462186605" level="TRACE" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Implementation of 'EdgeSetIF' (EdgeArray) has been created with given number of edges: 6.]]></log4j:message>
+<log4j:locationInfo class="EdgeArray" method="EdgeArray" file="../src/src/structures/EdgeSet/EdgeArray.cpp" line="35"/>
+</log4j:event>
+
+<log4j:event logger="PrimeHeap" timestamp="1455462195579" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Creating edge heap for MST solver...
+	Initial vertex ID	:	$VertexIdx$,
+	Outgoing edges:
+(null).]]></log4j:message>
+<log4j:locationInfo class="PrimeHeap" method="createEdgeHeap" file="../src/src/mstsolver/PrimeHeap.cpp" line="53"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455462269539" level="TRACE" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[File '/home/tomasz/workspace/va.json' has been opened.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::readGraph" file="../src/src/utils/InputUtils.cpp" line="156"/>
+</log4j:event>
+
+<log4j:event logger="GraphIF" timestamp="1455462269539" level="TRACE" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Calling 'GraphIF' constructor with 7 vertices and 11 edges.]]></log4j:message>
+<log4j:locationInfo class="GraphIF" method="GraphIF" file="../src/src/structures/GraphIF.cpp" line="39"/>
+</log4j:event>
+
+<log4j:event logger="EdgeArray" timestamp="1455462269539" level="TRACE" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Implementation of 'EdgeSetIF' (EdgeArray) has been created with given number of edges: 11.]]></log4j:message>
+<log4j:locationInfo class="EdgeArray" method="EdgeArray" file="../src/src/structures/EdgeSet/EdgeArray.cpp" line="35"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455462269540" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Implementation of 'GraphIF' (Graph) has been created with 7 vertices and 11 edges.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="Graph" file="../src/src/structures/Graph/Graph.cpp" line="41"/>
+</log4j:event>
+
+<log4j:event logger="GraphIF" timestamp="1455462269540" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Vertex with idx: 0 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="GraphIF" method="addVertex" file="../src/src/structures/GraphIF.cpp" line="68"/>
+</log4j:event>
+
+<log4j:event logger="GraphIF" timestamp="1455462269540" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Vertex with idx: 1 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="GraphIF" method="addVertex" file="../src/src/structures/GraphIF.cpp" line="68"/>
+</log4j:event>
+
+<log4j:event logger="GraphIF" timestamp="1455462269540" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Vertex with idx: 2 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="GraphIF" method="addVertex" file="../src/src/structures/GraphIF.cpp" line="68"/>
+</log4j:event>
+
+<log4j:event logger="GraphIF" timestamp="1455462269540" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Vertex with idx: 3 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="GraphIF" method="addVertex" file="../src/src/structures/GraphIF.cpp" line="68"/>
+</log4j:event>
+
+<log4j:event logger="GraphIF" timestamp="1455462269540" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Vertex with idx: 4 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="GraphIF" method="addVertex" file="../src/src/structures/GraphIF.cpp" line="68"/>
+</log4j:event>
+
+<log4j:event logger="GraphIF" timestamp="1455462269540" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Vertex with idx: 5 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="GraphIF" method="addVertex" file="../src/src/structures/GraphIF.cpp" line="68"/>
+</log4j:event>
+
+<log4j:event logger="GraphIF" timestamp="1455462269540" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Vertex with idx: 6 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="GraphIF" method="addVertex" file="../src/src/structures/GraphIF.cpp" line="68"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455462269540" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (0, 1) with cost: 3 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455462269540" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (0, 1) with cost: 3 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455462269540" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (0, 4) with cost: 3 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455462269541" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (0, 4) with cost: 3 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455462269541" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (4, 2) with cost: 4 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455462269541" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (4, 2) with cost: 4 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455462269541" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (1, 2) with cost: 2 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455462269541" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (1, 2) with cost: 2 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455462269541" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (2, 3) with cost: 3 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455462269541" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (2, 3) with cost: 3 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455462269541" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (3, 4) with cost: 2 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455462269541" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (3, 4) with cost: 2 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455462269541" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (4, 5) with cost: 3 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455462269541" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (4, 5) with cost: 3 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455462269541" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (5, 6) with cost: 1 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455462269542" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (5, 6) with cost: 1 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455462269542" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (6, 0) with cost: 2 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455462269542" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (6, 0) with cost: 2 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455462269542" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (0, 5) with cost: 3 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455462269542" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (0, 5) with cost: 3 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455462269542" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (4, 1) with cost: 4 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455462269542" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (4, 1) with cost: 4 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="EdgeArray" timestamp="1455462271761" level="TRACE" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Implementation of 'EdgeSetIF' (EdgeArray) has been created with given number of edges: 6.]]></log4j:message>
+<log4j:locationInfo class="EdgeArray" method="EdgeArray" file="../src/src/structures/EdgeSet/EdgeArray.cpp" line="35"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455462368525" level="TRACE" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[File '/home/tomasz/workspace/va.json' has been opened.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::readGraph" file="../src/src/utils/InputUtils.cpp" line="156"/>
+</log4j:event>
+
+<log4j:event logger="GraphIF" timestamp="1455462368526" level="TRACE" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Calling 'GraphIF' constructor with 7 vertices and 11 edges.]]></log4j:message>
+<log4j:locationInfo class="GraphIF" method="GraphIF" file="../src/src/structures/GraphIF.cpp" line="39"/>
+</log4j:event>
+
+<log4j:event logger="EdgeArray" timestamp="1455462368526" level="TRACE" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Implementation of 'EdgeSetIF' (EdgeArray) has been created with given number of edges: 11.]]></log4j:message>
+<log4j:locationInfo class="EdgeArray" method="EdgeArray" file="../src/src/structures/EdgeSet/EdgeArray.cpp" line="35"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455462368526" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Implementation of 'GraphIF' (Graph) has been created with 7 vertices and 11 edges.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="Graph" file="../src/src/structures/Graph/Graph.cpp" line="41"/>
+</log4j:event>
+
+<log4j:event logger="GraphIF" timestamp="1455462368526" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Vertex with idx: 0 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="GraphIF" method="addVertex" file="../src/src/structures/GraphIF.cpp" line="68"/>
+</log4j:event>
+
+<log4j:event logger="GraphIF" timestamp="1455462368526" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Vertex with idx: 1 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="GraphIF" method="addVertex" file="../src/src/structures/GraphIF.cpp" line="68"/>
+</log4j:event>
+
+<log4j:event logger="GraphIF" timestamp="1455462368526" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Vertex with idx: 2 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="GraphIF" method="addVertex" file="../src/src/structures/GraphIF.cpp" line="68"/>
+</log4j:event>
+
+<log4j:event logger="GraphIF" timestamp="1455462368526" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Vertex with idx: 3 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="GraphIF" method="addVertex" file="../src/src/structures/GraphIF.cpp" line="68"/>
+</log4j:event>
+
+<log4j:event logger="GraphIF" timestamp="1455462368526" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Vertex with idx: 4 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="GraphIF" method="addVertex" file="../src/src/structures/GraphIF.cpp" line="68"/>
+</log4j:event>
+
+<log4j:event logger="GraphIF" timestamp="1455462368526" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Vertex with idx: 5 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="GraphIF" method="addVertex" file="../src/src/structures/GraphIF.cpp" line="68"/>
+</log4j:event>
+
+<log4j:event logger="GraphIF" timestamp="1455462368526" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Vertex with idx: 6 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="GraphIF" method="addVertex" file="../src/src/structures/GraphIF.cpp" line="68"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455462368526" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (0, 1) with cost: 3 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455462368527" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (0, 1) with cost: 3 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455462368527" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (0, 4) with cost: 3 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455462368527" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (0, 4) with cost: 3 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455462368527" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (4, 2) with cost: 4 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455462368527" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (4, 2) with cost: 4 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455462368527" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (1, 2) with cost: 2 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455462368527" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (1, 2) with cost: 2 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455462368527" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (2, 3) with cost: 3 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455462368527" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (2, 3) with cost: 3 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455462368527" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (3, 4) with cost: 2 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455462368527" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (3, 4) with cost: 2 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455462368528" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (4, 5) with cost: 3 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455462368528" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (4, 5) with cost: 3 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455462368528" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (5, 6) with cost: 1 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455462368528" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (5, 6) with cost: 1 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455462368528" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (6, 0) with cost: 2 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455462368528" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (6, 0) with cost: 2 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455462368528" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (0, 5) with cost: 3 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455462368528" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (0, 5) with cost: 3 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455462368528" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (4, 1) with cost: 4 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455462368528" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (4, 1) with cost: 4 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="EdgeArray" timestamp="1455462369427" level="TRACE" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Implementation of 'EdgeSetIF' (EdgeArray) has been created with given number of edges: 6.]]></log4j:message>
+<log4j:locationInfo class="EdgeArray" method="EdgeArray" file="../src/src/structures/EdgeSet/EdgeArray.cpp" line="35"/>
+</log4j:event>
+
+<log4j:event logger="PrimeHeap" timestamp="1455462371291" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Creating edge heap for MST solver...
+	Initial vertex ID	:	0,
+	Outgoing edges:
+--> (1)		(0)	<------- [	3	] ------->	(1)
+--> (4)		(0)	<------- [	3	] ------->	(4)
+--> (5)		(0)	<------- [	3	] ------->	(5)
+--> (6)		(6)	<------- [	2	] ------->	(0)
+.]]></log4j:message>
+<log4j:locationInfo class="PrimeHeap" method="createEdgeHeap" file="../src/src/mstsolver/PrimeHeap.cpp" line="53"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455462599145" level="TRACE" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[File '/home/tomasz/workspace/va.json' has been opened.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::readGraph" file="../src/src/utils/InputUtils.cpp" line="156"/>
+</log4j:event>
+
+<log4j:event logger="GraphIF" timestamp="1455462599146" level="TRACE" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Calling 'GraphIF' constructor with 7 vertices and 11 edges.]]></log4j:message>
+<log4j:locationInfo class="GraphIF" method="GraphIF" file="../src/src/structures/GraphIF.cpp" line="39"/>
+</log4j:event>
+
+<log4j:event logger="EdgeArray" timestamp="1455462599146" level="TRACE" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Implementation of 'EdgeSetIF' (EdgeArray) has been created with given number of edges: 11.]]></log4j:message>
+<log4j:locationInfo class="EdgeArray" method="EdgeArray" file="../src/src/structures/EdgeSet/EdgeArray.cpp" line="35"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455462599146" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Implementation of 'GraphIF' (Graph) has been created with 7 vertices and 11 edges.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="Graph" file="../src/src/structures/Graph/Graph.cpp" line="41"/>
+</log4j:event>
+
+<log4j:event logger="GraphIF" timestamp="1455462599146" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Vertex with idx: 0 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="GraphIF" method="addVertex" file="../src/src/structures/GraphIF.cpp" line="68"/>
+</log4j:event>
+
+<log4j:event logger="GraphIF" timestamp="1455462599146" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Vertex with idx: 1 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="GraphIF" method="addVertex" file="../src/src/structures/GraphIF.cpp" line="68"/>
+</log4j:event>
+
+<log4j:event logger="GraphIF" timestamp="1455462599146" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Vertex with idx: 2 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="GraphIF" method="addVertex" file="../src/src/structures/GraphIF.cpp" line="68"/>
+</log4j:event>
+
+<log4j:event logger="GraphIF" timestamp="1455462599146" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Vertex with idx: 3 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="GraphIF" method="addVertex" file="../src/src/structures/GraphIF.cpp" line="68"/>
+</log4j:event>
+
+<log4j:event logger="GraphIF" timestamp="1455462599146" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Vertex with idx: 4 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="GraphIF" method="addVertex" file="../src/src/structures/GraphIF.cpp" line="68"/>
+</log4j:event>
+
+<log4j:event logger="GraphIF" timestamp="1455462599146" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Vertex with idx: 5 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="GraphIF" method="addVertex" file="../src/src/structures/GraphIF.cpp" line="68"/>
+</log4j:event>
+
+<log4j:event logger="GraphIF" timestamp="1455462599146" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Vertex with idx: 6 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="GraphIF" method="addVertex" file="../src/src/structures/GraphIF.cpp" line="68"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455462599146" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (0, 1) with cost: 3 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455462599147" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (0, 1) with cost: 3 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455462599147" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (0, 4) with cost: 3 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455462599147" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (0, 4) with cost: 3 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455462599147" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (4, 2) with cost: 4 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455462599147" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (4, 2) with cost: 4 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455462599147" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (1, 2) with cost: 2 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455462599147" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (1, 2) with cost: 2 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455462599147" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (2, 3) with cost: 3 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455462599147" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (2, 3) with cost: 3 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455462599147" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (3, 4) with cost: 2 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455462599147" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (3, 4) with cost: 2 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455462599148" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (4, 5) with cost: 3 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455462599148" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (4, 5) with cost: 3 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455462599148" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (5, 6) with cost: 1 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455462599148" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (5, 6) with cost: 1 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455462599148" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (6, 0) with cost: 2 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455462599148" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (6, 0) with cost: 2 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455462599148" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (0, 5) with cost: 3 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455462599148" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (0, 5) with cost: 3 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455462599148" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (4, 1) with cost: 4 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455462599148" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (4, 1) with cost: 4 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="EdgeArray" timestamp="1455462600544" level="TRACE" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Implementation of 'EdgeSetIF' (EdgeArray) has been created with given number of edges: 6.]]></log4j:message>
+<log4j:locationInfo class="EdgeArray" method="EdgeArray" file="../src/src/structures/EdgeSet/EdgeArray.cpp" line="35"/>
+</log4j:event>
+
+<log4j:event logger="PrimeHeap" timestamp="1455462602205" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Creating edge heap for MST solver...
+	Initial vertex ID	:	0,
+	Outgoing edges:
+--> (1)		(0)	<------- [	3	] ------->	(1)
+--> (4)		(0)	<------- [	3	] ------->	(4)
+--> (5)		(0)	<------- [	3	] ------->	(5)
+--> (6)		(6)	<------- [	2	] ------->	(0)
+.]]></log4j:message>
+<log4j:locationInfo class="PrimeHeap" method="createEdgeHeap" file="../src/src/mstsolver/PrimeHeap.cpp" line="53"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455466237707" level="TRACE" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[File '/home/tomasz/workspace/va.json' has been opened.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::readGraph" file="../src/src/utils/InputUtils.cpp" line="156"/>
+</log4j:event>
+
+<log4j:event logger="GraphIF" timestamp="1455466237708" level="TRACE" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Calling 'GraphIF' constructor with 7 vertices and 11 edges.]]></log4j:message>
+<log4j:locationInfo class="GraphIF" method="GraphIF" file="../src/src/structures/GraphIF.cpp" line="39"/>
+</log4j:event>
+
+<log4j:event logger="EdgeArray" timestamp="1455466237708" level="TRACE" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Implementation of 'EdgeSetIF' (EdgeArray) has been created with given number of edges: 11.]]></log4j:message>
+<log4j:locationInfo class="EdgeArray" method="EdgeArray" file="../src/src/structures/EdgeSet/EdgeArray.cpp" line="35"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455466237708" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Implementation of 'GraphIF' (Graph) has been created with 7 vertices and 11 edges.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="Graph" file="../src/src/structures/Graph/Graph.cpp" line="41"/>
+</log4j:event>
+
+<log4j:event logger="GraphIF" timestamp="1455466237708" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Vertex with idx: 0 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="GraphIF" method="addVertex" file="../src/src/structures/GraphIF.cpp" line="68"/>
+</log4j:event>
+
+<log4j:event logger="GraphIF" timestamp="1455466237708" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Vertex with idx: 1 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="GraphIF" method="addVertex" file="../src/src/structures/GraphIF.cpp" line="68"/>
+</log4j:event>
+
+<log4j:event logger="GraphIF" timestamp="1455466237708" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Vertex with idx: 2 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="GraphIF" method="addVertex" file="../src/src/structures/GraphIF.cpp" line="68"/>
+</log4j:event>
+
+<log4j:event logger="GraphIF" timestamp="1455466237708" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Vertex with idx: 3 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="GraphIF" method="addVertex" file="../src/src/structures/GraphIF.cpp" line="68"/>
+</log4j:event>
+
+<log4j:event logger="GraphIF" timestamp="1455466237708" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Vertex with idx: 4 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="GraphIF" method="addVertex" file="../src/src/structures/GraphIF.cpp" line="68"/>
+</log4j:event>
+
+<log4j:event logger="GraphIF" timestamp="1455466237708" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Vertex with idx: 5 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="GraphIF" method="addVertex" file="../src/src/structures/GraphIF.cpp" line="68"/>
+</log4j:event>
+
+<log4j:event logger="GraphIF" timestamp="1455466237708" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Vertex with idx: 6 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="GraphIF" method="addVertex" file="../src/src/structures/GraphIF.cpp" line="68"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455466237708" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (0, 1) with cost: 3 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455466237708" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (0, 1) with cost: 3 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455466237708" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (0, 4) with cost: 3 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455466237708" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (0, 4) with cost: 3 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455466237708" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (4, 2) with cost: 4 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455466237708" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (4, 2) with cost: 4 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455466237709" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (1, 2) with cost: 2 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455466237709" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (1, 2) with cost: 2 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455466237709" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (2, 3) with cost: 3 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455466237709" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (2, 3) with cost: 3 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455466237709" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (3, 4) with cost: 2 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455466237709" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (3, 4) with cost: 2 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455466237709" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (4, 5) with cost: 3 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455466237709" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (4, 5) with cost: 3 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455466237709" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (5, 6) with cost: 1 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455466237709" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (5, 6) with cost: 1 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455466237709" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (6, 0) with cost: 2 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455466237709" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (6, 0) with cost: 2 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455466237709" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (0, 5) with cost: 3 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455466237709" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (0, 5) with cost: 3 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455466237709" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (4, 1) with cost: 4 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455466237709" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Edge between vertices: (4, 1) with cost: 4 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="EdgeArray" timestamp="1455466239254" level="TRACE" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Implementation of 'EdgeSetIF' (EdgeArray) has been created with given number of edges: 6.]]></log4j:message>
+<log4j:locationInfo class="EdgeArray" method="EdgeArray" file="../src/src/structures/EdgeSet/EdgeArray.cpp" line="35"/>
+</log4j:event>
+
+<log4j:event logger="PrimeHeap" timestamp="1455466240488" level="INFO" thread="0x7ffff7fd2780">
+<log4j:message><![CDATA[Creating edge heap for MST solver...
+	Initial vertex ID	:	0,
+	Outgoing edges:
+--> (1)		(0)	<------- [	3	] ------->	(1)
+--> (4)		(0)	<------- [	3	] ------->	(4)
+--> (5)		(0)	<------- [	3	] ------->	(5)
+--> (6)		(6)	<------- [	2	] ------->	(0)
+.]]></log4j:message>
+<log4j:locationInfo class="PrimeHeap" method="createEdgeHeap" file="../src/src/mstsolver/PrimeHeap.cpp" line="54"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455466286988" level="TRACE" thread="0x7f9310f73780">
+<log4j:message><![CDATA[File '/home/tomasz/workspace/va.json' has been opened.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::readGraph" file="../src/src/utils/InputUtils.cpp" line="156"/>
+</log4j:event>
+
+<log4j:event logger="GraphIF" timestamp="1455466286989" level="TRACE" thread="0x7f9310f73780">
+<log4j:message><![CDATA[Calling 'GraphIF' constructor with 7 vertices and 11 edges.]]></log4j:message>
+<log4j:locationInfo class="GraphIF" method="GraphIF" file="../src/src/structures/GraphIF.cpp" line="39"/>
+</log4j:event>
+
+<log4j:event logger="EdgeArray" timestamp="1455466286989" level="TRACE" thread="0x7f9310f73780">
+<log4j:message><![CDATA[Implementation of 'EdgeSetIF' (EdgeArray) has been created with given number of edges: 11.]]></log4j:message>
+<log4j:locationInfo class="EdgeArray" method="EdgeArray" file="../src/src/structures/EdgeSet/EdgeArray.cpp" line="35"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455466286989" level="INFO" thread="0x7f9310f73780">
+<log4j:message><![CDATA[Implementation of 'GraphIF' (Graph) has been created with 7 vertices and 11 edges.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="Graph" file="../src/src/structures/Graph/Graph.cpp" line="41"/>
+</log4j:event>
+
+<log4j:event logger="GraphIF" timestamp="1455466286989" level="INFO" thread="0x7f9310f73780">
+<log4j:message><![CDATA[Vertex with idx: 0 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="GraphIF" method="addVertex" file="../src/src/structures/GraphIF.cpp" line="68"/>
+</log4j:event>
+
+<log4j:event logger="GraphIF" timestamp="1455466286989" level="INFO" thread="0x7f9310f73780">
+<log4j:message><![CDATA[Vertex with idx: 1 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="GraphIF" method="addVertex" file="../src/src/structures/GraphIF.cpp" line="68"/>
+</log4j:event>
+
+<log4j:event logger="GraphIF" timestamp="1455466286989" level="INFO" thread="0x7f9310f73780">
+<log4j:message><![CDATA[Vertex with idx: 2 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="GraphIF" method="addVertex" file="../src/src/structures/GraphIF.cpp" line="68"/>
+</log4j:event>
+
+<log4j:event logger="GraphIF" timestamp="1455466286989" level="INFO" thread="0x7f9310f73780">
+<log4j:message><![CDATA[Vertex with idx: 3 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="GraphIF" method="addVertex" file="../src/src/structures/GraphIF.cpp" line="68"/>
+</log4j:event>
+
+<log4j:event logger="GraphIF" timestamp="1455466286989" level="INFO" thread="0x7f9310f73780">
+<log4j:message><![CDATA[Vertex with idx: 4 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="GraphIF" method="addVertex" file="../src/src/structures/GraphIF.cpp" line="68"/>
+</log4j:event>
+
+<log4j:event logger="GraphIF" timestamp="1455466286990" level="INFO" thread="0x7f9310f73780">
+<log4j:message><![CDATA[Vertex with idx: 5 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="GraphIF" method="addVertex" file="../src/src/structures/GraphIF.cpp" line="68"/>
+</log4j:event>
+
+<log4j:event logger="GraphIF" timestamp="1455466286990" level="INFO" thread="0x7f9310f73780">
+<log4j:message><![CDATA[Vertex with idx: 6 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="GraphIF" method="addVertex" file="../src/src/structures/GraphIF.cpp" line="68"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455466286990" level="INFO" thread="0x7f9310f73780">
+<log4j:message><![CDATA[Edge between vertices: (0, 1) with cost: 3 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455466286990" level="INFO" thread="0x7f9310f73780">
+<log4j:message><![CDATA[Edge between vertices: (0, 1) with cost: 3 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455466286990" level="INFO" thread="0x7f9310f73780">
+<log4j:message><![CDATA[Edge between vertices: (0, 4) with cost: 3 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455466286991" level="INFO" thread="0x7f9310f73780">
+<log4j:message><![CDATA[Edge between vertices: (0, 4) with cost: 3 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455466286991" level="INFO" thread="0x7f9310f73780">
+<log4j:message><![CDATA[Edge between vertices: (4, 2) with cost: 4 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455466286991" level="INFO" thread="0x7f9310f73780">
+<log4j:message><![CDATA[Edge between vertices: (4, 2) with cost: 4 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455466286991" level="INFO" thread="0x7f9310f73780">
+<log4j:message><![CDATA[Edge between vertices: (1, 2) with cost: 2 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455466286991" level="INFO" thread="0x7f9310f73780">
+<log4j:message><![CDATA[Edge between vertices: (1, 2) with cost: 2 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455466286991" level="INFO" thread="0x7f9310f73780">
+<log4j:message><![CDATA[Edge between vertices: (2, 3) with cost: 3 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455466286991" level="INFO" thread="0x7f9310f73780">
+<log4j:message><![CDATA[Edge between vertices: (2, 3) with cost: 3 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455466286992" level="INFO" thread="0x7f9310f73780">
+<log4j:message><![CDATA[Edge between vertices: (3, 4) with cost: 2 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455466286992" level="INFO" thread="0x7f9310f73780">
+<log4j:message><![CDATA[Edge between vertices: (3, 4) with cost: 2 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455466286992" level="INFO" thread="0x7f9310f73780">
+<log4j:message><![CDATA[Edge between vertices: (4, 5) with cost: 3 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455466286992" level="INFO" thread="0x7f9310f73780">
+<log4j:message><![CDATA[Edge between vertices: (4, 5) with cost: 3 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455466286992" level="INFO" thread="0x7f9310f73780">
+<log4j:message><![CDATA[Edge between vertices: (5, 6) with cost: 1 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455466286992" level="INFO" thread="0x7f9310f73780">
+<log4j:message><![CDATA[Edge between vertices: (5, 6) with cost: 1 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455466286992" level="INFO" thread="0x7f9310f73780">
+<log4j:message><![CDATA[Edge between vertices: (6, 0) with cost: 2 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455466286992" level="INFO" thread="0x7f9310f73780">
+<log4j:message><![CDATA[Edge between vertices: (6, 0) with cost: 2 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455466286992" level="INFO" thread="0x7f9310f73780">
+<log4j:message><![CDATA[Edge between vertices: (0, 5) with cost: 3 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455466286992" level="INFO" thread="0x7f9310f73780">
+<log4j:message><![CDATA[Edge between vertices: (0, 5) with cost: 3 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="InputUtils" timestamp="1455466286992" level="INFO" thread="0x7f9310f73780">
+<log4j:message><![CDATA[Edge between vertices: (4, 1) with cost: 4 has been read.]]></log4j:message>
+<log4j:locationInfo class="InputUtils" method="impl::HDD::VA::addEdge" file="../src/src/utils/InputUtils.cpp" line="209"/>
+</log4j:event>
+
+<log4j:event logger="Graph" timestamp="1455466286992" level="INFO" thread="0x7f9310f73780">
+<log4j:message><![CDATA[Edge between vertices: (4, 1) with cost: 4 has been added to graph.]]></log4j:message>
+<log4j:locationInfo class="Graph" method="addEdge" file="../src/src/structures/Graph/Graph.cpp" line="61"/>
+</log4j:event>
+
+<log4j:event logger="EdgeArray" timestamp="1455466286994" level="TRACE" thread="0x7f9310f73780">
+<log4j:message><![CDATA[Implementation of 'EdgeSetIF' (EdgeArray) has been created with given number of edges: 6.]]></log4j:message>
+<log4j:locationInfo class="EdgeArray" method="EdgeArray" file="../src/src/structures/EdgeSet/EdgeArray.cpp" line="35"/>
+</log4j:event>
+
+<log4j:event logger="PrimeHeap" timestamp="1455466286994" level="INFO" thread="0x7f9310f73780">
+<log4j:message><![CDATA[Creating edge heap for MST solver...
+	Initial vertex ID	:	0,
+	Outgoing edges:
+		--> (1)		(0)	<------- [	3	] ------->	(1)
+		--> (4)		(0)	<------- [	3	] ------->	(4)
+		--> (5)		(0)	<------- [	3	] ------->	(5)
+		--> (6)		(6)	<------- [	2	] ------->	(0)
+.]]></log4j:message>
+<log4j:locationInfo class="PrimeHeap" method="createEdgeHeap" file="../src/src/mstsolver/PrimeHeap.cpp" line="54"/>
+</log4j:event>
+
+<log4j:event logger="FibonacciHeap" timestamp="1455466286994" level="TRACE" thread="0x7f9310f73780">
+<log4j:message><![CDATA[Vertex: toString() METHOD UNIMPLEMENTED has been pushed into Fibonacci heap implementation.]]></log4j:message>
+<log4j:locationInfo class="FibonacciHeap" method="push" file="../src/src/heap/FibonacciHeap.cpp" line="53"/>
+</log4j:event>
+
+<log4j:event logger="FibonacciHeap" timestamp="1455466286994" level="TRACE" thread="0x7f9310f73780">
+<log4j:message><![CDATA[Vertex: toString() METHOD UNIMPLEMENTED has been pushed into Fibonacci heap implementation.]]></log4j:message>
+<log4j:locationInfo class="FibonacciHeap" method="push" file="../src/src/heap/FibonacciHeap.cpp" line="53"/>
+</log4j:event>
+
+<log4j:event logger="FibonacciHeap" timestamp="1455466286995" level="TRACE" thread="0x7f9310f73780">
+<log4j:message><![CDATA[Vertex: toString() METHOD UNIMPLEMENTED has been pushed into Fibonacci heap implementation.]]></log4j:message>
+<log4j:locationInfo class="FibonacciHeap" method="push" file="../src/src/heap/FibonacciHeap.cpp" line="53"/>
+</log4j:event>
+
+<log4j:event logger="FibonacciHeap" timestamp="1455466286995" level="TRACE" thread="0x7f9310f73780">
+<log4j:message><![CDATA[Vertex: toString() METHOD UNIMPLEMENTED has been pushed into Fibonacci heap implementation.]]></log4j:message>
+<log4j:locationInfo class="FibonacciHeap" method="push" file="../src/src/heap/FibonacciHeap.cpp" line="53"/>
+</log4j:event>
+
+<log4j:event logger="FibonacciHeap" timestamp="1455466286995" level="TRACE" thread="0x7f9310f73780">
+<log4j:message><![CDATA[Vertex: toString() METHOD UNIMPLEMENTED has been pushed into Fibonacci heap implementation.]]></log4j:message>
+<log4j:locationInfo class="FibonacciHeap" method="push" file="../src/src/heap/FibonacciHeap.cpp" line="53"/>
+</log4j:event>
+
+<log4j:event logger="FibonacciHeap" timestamp="1455466286995" level="TRACE" thread="0x7f9310f73780">
+<log4j:message><![CDATA[Vertex: toString() METHOD UNIMPLEMENTED has been pushed into Fibonacci heap implementation.]]></log4j:message>
+<log4j:locationInfo class="FibonacciHeap" method="push" file="../src/src/heap/FibonacciHeap.cpp" line="53"/>
+</log4j:event>
+
