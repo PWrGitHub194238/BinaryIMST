@@ -8,14 +8,19 @@
 #ifndef INCLUDE_STRUCTURES_EDGEIF_HPP_
 #define INCLUDE_STRUCTURES_EDGEIF_HPP_
 
+#include <rapidjson/document.h>
 #include <string>
 
+#include "../enums/EdgeConnectionType.hpp"
+#include "../enums/Visibility.hpp"
 #include "../typedefs/primitive.hpp"
 #include "../typedefs/struct.hpp"
+#include "JSONIF.hpp"
+#include "VisibleElementIF.hpp"
 
 class VertexIF;
 
-class EdgeIF {
+class EdgeIF: public VisibleElement, public JSONIF {
 private:
 
 	//************************************ PRIVATE CONSTANT FIELDS *************************************//
@@ -23,6 +28,18 @@ private:
 	//************************************** PRIVATE CLASS FIELDS **************************************//
 
 	//*************************************** PRIVATE FUNCTIONS ****************************************//
+
+	void connectUndirected();
+
+	void connectForward();
+
+	void connectBackward();
+
+	void disconnectUndirected();
+
+	void disconnectForward();
+
+	void disconnectBackward();
 
 protected:
 
@@ -34,10 +51,7 @@ protected:
 
 	EdgeCost edgeCost;
 
-	/** MST in graph means that every edge that is not in MST is hidden.
-	 *
-	 */
-	bool hidden;
+	EdgeConnectionType connectionType;
 
 	//************************************** PROTECTED FUNCTIONS ***************************************//
 
@@ -50,7 +64,13 @@ public:
 	//************************************ CONSTRUCTOR & DESTRUCTOR ************************************//
 
 	EdgeIF(VertexPair const & edgeConnections, EdgeCost const edgeCost,
-			bool isHidden);
+			EdgeConnectionType isConnect, Visibility visibility);
+
+	EdgeIF(VertexPair const & edgeConnections, EdgeCost const edgeCost,
+			EdgeConnectionType isConnect);
+
+	EdgeIF(VertexPair const & edgeConnections, EdgeCost const edgeCost,
+			Visibility visibility);
 
 	EdgeIF(VertexPair const & edgeConnections, EdgeCost const edgeCost);
 
@@ -58,9 +78,13 @@ public:
 
 	//*************************************** PUBLIC FUNCTIONS *****************************************//
 
-	void hide();
+	void connect(EdgeConnectionType connectionType);
 
-	void show();
+	void disconnect();
+
+	virtual void fillJSON(rapidjson::Document& jsonDoc,
+			rapidjson::Document::AllocatorType& allocator,
+			unsigned short depth);
 
 	virtual std::string toString();
 
@@ -68,11 +92,40 @@ public:
 
 	EdgeCost getEdgeCost() const;
 
+	/** Jeśli krawędź nie jest BACKWARD wtedy zwróć jako źródło krawędzi (u,v) normalnie u.
+	 * Jeśli krawędź jest BACKWARD wtedy z pary (u,v), v jest źródłem
+	 *
+	 * @return
+	 */
 	VertexIF * getSourceVertex() const;
 
+	/** Jeśli krawędź nie jest BACKWARD wtedy zwróć jako target krawędzi (u,v) normalnie v.
+	 * Jeśli krawędź jest BACKWARD wtedy z pary (u,v), v jest targetem
+	 *
+	 * @return
+	 */
 	VertexIF * getTargetVertex() const;
 
-	bool isHidden() const;
+	/** W przypadku krawędzi nieskierowanych nie ma możliwości jednoznaczego wskazania, który wierzchołek jest teraz źródłem, a który celem.
+	 * Funkcja zwraca drugi z pary wierzchołków krawędzi, inny niż podany vertex.
+	 * Jeśli krawędź ma oba końce w tym samym wierzchołku to zwraca jeden z nich.
+	 *
+	 * @param vertex
+	 * @return
+	 */
+	VertexIF * getOtherVertex(VertexIF* vertex) const;
+
+	/** W przypadku krawędzi nieskierowanych nie ma możliwości jednoznaczego wskazania, który wierzchołek jest teraz źródłem, a który celem.
+	 * Funkcja zwraca drugi z pary wierzchołków krawędzi 'v', którego idx jest różne od podanego.
+	 * Jeśli krawędź ma oba końce w tym samym wierzchołku to zwraca jeden z nich.
+	 *
+	 *
+	 * @param vertexIdx
+	 * @return
+	 */
+	VertexIF* getOtherVertex(VertexIdx vertexIdx) const;
+
+	EdgeConnectionType getConnectionType() const;
 };
 
 #endif /* INCLUDE_STRUCTURES_EDGEIF_HPP_ */

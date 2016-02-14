@@ -1,5 +1,5 @@
 /*
- * StringUtils.h
+ * Logger.h
  *
  *  Created on: 3 wrz 2015
  * Author: tomasz

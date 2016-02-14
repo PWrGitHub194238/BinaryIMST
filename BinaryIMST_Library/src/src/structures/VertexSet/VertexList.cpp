@@ -9,9 +9,6 @@
 
 #include <iterator>
 
-#include "../../../include/utils/enums/IndexShift.hpp"
-#include "../../../include/utils/IndexUtils.hpp"
-
 //************************************ PRIVATE CONSTANT FIELDS *************************************//
 
 //************************************** PRIVATE CLASS FIELDS **************************************//
@@ -50,9 +47,7 @@ void VertexList::push_back(VertexIF * const & vertex) {
 }
 
 VertexIF * VertexList::getElementAt(VertexIdx const vertexIdx) {
-	return *(std::next(vertices.begin(),
-			IndexUtils::shiftIndex(vertexIdx,
-					IndexShift::FROM_ONE_TO_ZERO_BASED_INDEX)));
+	return *(std::next(vertices.begin(), vertexIdx));
 }
 
 VertexCount VertexList::size() {

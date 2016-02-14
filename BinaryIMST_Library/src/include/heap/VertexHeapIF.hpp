@@ -52,8 +52,6 @@ public:
 
 	virtual VertexHeapItem * peek() = 0;
 
-	virtual void removeTop() = 0;
-
 	virtual void increaseKey(VertexHeapItem * heapItem, VertexKey newKey) = 0;
 
 	virtual void decreaseKey(VertexHeapItem * heapItem, VertexKey newKey) = 0;

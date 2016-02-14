@@ -6,30 +6,48 @@
  */
 
 #include <gtest.h>
-#include <iostream>
+#include <cstdlib>
+#include <ctime>
 
 #include "../../include/heap/VertexHeapInclude.hpp"
 #include "../../include/heap/VertexHeapItem.hpp"
 #include "../../include/structures/VertexInclude.hpp"
+#include "../../include/typedefs/primitive.hpp"
 
-TEST ( HEAP_TEST, FIBONACCI_TEST ) {
+TEST ( HEAP_TEST, FIBONACCI_TEST_1000 ) {
 
-	VertexIF * v1 = new VertexImpl { 1 };
-	VertexIF * v2 = new VertexImpl { 2 };
-	VertexIF * v3 = new VertexImpl { 3 };
+	srand(time(NULL));
+	unsigned int i { };
+	unsigned int numberOfVertices { 1000 };
 
+	VertexKey v1Key;
+	VertexKey v2Key;
 	VertexHeapIF * vh = new VertexHeapImpl { };
 
-	vh->push(new VertexHeapItem { v1, 10 });
-	vh->push(new VertexHeapItem { v2, 5 });
-	vh->push(new VertexHeapItem { v3 });
+	bool result = true;
 
-	std::cout << vh->pop()->getVertexIdx() << std::endl;
-	std::cout << vh->pop()->getVertexIdx() << std::endl;
-	std::cout << vh->pop()->getVertexIdx() << std::endl;
+	for (i = 0; i < numberOfVertices; i += 1) {
+		vh->push(new VertexHeapItem { new VertexImpl { i }, rand() });
+	}
 
-	delete v1;
-	delete v2;
-	delete v3;
+	v1Key = vh->peek()->getKey();
+
+	for (i = 0; i < numberOfVertices; i += 1) {
+		v2Key = vh->peek()->getKey();
+		if (v1Key > v2Key) {
+			result = false;
+			break;
+		}
+		v1Key = v2Key;
+		delete vh->pop();
+	}
+
+	for (; i < numberOfVertices; i += 1) {
+		delete vh->pop();
+	}
+
 	delete vh;
+
+	ASSERT_TRUE(result);
+
 }

@@ -10,6 +10,7 @@
 
 #include <vector>
 
+#include "../../enums/Visibility.hpp"
 #include "../../typedefs/primitive.hpp"
 #include "../EdgeIF.hpp"
 #include "../EdgeSetIF.hpp"
@@ -61,7 +62,7 @@ public:
 
 	bool hasNext();
 
-	bool hasNextNotHidden();
+	bool hasNext(Visibility const visibility);
 
 	EdgeIF * next();
 

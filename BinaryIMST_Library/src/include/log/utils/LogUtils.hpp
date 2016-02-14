@@ -8,13 +8,14 @@
 #ifndef LOG_UTILS_HPP_
 #define LOG_UTILS_HPP_
 
-#include "../../utils/StringUtils.hpp"
-#include "../utils/LogUtils.hpp"
-#include "../utils/Logger.hpp"
-
 #include <memory>
 
 #include "../bundle/Bundle.hpp"
+
+#include "../../utils/StringUtils.hpp"
+#include "../utils/Logger.hpp"
+
+class VertexIF;
 
 #define TRACE(logger, bundleKey, ...) C11_LOG4CXX_TRACE( \
 		logger, \
@@ -112,7 +113,7 @@ void configureLog(const char* xmlFileConfig);
 
 namespace impl {
 
-/** Returns parsed (@see parseBundle()) format from bundle file e.g. EN_US_Bundle.cpp
+/** Returns parsed (@see parseBundle()) format from logging bundle file e.g. src/log/bundle/EN_US_Bundle.cpp
  *
  * Function gets string from extern dictionary in bundle file and returns its parsed version i.e.
  * it takes bundle raw format from e.g. EN_US_Bundle.cpp from it's dictionary (it looks for right 'bundleKey'),
@@ -121,10 +122,10 @@ namespace impl {
  * @param bundleKey key for dictionary in file containing bundles
  * @return unique pointer to final format - that format will be destroyed (thanks to smart pointer) as soon as it will be used.
  */
-std::unique_ptr<char[]> getBundle(BundleKey bundleKey);
+std::unique_ptr<char[]> getBundle(LogBundleKey bundleKey);
 
-}
+}  // namespace impl
 
-}
+}  // namespace LogUtils
 
 #endif /* LOG_UTILS_HPP_ */

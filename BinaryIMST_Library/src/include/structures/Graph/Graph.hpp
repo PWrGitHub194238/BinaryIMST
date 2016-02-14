@@ -8,6 +8,7 @@
 #ifndef INCLUDE_STRUCTURES_GRAPH_GRAPH_HPP_
 #define INCLUDE_STRUCTURES_GRAPH_GRAPH_HPP_
 
+#include "../../enums/GraphConstructMode.hpp"
 #include "../../typedefs/primitive.hpp"
 #include "../GraphIF.hpp"
 
@@ -19,9 +20,6 @@ private:
 	//************************************** PRIVATE CLASS FIELDS **************************************//
 
 	//*************************************** PRIVATE FUNCTIONS ****************************************//
-
-	void connectUndirectedEdgeToVertex(EdgeIF * const edge,
-			VertexIF * const vertex);
 
 protected:
 
@@ -38,6 +36,9 @@ public:
 	//************************************** PUBLIC CLASS FIELDS ***************************************//
 
 	//************************************ CONSTRUCTOR & DESTRUCTOR ************************************//
+
+	Graph(VertexCount const vertexCount, EdgeCount const edgeCount,
+			GraphConstructMode constructorMode);
 
 	Graph(VertexCount const vertexCount, EdgeCount const edgeCount);
 

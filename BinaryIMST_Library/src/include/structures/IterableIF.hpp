@@ -5,8 +5,8 @@
  *      Author: tomasz
  */
 
-#ifndef SRC_INCLUDE_STRUCTURES_ITERABLE_HPP_
-#define SRC_INCLUDE_STRUCTURES_ITERABLE_HPP_
+#ifndef SRC_INCLUDE_STRUCTURES_ITERABLEIF_HPP_
+#define SRC_INCLUDE_STRUCTURES_ITERABLEIF_HPP_
 
 template<typename Item>
 class Iterable {
@@ -35,7 +35,6 @@ public:
 	//************************************ CONSTRUCTOR & DESTRUCTOR ************************************//
 
 	virtual ~Iterable() {
-
 	}
 
 	//*************************************** PUBLIC FUNCTIONS *****************************************//
@@ -73,6 +72,14 @@ public:
 	 */
 	virtual bool hasNext() = 0;
 
+	/** Checks if there is any element to iterate
+	 *
+	 * This function checks if there is any element in iterable set by setting iterator to the beginning of the set and return value of hasNext() function
+	 *
+	 * @return true if actual element that is returned by previously called next() function is not the last element of this set, false otherwise.
+	 */
+	bool hasAny();
+
 	/** Returns next element of this set.
 	 *
 	 * This function is usually used to simulate loop behavior:
@@ -92,4 +99,4 @@ public:
 
 };
 
-#endif /* SRC_INCLUDE_STRUCTURES_ITERABLE_HPP_ */
+#endif /* SRC_INCLUDE_STRUCTURES_ITERABLEIF_HPP_ */

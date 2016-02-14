@@ -8,6 +8,14 @@
 #ifndef INCLUDE_STRUCTURES_GRAPHIF_HPP_
 #define INCLUDE_STRUCTURES_GRAPHIF_HPP_
 
+#include <rapidjson/document.h>
+#include <string>
+
+#include "../enums/EdgeConnectionType.hpp"
+#include "../enums/GraphConstructMode.hpp"
+#include "../enums/Visibility.hpp"
+#include "JSONIF.hpp"
+
 class EdgeIF;
 class VertexIF;
 
@@ -16,7 +24,7 @@ class VertexSetIF;
 
 #include "../typedefs/primitive.hpp"
 
-class GraphIF {
+class GraphIF: public JSONIF {
 private:
 
 	//************************************ PRIVATE CONSTANT FIELDS *************************************//
@@ -44,13 +52,42 @@ public:
 
 	//************************************ CONSTRUCTOR & DESTRUCTOR ************************************//
 
+	/** Jeśli AUTO_CONSTRUCT_VERTEX to tworzy vertexCount węzłów od 0 do vertexCount-1 i rezerwuje miejsce na edgeCount krawędzi
+	 * Jeśli RESERVE_SPACE_ONLY to tylko rezerwuje miejsce
+	 *
+	 * @param vertexCount
+	 * @param edgeCount
+	 * @param constructMode
+	 */
+	GraphIF(VertexCount const vertexCount, EdgeCount const edgeCount,
+			GraphConstructMode constructMode);
+
+	/** Domyślnie tworzy vertexCount węzłów od 0 do vertexCount-1 i rezerwuje miejsce na edgeCount krawędzi
+	 *
+	 * @param vertexCount
+	 * @param edgeCount
+	 */
 	GraphIF(VertexCount const vertexCount, EdgeCount const edgeCount);
+
+	/** Tworzy graf z podanych komponentów
+	 *
+	 * @param vertexSet
+	 * @param edgeSet
+	 */
+	GraphIF(VertexSetIF * const & vertexSet, EdgeSetIF * const & edgeSet);
 
 	virtual ~GraphIF();
 
 	//*************************************** PUBLIC FUNCTIONS *****************************************//
 
-	void addVertex(VertexIdx const vertexIdx);
+	void addVertex(VertexIF* const vertex);
+
+	void addEdge(VertexIdx const vertexIdxU, VertexIdx const vertexIdxV,
+			EdgeCost const edgeCost, EdgeConnectionType connectionType,
+			Visibility visibility);
+
+	void addEdge(VertexIdx const vertexIdxU, VertexIdx const vertexIdxV,
+			EdgeCost const edgeCost, EdgeConnectionType connectionType);
 
 	/** Czy dodajemy do grafu skierowanego czy nie, dlatego pure virtual
 	 *
@@ -67,15 +104,29 @@ public:
 
 	bool hasNextVertex();
 
+	bool hasAnyVertex();
+
 	VertexIF * nextVertex();
 
 	void beginEdge();
 
 	bool hasNextEdge();
 
+	bool hasAnyEdge();
+
 	EdgeIF * nextEdge();
 
 	void hideAllEdges();
+
+	virtual void fillJSON(rapidjson::Document& jsonDoc,
+			rapidjson::Document::AllocatorType& allocator,
+			unsigned short depth);
+
+	virtual std::string toString();
+
+	virtual std::string edgeSetToString();
+
+	virtual std::string edgeSetToString(Visibility edgeVisibility);
 
 	//*************************************** GETTERS & SETTERS ****************************************//
 

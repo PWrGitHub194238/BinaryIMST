@@ -8,15 +8,17 @@
 #ifndef INCLUDE_STRUCTURES_VERTEXIF_HPP_
 #define INCLUDE_STRUCTURES_VERTEXIF_HPP_
 
+#include <rapidjson/document.h>
 #include <string>
 
 #include "../typedefs/primitive.hpp"
+#include "JSONIF.hpp"
 
 class EdgeIF;
 
 class EdgeByVertexSetIF;
 
-class VertexIF {
+class VertexIF: public JSONIF {
 private:
 
 	//************************************ PRIVATE CONSTANT FIELDS *************************************//
@@ -50,8 +52,16 @@ public:
 
 	//*************************************** PUBLIC FUNCTIONS *****************************************//
 
+	/** Łączy krawędź do wierzchołka, która do niego wchodzi
+	 *
+	 * @param inputEdge
+	 */
 	void addInputEdge(EdgeIF * inputEdge);
 
+	/** Łączy krawędź do wierzchołka wychodzącą z tego wierzchołka
+	 *
+	 * @param outputEdge
+	 */
 	void addOutputEdge(EdgeIF * outputEdge);
 
 	EdgeIF * findInputEdge(VertexIdx const vertexId);
@@ -62,9 +72,27 @@ public:
 
 	EdgeIF * findOutputEdge(VertexIF * vertex);
 
+	/** Rozłącza wierzchołek z wchodzącą do niego krawędzią
+	 *
+	 * @param inputEdge
+	 */
+	void removeInputEdge(EdgeIF * const inputEdge);
+
+	void removeInputEdge(VertexIdx const vertexIdx);
+
+	void removeInputEdge(VertexIF * const vertex);
+
+	void removeOutputEdge(EdgeIF * outputEdge);
+
+	void removeOutputEdge(VertexIdx const vertexIdx);
+
+	void removeOutputEdge(VertexIF * const vertex);
+
 	void beginInputEdges();
 
 	bool hasNextInputEdge();
+
+	bool hasAnyInputEdge();
 
 	EdgeIF * nextInputEdge();
 
@@ -76,13 +104,27 @@ public:
 
 	EdgeIF * nextOutputEdge();
 
+	bool hasAnyOutputEdge();
+
 	VertexIF * nextOutputEdgeTarget();
 
+	virtual void fillJSON(rapidjson::Document& jsonDoc,
+			rapidjson::Document::AllocatorType& allocator,
+			unsigned short depth);
+
 	virtual std::string toString();
+
+	virtual std::string inputEdgesToString();
+
+	virtual std::string outputEdgesToString();
 
 	//*************************************** GETTERS & SETTERS ****************************************//
 
 	VertexIdx getVertexIdx() const;
+
+	VertexCount getNumberOfInputEdges() const;
+
+	VertexCount getNumberOfOutputEdges() const;
 
 };
 

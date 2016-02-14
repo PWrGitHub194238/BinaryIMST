@@ -8,7 +8,6 @@
 #include "../../include/heap/FibonacciHeap.hpp"
 
 #include <boost/heap/detail/stable_heap.hpp>
-#include <iostream>
 #include <memory>
 #include <string>
 #include <utility>
@@ -27,33 +26,22 @@ const static log4cxx::LoggerPtr logger(
 		log4cxx::Logger::getLogger("FibonacciHeap"));
 
 //************************************ PRIVATE CONSTANT FIELDS *************************************//
-
 //************************************** PRIVATE CLASS FIELDS **************************************//
-
 //*************************************** PRIVATE FUNCTIONS ****************************************//
-
 //*********************************** PROTECTED CONSTANT FIELDS ************************************//
-
 //************************************ PROTECTED CLASS FIELDS **************************************//
-
 //************************************** PROTECTED FUNCTIONS ***************************************//
-
 //************************************* PUBLIC CONSTANT FIELDS *************************************//
-
 //************************************** PUBLIC CLASS FIELDS ***************************************//
-
 //************************************ CONSTRUCTOR & DESTRUCTOR ************************************//
-
 FibonacciHeap::FibonacciHeap() :
 		VertexHeapIF() {
 }
 
 FibonacciHeap::~FibonacciHeap() {
-	VertexHeapItem * vhi { };
-	/*for (auto const &heapItem : heapMap) {
-	 std::cout << (*heapItem.second)->getValue()->toString() << std::endl;
-	 //	delete *(heapItem.second);
-	 }*/
+	while (!this->heap.empty()) {
+		pop();
+	}
 	heapMap.clear();
 	heap.clear();
 }
@@ -61,8 +49,7 @@ FibonacciHeap::~FibonacciHeap() {
 //*************************************** PUBLIC FUNCTIONS *****************************************//
 
 void FibonacciHeap::push(VertexHeapItem * const vertex) {
-	std::cout << "Push: " << vertex->toString() << std::endl;
-	TRACE(logger, BundleKey::VERTEX_PUSHED_INTO_FIB_HEAP,
+	TRACE(logger, LogBundleKey::VERTEX_PUSHED_INTO_FIB_HEAP,
 			vertex->toString().c_str());
 	this->heapMap.insert(
 			std::make_pair(vertex->getValue()->getVertexIdx(),
@@ -72,6 +59,7 @@ void FibonacciHeap::push(VertexHeapItem * const vertex) {
 VertexIF * FibonacciHeap::pop() {
 	VertexHeapItem * item = this->heap.top();
 	VertexIF * vertex = item->getValue();
+	this->heapMap.erase(item->getValue()->getVertexIdx());
 	delete item;
 	this->heap.pop();
 	return vertex;
@@ -79,10 +67,6 @@ VertexIF * FibonacciHeap::pop() {
 
 VertexHeapItem * FibonacciHeap::peek() {
 	return this->heap.top();
-}
-
-void FibonacciHeap::removeTop() {
-	this->heap.pop();
 }
 
 void FibonacciHeap::increaseKey(VertexHeapItem * heapItem, VertexKey newKey) {

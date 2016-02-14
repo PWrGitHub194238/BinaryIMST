@@ -20,7 +20,7 @@ log4cxx::LoggerPtr logger(log4cxx::Logger::getLogger("log4cxx_test"));
 TEST ( LOG_NOARG_TEST, TEST_EN_WITHOUT_FORMAT ) {
 	testing::internal::CaptureStdout();
 
-	TRACE_NOARG(logger, BundleKey::TEST_EN_WITHOUT_FORMAT);
+	TRACE_NOARG(logger, LogBundleKey::TEST_EN_WITHOUT_FORMAT);
 
 	ASSERT_TRUE(
 			std::regex_match(testing::internal::GetCapturedStdout(),
@@ -32,7 +32,7 @@ TEST ( LOG_NOARG_TEST, TEST_EN_WITHOUT_FORMAT ) {
 TEST ( LOG_TEST, TEST_EN_CHAR_FORMAT ) {
 	testing::internal::CaptureStdout();
 
-	TRACE(logger, BundleKey::TEST_EN_CHAR_FORMAT, 'A');
+	TRACE(logger, LogBundleKey::TEST_EN_CHAR_FORMAT, 'A');
 
 	ASSERT_TRUE(
 			std::regex_match(testing::internal::GetCapturedStdout(),
@@ -43,7 +43,7 @@ TEST ( LOG_TEST, TEST_EN_CHAR_FORMAT ) {
 TEST ( LOG_TEST, TEST_EN_CHAR_MULTIPLE_FORMAT ) {
 	testing::internal::CaptureStdout();
 
-	TRACE(logger, BundleKey::TEST_EN_CHAR_MULTIPLE_FORMAT, 'A', 'B', 'C', 'D',
+	TRACE(logger, LogBundleKey::TEST_EN_CHAR_MULTIPLE_FORMAT, 'A', 'B', 'C', 'D',
 			'E', 'F', 'G');
 
 	ASSERT_TRUE(
@@ -57,7 +57,7 @@ TEST ( LOG_TEST, TEST_EN_VertexCount_FORMAT ) {
 	testing::internal::CaptureStdout();
 
 	VertexCount vCount { 5 };
-	TRACE(logger, BundleKey::TEST_EN_VertexCount_FORMAT, vCount);
+	TRACE(logger, LogBundleKey::TEST_EN_VertexCount_FORMAT, vCount);
 
 	ASSERT_TRUE(
 			std::regex_match(testing::internal::GetCapturedStdout(),
@@ -80,7 +80,7 @@ TEST ( LOG_TEST, TEST_EN_EdgeCount_FORMAT ) {
 	testing::internal::CaptureStdout();
 
 	EdgeCount eCount { 5 };
-	TRACE(logger, BundleKey::TEST_EN_EdgeCount_FORMAT, eCount);
+	TRACE(logger, LogBundleKey::TEST_EN_EdgeCount_FORMAT, eCount);
 
 	ASSERT_TRUE(
 			std::regex_match(testing::internal::GetCapturedStdout(),

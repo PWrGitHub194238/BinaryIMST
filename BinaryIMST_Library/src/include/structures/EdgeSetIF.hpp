@@ -8,13 +8,17 @@
 #ifndef INCLUDE_STRUCTURES_EDGESETIF_HPP_
 #define INCLUDE_STRUCTURES_EDGESETIF_HPP_
 
+#include <rapidjson/document.h>
+#include <string>
+
+#include "../enums/Visibility.hpp"
 #include "../typedefs/primitive.hpp"
 #include "EdgeIF.hpp"
-#include "Iterable.hpp"
+#include "VisibleIterableIF.hpp"
 
 class EdgeIF;
 
-class EdgeSetIF: public Iterable<EdgeIF *> {
+class EdgeSetIF: public VisibleIterable<EdgeIF*>, public JSONIF {
 private:
 
 	//************************************ PRIVATE CONSTANT FIELDS *************************************//
@@ -57,17 +61,22 @@ public:
 
 	virtual bool hasNext() = 0;
 
-	/** Ignores hidden edges while searching for next element
-	 *
-	 * @return
-	 */
-	virtual bool hasNextNotHidden() = 0;
+	virtual bool hasNext(Visibility const visibility) = 0;
 
 	virtual EdgeIF * next() = 0;
 
-	void hideAll();
+	virtual void fillJSON(rapidjson::Document& jsonDoc,
+			rapidjson::Document::AllocatorType& allocator,
+			unsigned short depth);
 
-	void showAll();
+	virtual std::string toString();
+
+	/** Prints only edges that satisfy edgeVisibility
+	 *
+	 * @param visibility
+	 * @return
+	 */
+	virtual std::string toString(Visibility edgeVisibility);
 
 	//*************************************** GETTERS & SETTERS ****************************************//
 

@@ -56,7 +56,7 @@ std::unique_ptr<char[]> parseStringFormatSpecifiers(
  */
 const char* formatMessage(const char* format, ...);
 
-namespace Impl {
+namespace impl {
 
 /** @brief Replaces one of user-defined formatter to valid format that were assigned to it.
  *
@@ -68,7 +68,7 @@ namespace Impl {
 size_t insertRightFormat(std::string& sourceFormat, size_t const & beginIdx,
 		size_t const & endIdx);
 
-}  // namespace Impl
+}  // namespace impl
 
 }  // namespace StringUtils
 

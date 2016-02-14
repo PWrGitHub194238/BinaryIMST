@@ -8,13 +8,14 @@
 #ifndef SRC_INCLUDE_HEAP_VERTEXHEAPITEM_HPP_
 #define SRC_INCLUDE_HEAP_VERTEXHEAPITEM_HPP_
 
-#include <string>
+#include <rapidjson/document.h>
 
+#include "../structures/JSONIF.hpp"
 #include "../typedefs/primitive.hpp"
 
 class VertexIF;
 
-class VertexHeapItem {
+class VertexHeapItem: public JSONIF {
 private:
 
 	//************************************ PRIVATE CONSTANT FIELDS *************************************//
@@ -43,6 +44,8 @@ public:
 
 	//************************************ CONSTRUCTOR & DESTRUCTOR ************************************//
 
+	VertexHeapItem();
+
 	VertexHeapItem(VertexIF * vertex);
 
 	VertexHeapItem(VertexIF * vertex, VertexKey key);
@@ -58,7 +61,9 @@ public:
 
 	//*************************************** PUBLIC FUNCTIONS *****************************************//
 
-	virtual std::string toString();
+	virtual void fillJSON(rapidjson::Document& jsonDoc,
+			rapidjson::Document::AllocatorType& allocator,
+			unsigned short depth);
 
 	//*************************************** GETTERS & SETTERS ****************************************//
 

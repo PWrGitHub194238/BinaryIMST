@@ -18,30 +18,21 @@
 const static log4cxx::LoggerPtr logger(log4cxx::Logger::getLogger("EdgeArray"));
 
 //************************************ PRIVATE CONSTANT FIELDS *************************************//
-
 //************************************** PRIVATE CLASS FIELDS **************************************//
-
 //*************************************** PRIVATE FUNCTIONS ****************************************//
-
 //*********************************** PROTECTED CONSTANT FIELDS ************************************//
-
 //************************************ PROTECTED CLASS FIELDS **************************************//
-
 //************************************** PROTECTED FUNCTIONS ***************************************//
-
 //************************************* PUBLIC CONSTANT FIELDS *************************************//
-
 //************************************** PUBLIC CLASS FIELDS ***************************************//
-
 //************************************ CONSTRUCTOR & DESTRUCTOR ************************************//
-
 EdgeArray::EdgeArray() :
 		EdgeSetIF() {
 }
 
 EdgeArray::EdgeArray(EdgeCount numberOfEdges) :
 		EdgeSetIF(numberOfEdges) {
-	TRACE(logger, BundleKey::EDGE_ARRAY_CONSTRUCTOR, numberOfEdges);
+	TRACE(logger, LogBundleKey::EDGE_ARRAY_CONSTRUCTOR, numberOfEdges);
 	edges.reserve(numberOfEdges);
 }
 
@@ -71,10 +62,10 @@ void EdgeArray::begin() {
 bool EdgeArray::hasNext() {
 	return this->edgeIteratorBegin != this->edgeIteratorEnd;
 }
-
-bool EdgeArray::hasNextNotHidden() {
-	while (this->edgeIteratorBegin != this->edgeIteratorEnd
-			|| (*this->edgeIteratorBegin)->isHidden()) {
+bool EdgeArray::hasNext(Visibility const visibility) {
+	while (hasNext()
+			&& (visibility != Visibility::BOTH
+					&& (*this->edgeIteratorBegin)->getVisibility() != visibility)) {
 		++this->edgeIteratorBegin;
 	}
 	return this->edgeIteratorBegin != this->edgeIteratorEnd;

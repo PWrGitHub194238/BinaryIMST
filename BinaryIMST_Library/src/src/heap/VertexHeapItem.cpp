@@ -8,9 +8,9 @@
 #include "../../include/heap/VertexHeapItem.hpp"
 
 #include <limits>
-#include <sstream>
 
 #include "../../include/structures/VertexIF.hpp"
+#include "../../include/utils/JSONUtils.hpp"
 
 //************************************ PRIVATE CONSTANT FIELDS *************************************//
 
@@ -51,11 +51,13 @@ VertexHeapItem::~VertexHeapItem() {
 
 //*************************************** PUBLIC FUNCTIONS *****************************************//
 
-std::string VertexHeapItem::toString() {
-	std::ostringstream oss { };
-	oss << "VertexHeapItem['key': " << key << ", 'value' : "
-			<< value->toString() << "]";
-	return oss.str();
+void VertexHeapItem::fillJSON(rapidjson::Document& jsonDoc,
+		rapidjson::Document::AllocatorType& allocator, unsigned short depth) {
+
+	jsonDoc.AddMember("key", key, allocator);
+	jsonDoc.AddMember("value",
+			JSONUtils::getDepthLimitedJSON(value, allocator, "VertexIF", depth),
+			allocator);
 }
 
 //*************************************** GETTERS & SETTERS ****************************************//

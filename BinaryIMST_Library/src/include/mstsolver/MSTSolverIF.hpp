@@ -8,11 +8,12 @@
 #ifndef SRC_INCLUDE_MSTSOLVER_MSTSOLVERIF_HPP_
 #define SRC_INCLUDE_MSTSOLVER_MSTSOLVERIF_HPP_
 
-#include "../enums/MSTSolverMode.hpp"
-#include "../structures/GraphIF.hpp"
+class VertexIF;
 
 class EdgeSetIF;
 class GraphIF;
+
+#include "../../include/exp/GraphExceptions.hpp"
 
 class MSTSolverIF {
 private:
@@ -33,6 +34,19 @@ protected:
 
 	//************************************** PROTECTED FUNCTIONS ***************************************//
 
+	/** Zwraca zbiór krawędzi tworzących MST. Zaczyna konstruować je od pierwszego wierzchołka w zbiorze wierzchołków grafu
+	 *
+	 * @return
+	 */
+	virtual EdgeSetIF * resolve() = 0;
+
+	/** Zwraca zbiór krawędzi tworzących MST. Zaczyna konstruować je od wierzchołka initialVertex
+	 *
+	 * @param
+	 * @return
+	 */
+	virtual EdgeSetIF * resolve(VertexIF * const initialVertex) = 0;
+
 public:
 
 	//************************************* PUBLIC CONSTANT FIELDS *************************************//
@@ -41,10 +55,7 @@ public:
 
 	//************************************ CONSTRUCTOR & DESTRUCTOR ************************************//
 
-	MSTSolverIF(GraphIF * const graph, MSTSolverMode mode) {
-		if (mode == MSTSolverMode::HIDE_EDGES) {
-			graph->hideAllEdges();
-		}
+	MSTSolverIF(GraphIF * const graph) {
 		this->graph = graph;
 	}
 
@@ -55,7 +66,10 @@ public:
 
 	//*************************************** PUBLIC FUNCTIONS *****************************************//
 
-	virtual EdgeSetIF * resolve() = 0;
+	EdgeSetIF * getMST() throw (GraphExceptions::DisconnectedGraphException);
+
+	EdgeSetIF * getMST(VertexIF * const initialVertex)
+			throw (GraphExceptions::DisconnectedGraphException);
 
 	//*************************************** GETTERS & SETTERS ****************************************//
 

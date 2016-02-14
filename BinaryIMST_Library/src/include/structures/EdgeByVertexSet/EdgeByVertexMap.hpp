@@ -9,12 +9,11 @@
 #define SRC_INCLUDE_STRUCTURES_EDGEBYVERTEXSET_EDGEBYVERTEXMAP_HPP_
 
 #include <map>
-#include <utility>
 
 #include "../../enums/EdgeByVertexKey.hpp"
 #include "../../typedefs/primitive.hpp"
+#include "../../typedefs/struct.hpp"
 #include "../EdgeByVertexSetIF.hpp"
-#include "../EdgeIF.hpp"
 
 class EdgeIF;
 class VertexIF;
@@ -26,11 +25,11 @@ private:
 
 	//************************************** PRIVATE CLASS FIELDS **************************************//
 
-	std::map<VertexIdx, EdgeIF *> edgeMap;
+	EdgeByVertexIdxMap edgeMap;
 
-	std::map<VertexIdx, EdgeIF *>::const_iterator edgeIteratorBegin;
+	EdgeByVertexIdxMap::const_iterator edgeIteratorBegin;
 
-	std::map<VertexIdx, EdgeIF *>::const_iterator edgeIteratorEnd;
+	EdgeByVertexIdxMap::const_iterator edgeIteratorEnd;
 
 	//*************************************** PRIVATE FUNCTIONS ****************************************//
 
@@ -42,6 +41,12 @@ protected:
 
 	//************************************** PROTECTED FUNCTIONS ***************************************//
 
+	void addUndirectedEdge(EdgeIF * const edge);
+
+	void addForwardEdge(EdgeIF * const edge);
+
+	void addBackwardEdge(EdgeIF * const edge);
+
 public:
 
 	//************************************* PUBLIC CONSTANT FIELDS *************************************//
@@ -50,7 +55,7 @@ public:
 
 	//************************************ CONSTRUCTOR & DESTRUCTOR ************************************//
 
-	EdgeByVertexMap(EdgeByVertexKey const key);
+	EdgeByVertexMap(VertexIF const * const vertex, EdgeByVertexKey const key);
 
 	virtual ~EdgeByVertexMap();
 
@@ -59,8 +64,6 @@ public:
 	//*************************************** GETTERS & SETTERS ****************************************//
 
 	//*************************************** PUBLIC FUNCTIONS *****************************************//
-
-	void addEdge(EdgeIF * const edge);
 
 	EdgeIF * findEdge(VertexIdx const vertexId);
 
@@ -78,7 +81,7 @@ public:
 
 	bool hasNext();
 
-	std::pair<VertexIdx, EdgeIF *> next();
+	EdgeByVertexIdxPair next();
 
 	//*************************************** GETTERS & SETTERS ****************************************//
 

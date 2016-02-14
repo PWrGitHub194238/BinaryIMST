@@ -17,30 +17,21 @@
 const static log4cxx::LoggerPtr logger(log4cxx::Logger::getLogger("EdgeList"));
 
 //************************************ PRIVATE CONSTANT FIELDS *************************************//
-
 //************************************** PRIVATE CLASS FIELDS **************************************//
-
 //*************************************** PRIVATE FUNCTIONS ****************************************//
-
 //*********************************** PROTECTED CONSTANT FIELDS ************************************//
-
 //************************************ PROTECTED CLASS FIELDS **************************************//
-
 //************************************** PROTECTED FUNCTIONS ***************************************//
-
 //************************************* PUBLIC CONSTANT FIELDS *************************************//
-
 //************************************** PUBLIC CLASS FIELDS ***************************************//
-
 //************************************ CONSTRUCTOR & DESTRUCTOR ************************************//
-
 EdgeList::EdgeList() :
 		EdgeSetIF() {
 }
 
 EdgeList::EdgeList(VertexCount numberOfEdges) :
 		EdgeSetIF(numberOfEdges) {
-	TRACE(logger, BundleKey::EDGE_LIST_CONSTRUCTOR, numberOfEdges);
+	TRACE(logger, LogBundleKey::EDGE_LIST_CONSTRUCTOR, numberOfEdges);
 	edges = std::list<EdgeIF*> { };
 }
 
@@ -71,9 +62,10 @@ bool EdgeList::hasNext() {
 	return this->edgeIteratorBegin != this->edgeIteratorEnd;
 }
 
-bool EdgeList::hasNextNotHidden() {
-	while (this->edgeIteratorBegin != this->edgeIteratorEnd
-			|| (*this->edgeIteratorBegin)->isHidden()) {
+bool EdgeList::hasNext(Visibility const visibility) {
+	while (hasNext()
+			&& (visibility != Visibility::BOTH
+					&& (*this->edgeIteratorBegin)->getVisibility() != visibility)) {
 		++this->edgeIteratorBegin;
 	}
 	return this->edgeIteratorBegin != this->edgeIteratorEnd;

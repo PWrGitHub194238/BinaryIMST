@@ -8,8 +8,12 @@
 #ifndef SRC_INCLUDE_UTILS_ENUMS_INPUTMODE_HPP_
 #define SRC_INCLUDE_UTILS_ENUMS_INPUTMODE_HPP_
 
+/**
+ *
+ */
 enum class InputMode {
-	HDD, RAM
+	HDD,//!< HDD
+	RAM //!< RAM
 };
 
 #endif /* SRC_INCLUDE_UTILS_ENUMS_INPUTMODE_HPP_ */

@@ -66,8 +66,6 @@ public:
 
 	VertexHeapItem * peek();
 
-	void removeTop();
-
 	void increaseKey(VertexHeapItem * heapItem, VertexKey newKey);
 
 	void decreaseKey(VertexHeapItem * heapItem, VertexKey newKey);

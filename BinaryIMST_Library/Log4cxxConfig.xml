@@ -10,7 +10,7 @@
 	</appender>
 
 	<!-- Output the log message to log file -->
-	<appender name="appxNormalAppender" class="org.apache.log4j.FileAppender">
+	<appender name="appxFileAppender" class="org.apache.log4j.FileAppender">
 		<param name="file" value="appxLogFile.log" />
 		<param name="append" value="true" />
 		<layout class="org.apache.log4j.PatternLayout">
@@ -18,16 +18,38 @@
 		</layout>
 	</appender>
 
+	<appender name="appxXMLAppender" class="org.apache.log4j.FileAppender">
+		<param name="file" value="appxLogFile.xml" />
+		<param name="append" value="true" />
+		<layout class="org.apache.log4j.xml.XMLLayout">
+			<param name="properties" value="true" />
+			<param name="locationinfo" value="true" />
+		</layout>
+	</appender>
+
+	<!-- Output the log message to Chainsaw application -->
+	<appender name="appxChainsawXMLAppender" class="org.apache.log4j.XMLSocketAppender">
+		<param name="RemoteHost" value="localhost" />
+		<param name="Port" value="4448" />
+		<layout class="org.apache.log4j.xml.XMLLayout">
+			<param name="properties" value="true" />
+			<param name="locationinfo" value="true" />
+		</layout>
+	</appender>
+
 	<root>
 		<priority value="all" />
-		<appender-ref ref="appxNormalAppender" />
+		<appender-ref ref="appxFileAppender" />
 		<appender-ref ref="appxConsoleAppender" />
+		<appender-ref ref="appxXMLAppender" />
+		<appender-ref ref="appxChainsawXMLAppender" />
+
 	</root>
 
 	<!-- Specify the level for some specific categories -->
 	<category name="functionA">
-		<priority value="info" />
-		<appender-ref ref="appxNormalAppender" />
+		<priority value="all" />
+		<appender-ref ref="appxFileAppender" />
 		<appender-ref ref="appxConsoleAppender" />
 	</category>
 

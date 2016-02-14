@@ -8,8 +8,8 @@
 #ifndef INCLUDE_STRUCTURES_EDGE_EDGE_HPP_
 #define INCLUDE_STRUCTURES_EDGE_EDGE_HPP_
 
-#include <string>
-
+#include "../../enums/EdgeConnectionType.hpp"
+#include "../../enums/Visibility.hpp"
 #include "../../typedefs/primitive.hpp"
 #include "../../typedefs/struct.hpp"
 #include "../EdgeIF.hpp"
@@ -39,13 +39,20 @@ public:
 
 	//************************************ CONSTRUCTOR & DESTRUCTOR ************************************//
 
+	Edge(VertexPair const & edgeConnections, EdgeCost const edgeCost,
+			EdgeConnectionType connectionType, Visibility visibility);
+
+	Edge(VertexPair const & edgeConnections, EdgeCost const edgeCost,
+			EdgeConnectionType connectionType);
+
+	Edge(VertexPair const & edgeConnections, EdgeCost const edgeCost,
+			Visibility visibility);
+
 	Edge(VertexPair const & edgeConnections, EdgeCost const edgeCost);
 
 	virtual ~Edge();
 
 	//*************************************** PUBLIC FUNCTIONS *****************************************//
-
-	std::string toString();
 
 	//*************************************** GETTERS & SETTERS ****************************************//
 

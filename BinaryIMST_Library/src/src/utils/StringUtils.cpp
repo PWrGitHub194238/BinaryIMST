@@ -31,7 +31,7 @@ std::unique_ptr<char[]> StringUtils::parseStringFormatSpecifiers(
 			e += 1;
 			continue;
 		}
-		e = StringUtils::Impl::insertRightFormat(str, b + 1, e - 1);
+		e = StringUtils::impl::insertRightFormat(str, b + 1, e - 1);
 	} while (e != std::string::npos);
 	c_str = std::unique_ptr<char[]> { new char[str.size() + 1] { } }; // +1 for terminating NUL
 	strcpy(c_str.get(), str.c_str());
@@ -47,7 +47,7 @@ const char* StringUtils::formatMessage(const char* format, ...) {
 	return formatted;
 }
 
-size_t StringUtils::Impl::insertRightFormat(std::string& sourceFormat,
+size_t StringUtils::impl::insertRightFormat(std::string& sourceFormat,
 		size_t const & beginIdx, size_t const & endIdx) {
 	const size_t length = endIdx - beginIdx + 1;
 	std::string subStr = sourceFormat.substr(beginIdx, length);

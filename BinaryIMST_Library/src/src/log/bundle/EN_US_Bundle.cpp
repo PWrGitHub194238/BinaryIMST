@@ -5,7 +5,7 @@
  *      Author: tomasz
  */
 
-const char* dictionary[] = {
+const char* logDictionary[] = {
 
 	//*********************************** FibonacciHeap ***********************************//
 	//**************** Trace ****************//
@@ -111,6 +111,28 @@ const char* dictionary[] = {
 	// INVALID_ARC_LINE_READ
 	"Unexpected line pattern while reading arc line. Graph cannot be read from this file.",
 
+
+	//*********************************** PrimeHeap.cpp ***********************************//
+	//**************** Trace ****************//
+	//**************** Debug ****************//
+	//**************** Info *****************//
+	// PH_CREATE_EDGE_HEAP_INIT
+	"Creating edge heap for MST solver...\n\tInitial vertex ID\t:\t%VertexIdx%,\n\tOutgoing edges:\n%s.",
+	// PH_FILL_HEAP_WITH_INIT_VERTICES
+	"",
+	// 	PH_ADD_FULL_VERTEX_TO_HEAP
+	"Inserting vertex to heap:\t\nVertex ID\t:\t%VertexIdx%,\n\tVertex cost\t:\t%EdgeCost%,\n\tParent ID\t:\t%VertexIdx%.",
+	// PH_FILL_HEAP_WITH_VERTICES
+	"",
+	// PH_ADD_VERTEX_TO_HEAP
+	"Inserting vertex to heap:\t\nVertex ID\t:\t%VertexIdx%.",
+
+	//**************** Warn *****************//
+	// MST_EMPTY_INPUT_GRAPH
+	"Inputed graph has no vertices. Algorithm for solving MST problem has been skipped.",
+
+	//**************** Error ****************//
+	//**************** Fatal ****************//
 
 	//*********************************** Test cases ***********************************//
 	// TEST_EN_WITHOUT_FORMAT

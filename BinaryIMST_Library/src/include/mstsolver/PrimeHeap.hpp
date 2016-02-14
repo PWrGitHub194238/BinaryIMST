@@ -8,12 +8,9 @@
 #ifndef INCLUDE_MSTSOLVER_PRIMEHEAP_HPP_
 #define INCLUDE_MSTSOLVER_PRIMEHEAP_HPP_
 
-#include <utility>
-
-#include "../enums/MSTSolverMode.hpp"
-#include "../heap/VertexHeapIF.hpp"
-#include "../structures/VertexIF.hpp"
 #include "MSTSolverIF.hpp"
+
+class VertexIF;
 
 class VertexHeapIF;
 
@@ -25,7 +22,6 @@ private:
 	//************************************** PRIVATE CLASS FIELDS **************************************//
 
 	VertexHeapIF * vertexHeap;
-	VertexIF * initVertex;
 
 	//*************************************** PRIVATE FUNCTIONS ****************************************//
 
@@ -33,10 +29,13 @@ private:
 	 * It is assumed that it will be immediately pop from heap
 	 * so there is no reason to push it in a first place.
 	 *
+	 * All neighbours of given initVertex will be added to heap with edge cost instead of infinity
+	 *
 	 * @param graph
 	 * @return
 	 */
-	std::pair<VertexIF *, VertexHeapIF *> createEdgeHeap(GraphIF * const graph);
+	VertexHeapIF* createEdgeHeap(GraphIF * const graph,
+			VertexIF * const initVertex);
 
 protected:
 
@@ -46,6 +45,10 @@ protected:
 
 	//************************************** PROTECTED FUNCTIONS ***************************************//
 
+	EdgeSetIF * resolve();
+
+	EdgeSetIF * resolve(VertexIF * const initialVertex);
+
 public:
 
 	//************************************* PUBLIC CONSTANT FIELDS *************************************//
@@ -54,13 +57,11 @@ public:
 
 	//************************************ CONSTRUCTOR & DESTRUCTOR ************************************//
 
-	PrimeHeap(GraphIF * graph, MSTSolverMode mode);
+	PrimeHeap(GraphIF * graph);
 
 	virtual ~PrimeHeap();
 
 	//*************************************** PUBLIC FUNCTIONS *****************************************//
-
-	EdgeSetIF * resolve();
 
 	//*************************************** GETTERS & SETTERS ****************************************//
 

@@ -9,9 +9,6 @@
 
 #include <iterator>
 
-#include "../../../include/utils/enums/IndexShift.hpp"
-#include "../../../include/utils/IndexUtils.hpp"
-
 //************************************ PRIVATE CONSTANT FIELDS *************************************//
 
 //************************************** PRIVATE CLASS FIELDS **************************************//
@@ -38,8 +35,7 @@ VertexArray::VertexArray(VertexCount numberOfVertices) :
 VertexArray::~VertexArray() {
 	begin();
 	while (hasNext()) {
-		VertexIF * v = next();
-		delete v;
+		delete next();
 	}
 	vertices.clear();
 }
@@ -51,9 +47,7 @@ void VertexArray::push_back(VertexIF * const & vertex) {
 }
 
 VertexIF * VertexArray::getElementAt(VertexIdx const vertexIdx) {
-	return this->vertices.at(
-			IndexUtils::shiftIndex<VertexIdx>(vertexIdx,
-					IndexShift::FROM_ONE_TO_ZERO_BASED_INDEX));
+	return this->vertices.at(vertexIdx);
 }
 
 VertexCount VertexArray::size() {

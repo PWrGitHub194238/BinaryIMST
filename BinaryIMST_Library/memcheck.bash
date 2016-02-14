@@ -4,6 +4,7 @@
 # Public function
 # Parse command line arguments
 #
+#	-f --force-yes			force every prompt to be skiped with 'y' value - use with caution
 #	-r --runnable <arg>		path to executable file which will be memchecked
 #	-o --output <arg>		path where all valgrind logs will be redirected
 #	-s --suppressions <arg>		path to file with additional suppressions for valgrind
@@ -12,6 +13,9 @@ function pasreBash() {
 	while [[ $# > 0 ]]
 	do
 		case $1 in
+			-f|--force-yes)
+				FORCE_YES='y'
+			;;
 			-r|--runnable)
 				runnable_path=$(expandFilePath "$2")
 				shift # past argument
@@ -39,6 +43,7 @@ function pasreBash() {
 #
 function printHelp() {
 	echo "Usage: [sudo] bash memcheck.sh -r|--runnable <arg> [-o|--output <arg>] [-s|--suppressions <arg>]"
+	echo "	-f --force-yes			force every prompt to be skiped with 'y' value - use with caution"
 	echo "	-r --runnable <arg>		path to executable file which will be memchecked"
 	echo "	-o --output <arg>		path where all valgrind logs will be redirected"
 	echo "	-s --suppressions <arg>		path to file with additional suppressions for valgrind"
@@ -73,6 +78,67 @@ function expandDirPath() {
 	fi
 
 	echo "$var"
+}
+
+# Public function
+# Show prompt and force user to confirm or cancel.
+#
+# Parameters:
+#	$1 - text message to show to user before asking for 'y' or 'n' value
+#
+function confirm() {
+	read -e -p "$1 (y/n): "
+	echo "$REPLY"
+}
+
+# Private function
+# Function supports bash command line arguments.
+#
+# Parameters:
+#	$1 - text message to show to user before asking for 'y' or 'n' value
+#
+function bash_confirm() {
+	if [ "$FORCE_YES" == 'y' ]; then
+		echo 'y'
+	else
+		echo $(confirm "$1")
+	fi
+}
+
+# Public function
+# Install additional package and dependencies
+#
+# Parameters:
+#	$1 - package name
+#
+function installPackage() {
+	if [ $(dpkg-query -W -f='${Status}' "$1" 2>/dev/null | grep -c "ok installed") -eq 0 ];
+	then
+		if [ $(confirm "Confirm installation of package \"$1\"?") == "y" ]; then
+			sudo apt-get -yf install "$1"
+			sudo apt-get -yf install
+		fi;
+	else
+		echo "Package \"$1\" already has been installed."
+	fi;
+}
+
+# Public function
+# Install additional package and dependencies
+#
+# Parameters:
+#	$1 - package name
+#
+function bash_installPackage() {
+	if [ $(dpkg-query -W -f='${Status}' "$1" 2>/dev/null | grep -c "ok installed") -eq 0 ];
+	then
+		if [ $(bash_confirm "Confirm installation of package \"$1"\"?) == "y" ]; then
+			sudo apt-get -yf install "$1"
+			sudo apt-get -yf install
+		fi;
+	else
+		echo "Package '$1' is already installed. Skipping..."
+	fi;
 }
 
 function parseSummary() {
@@ -123,19 +189,23 @@ pasreBash $@
 if [ -z "$runnable_path" ]; then
 	printHelp
 	exit;
-elif [ -n "$output_path" ] && [ -n "$suppressions_path" ]; then
-	echo -e "Running valgrind with additional configuration from file '$suppressions_path' (log file will be generated as '$output_path')...";
-	valgrind --leak-check=full --track-fds=yes --show-leak-kinds=all --show-reachable=yes --log-file="$output_path" --gen-suppressions=all --suppressions="$suppressions_path" -v "$runnable_path"
-	parseSummary "$output_path"
-elif [ -n "$output_path" ]; then
-	echo -e "Running valgrind (log file will be generated as '$output_path')...";
-	valgrind --leak-check=full --track-fds=yes --show-leak-kinds=all --show-reachable=yes --log-file="$output_path" --gen-suppressions=all -v "$runnable_path"
-	parseSummary "$output_path"
-elif [ -n "$suppressions_path" ]; then
-	echo -e "Running valgrind with additional configuration from file '$suppressions_path'...";
-	valgrind --leak-check=full --track-fds=yes --show-leak-kinds=all --show-reachable=yes --gen-suppressions=all --suppressions="$suppressions_path" -v "$runnable_path"
 else
-	echo -e "Running valgrind...";
-	valgrind --leak-check=full --track-fds=yes --show-leak-kinds=all --show-reachable=yes --gen-suppressions=all -v "$runnable_path"
+	echo "'Valgrind' is required in order to memcheck this application."
+	bash_installPackage "valgrind"
+	if [ -n "$output_path" ] && [ -n "$suppressions_path" ]; then
+		echo -e "Running valgrind with additional configuration from file '$suppressions_path' (log file will be generated as '$output_path')...";
+		valgrind --leak-check=full --track-fds=yes --show-leak-kinds=all --show-reachable=yes --log-file="$output_path" --gen-suppressions=all --suppressions="$suppressions_path" -v "$runnable_path"
+		parseSummary "$output_path"
+	elif [ -n "$output_path" ]; then
+		echo -e "Running valgrind (log file will be generated as '$output_path')...";
+		valgrind --leak-check=full --track-fds=yes --show-leak-kinds=all --show-reachable=yes --log-file="$output_path" --gen-suppressions=all -v "$runnable_path"
+		parseSummary "$output_path"
+	elif [ -n "$suppressions_path" ]; then
+		echo -e "Running valgrind with additional configuration from file '$suppressions_path'...";
+		valgrind --leak-check=full --track-fds=yes --show-leak-kinds=all --show-reachable=yes --gen-suppressions=all --suppressions="$suppressions_path" -v "$runnable_path"
+	else
+		echo -e "Running valgrind...";
+		valgrind --leak-check=full --track-fds=yes --show-leak-kinds=all --show-reachable=yes --gen-suppressions=all -v "$runnable_path"
+	fi
 fi
 

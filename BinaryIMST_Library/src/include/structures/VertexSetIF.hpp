@@ -8,13 +8,16 @@
 #ifndef INCLUDE_STRUCTURES_VERTEXSETIF_HPP_
 #define INCLUDE_STRUCTURES_VERTEXSETIF_HPP_
 
+#include <rapidjson/document.h>
+#include <string>
+
 #include "../typedefs/primitive.hpp"
-#include "Iterable.hpp"
+#include "IterableIF.hpp"
 #include "VertexIF.hpp"
 
 class VertexIF;
 
-class VertexSetIF: public Iterable<VertexIF *> {
+class VertexSetIF: public Iterable<VertexIF*>, public JSONIF {
 private:
 
 	//************************************ PRIVATE CONSTANT FIELDS *************************************//
@@ -60,6 +63,12 @@ public:
 	virtual bool hasNext() = 0;
 
 	virtual VertexIF * next() = 0;
+
+	virtual void fillJSON(rapidjson::Document& jsonDoc,
+			rapidjson::Document::AllocatorType& allocator,
+			unsigned short depth);
+
+	virtual std::string toString();
 
 	//*************************************** GETTERS & SETTERS ****************************************//
 

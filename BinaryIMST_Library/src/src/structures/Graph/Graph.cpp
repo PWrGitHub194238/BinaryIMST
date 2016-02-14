@@ -11,12 +11,9 @@
 #include <log4cxx/logger.h>
 #include <memory>
 
+#include "../../../include/enums/EdgeConnectionType.hpp"
 #include "../../../include/log/bundle/Bundle.hpp"
 #include "../../../include/log/utils/LogUtils.hpp"
-#include "../../../include/structures/EdgeInclude.hpp"
-#include "../../../include/structures/EdgeSetIF.hpp"
-#include "../../../include/structures/VertexIF.hpp"
-#include "../../../include/typedefs/struct.hpp"
 
 const static log4cxx::LoggerPtr logger(log4cxx::Logger::getLogger("Graph"));
 
@@ -25,12 +22,6 @@ const static log4cxx::LoggerPtr logger(log4cxx::Logger::getLogger("Graph"));
 //************************************** PRIVATE CLASS FIELDS **************************************//
 
 //*************************************** PRIVATE FUNCTIONS ****************************************//
-
-void Graph::connectUndirectedEdgeToVertex(EdgeIF * const edge,
-		VertexIF * const vertex) {
-	vertex->addInputEdge(edge);
-	vertex->addOutputEdge(edge);
-}
 
 //*********************************** PROTECTED CONSTANT FIELDS ************************************//
 
@@ -44,9 +35,18 @@ void Graph::connectUndirectedEdgeToVertex(EdgeIF * const edge,
 
 //************************************ CONSTRUCTOR & DESTRUCTOR ************************************//
 
+Graph::Graph(VertexCount const vertexCount, EdgeCount const edgeCount,
+		GraphConstructMode constructorMode) :
+		GraphIF(vertexCount, edgeCount, constructorMode) {
+	INFO(logger, LogBundleKey::GRAPH_CONSTRUCTOR, vertexCount, edgeCount);
+}
+
 Graph::Graph(VertexCount const vertexCount, EdgeCount const edgeCount) :
 		GraphIF(vertexCount, edgeCount) {
-	INFO(logger, BundleKey::GRAPH_CONSTRUCTOR, vertexCount, edgeCount);
+}
+
+Graph::Graph(VertexSetIF * const & vertexSet, EdgeSetIF * const & edgeSet) :
+		GraphIF(vertexSet, edgeSet) {
 }
 
 Graph::~Graph() {
@@ -57,14 +57,10 @@ Graph::~Graph() {
 
 void Graph::addEdge(VertexIdx const vertexIdxU, VertexIdx const vertexIdxV,
 		EdgeCost const edgeCost) {
-	INFO(logger, BundleKey::EDGE_TO_GRAPH_IF_ADDED, vertexIdxU, vertexIdxV,
+	INFO(logger, LogBundleKey::EDGE_TO_GRAPH_IF_ADDED, vertexIdxU, vertexIdxV,
 			edgeCost);
-	VertexIF * vertexU = this->getVertexByIdx(vertexIdxU);
-	VertexIF * vertexV = this->getVertexByIdx(vertexIdxV);
-	EdgeIF * edge = new EdgeImpl { VertexPair { vertexU, vertexV }, edgeCost };
-	edgeSet->push_back(edge);
-	connectUndirectedEdgeToVertex(edge, vertexU);
-	connectUndirectedEdgeToVertex(edge, vertexV);
+	GraphIF::addEdge(vertexIdxU, vertexIdxV, edgeCost,
+			EdgeConnectionType::UNDIRECTED);
 }
 
 //*************************************** GETTERS & SETTERS ****************************************//

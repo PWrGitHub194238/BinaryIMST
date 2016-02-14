@@ -8,7 +8,7 @@
 #ifndef INCLUDE_BUNDLE_H_
 #define INCLUDE_BUNDLE_H_
 
-enum BundleKey {
+enum LogBundleKey {
 
 	//*********************************** FibonacciHeap ***********************************//
 	//**************** Trace ****************//
@@ -82,6 +82,22 @@ enum BundleKey {
 	INVALID_PROBLEM_LINE_READ,
 	INVALID_ARC_LINE_READ,
 
+	//*********************************** PrimeHeap.cpp ***********************************//
+	//**************** Trace ****************//
+	//**************** Debug ****************//
+	//**************** Info *****************//
+	PH_CREATE_EDGE_HEAP_INIT,
+	PH_FILL_HEAP_WITH_INIT_VERTICES,
+	PH_ADD_FULL_VERTEX_TO_HEAP,
+	PH_FILL_HEAP_WITH_VERTICES,
+	PH_ADD_VERTEX_TO_HEAP,
+
+	//**************** Warn *****************//
+	MST_EMPTY_INPUT_GRAPH,
+
+	//**************** Error ****************//
+	//**************** Fatal ****************//
+
 	//*********************************** Test cases ***********************************//
 	TEST_EN_WITHOUT_FORMAT,
 	TEST_EN_CHAR_FORMAT,
@@ -92,6 +108,6 @@ enum BundleKey {
 	TEST_EN_EdgeCount_MULTIPLY_FORMAT
 };
 
-extern const char* dictionary[];
+extern const char* logDictionary[];
 
 #endif /* INCLUDE__BUNDLE_H_ */

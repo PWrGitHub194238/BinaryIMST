@@ -8,12 +8,15 @@
 #ifndef INCLUDE_UTILS_INPUTUTILS_HPP_
 #define INCLUDE_UTILS_INPUTUTILS_HPP_
 
+#include <rapidjson/document.h>
+#include <rapidjson/rapidjson.h>
 #include <cstdio>
 #include <iostream>
 #include <limits>
 #include <memory>
 
 #include "../typedefs/primitive.hpp"
+#include "enums/InputFormat.hpp"
 #include "enums/InputMode.hpp"
 #include "StringUtils.hpp"
 
@@ -30,15 +33,18 @@ class GraphIF;
 
 namespace InputUtils {
 
-GraphIF * readGraph(char const * filename, InputMode inputMode);
+GraphIF * readGraph(char const * filename, InputFormat inputFormat,
+		InputMode inputMode);
 
-namespace Impl {
+namespace impl {
 
 static const unsigned short MAX_CHARS_IN_LINE { 2
 		* (std::numeric_limits<EdgeIdx>::digits10 + 1)
 		+ (std::numeric_limits<EdgeCost>::digits10 + 1) + 3 };
 
 static const long MAX_STREAM_SIZE = std::numeric_limits<std::streamsize>::max();
+static const short BUFFER_SIZE { 4096 };
+namespace GR {
 
 static const unsigned short COMMENT_LINE { static_cast<unsigned short>('c') };
 static const char* COMMENT_LINE_PATTERN { "%*[^\n]\n" };
@@ -56,23 +62,80 @@ static const std::unique_ptr<char[]> ARC_DEF_LINE_PATTERN {
 				" %VertexIdx% %VertexIdx% %EdgeCost%") };
 static const unsigned short ARC_DEF_LINE_PATTERN_ARGS { 3 };
 
-GraphIF * readGraphWithoutFileMappping(char const * const filename);
+}  // namespace GR
 
-GraphIF * readGraphWithFileMappping(char const * const filename);
+namespace VA {
 
-GraphIF * createGraphFromFile(FILE * const dataFile)
+static const char* VERTEX_LIST_KEY { "vl" };
+static const char* EDGE_LIST_KEY { "el" };
+static const char* EDGE_VERTEX_A_KEY { "vertexA" };
+static const char* EDGE_VERTEX_B_KEY { "vertexB" };
+static const char* EDGE_COST_KEY { "weight" };
+
+}  // namespace VA
+
+namespace RAM {
+
+GraphIF * readGraph(char const * const filename, InputFormat inputFormat);
+
+namespace GR {
+
+GraphIF * readGraph(char const * const filename);
+
+GraphIF * createGraph(char * const buffer)
 		throw (InputExceptions::InvalidProblemRead);
 
-GraphIF * createGraphFromBuffer(char * const buffer)
+void addEdge(char * const buffer, GraphIF * const graph)
+		throw (InputExceptions::InvalidArcRead);
+
+}  // namespace GR
+
+namespace VA {
+
+GraphIF * readGraph(char const * const filename);
+
+GraphIF * createGraph(char * const buffer)
 		throw (InputExceptions::InvalidProblemRead);
 
-void addEdgeFromFile(FILE * const dataFile, GraphIF * const graph)
+void addEdge(char * const buffer, GraphIF * const graph)
 		throw (InputExceptions::InvalidArcRead);
 
-void addEdgeFromBuffer(char * const buffer, GraphIF * const graph)
+}  // namespace VA
+
+}  // namespace RAM
+
+namespace HDD {
+
+GraphIF * readGraph(char const * const filename, InputFormat inputFormat);
+
+namespace GR {
+
+GraphIF * readGraph(char const * const filename);
+
+GraphIF * createGraph(FILE * const dataFile)
+		throw (InputExceptions::InvalidProblemRead);
+
+void addEdge(FILE * const dataFile, GraphIF * const graph)
 		throw (InputExceptions::InvalidArcRead);
 
-}
+}  // namespace GR
+
+namespace VA {
+
+GraphIF * readGraph(char const * const filename);
+
+GraphIF * createGraph(rapidjson::Value& vertexList,
+		rapidjson::SizeType const numberOfEdges)
+				throw (InputExceptions::InvalidProblemRead);
+
+void addEdge(rapidjson::Value::ConstMemberIterator& edge, GraphIF * const graph)
+		throw (InputExceptions::InvalidArcRead);
+
+}  // namespace VA
+
+}  // namespace HDD
+
+}  // namespace impl
 
 }  // namespace InputUtils
 
