@@ -7,40 +7,140 @@
 
 #include "../../../include/structures/EdgeSet/EdgeList.hpp"
 
-#include <log4cxx/helpers/messagebuffer.h>
 #include <log4cxx/logger.h>
-#include <memory>
+#include <algorithm>
+#include <iterator>
+#include <set>
+#include <utility>
 
-#include "../../../include/log/bundle/Bundle.hpp"
-#include "../../../include/log/utils/LogUtils.hpp"
+#include "../../../include/exp/LogicExceptions.hpp"
 
-const static log4cxx::LoggerPtr logger(log4cxx::Logger::getLogger("EdgeList"));
+const static log4cxx::LoggerPtr logger(
+		log4cxx::Logger::getLogger("structures.EdgeList"));
 
 //************************************ PRIVATE CONSTANT FIELDS *************************************//
+
 //************************************** PRIVATE CLASS FIELDS **************************************//
+
 //*************************************** PRIVATE FUNCTIONS ****************************************//
-//*********************************** PROTECTED CONSTANT FIELDS ************************************//
-//************************************ PROTECTED CLASS FIELDS **************************************//
-//************************************** PROTECTED FUNCTIONS ***************************************//
-//************************************* PUBLIC CONSTANT FIELDS *************************************//
-//************************************** PUBLIC CLASS FIELDS ***************************************//
-//************************************ CONSTRUCTOR & DESTRUCTOR ************************************//
-EdgeList::EdgeList() :
-		EdgeSetIF() {
+
+void EdgeList::begin(std::list<EdgeIF*>::const_iterator & iterator) {
+	this->edgeIteratorBegin = this->edges.begin();
+	iterator = this->edges.begin();
+	this->edgeIteratorEnd = this->edges.end();
 }
 
-EdgeList::EdgeList(VertexCount numberOfEdges) :
+void EdgeList::end(std::list<EdgeIF*>::const_iterator & iterator) {
+	this->edgeIteratorBegin = this->edges.begin();
+	iterator = this->edges.end();
+	this->edgeIteratorEnd = this->edges.end();
+}
+
+bool EdgeList::hasNext(std::list<EdgeIF*>::const_iterator & iterator) {
+	return iterator != this->edgeIteratorEnd;
+}
+
+bool EdgeList::hasNext(std::list<EdgeIF*>::const_iterator & iterator,
+		Visibility const visibility) {
+	while (hasNext(iterator)
+			&& (visibility != Visibility::BOTH
+					&& current(iterator)->getVisibility() != visibility)) {
+		next(iterator);
+	}
+	return hasNext(iterator);
+}
+
+bool EdgeList::hasPrevious(std::list<EdgeIF*>::const_iterator & iterator) {
+	return iterator != this->edgeIteratorBegin;
+}
+
+bool EdgeList::hasPrevious(std::list<EdgeIF*>::const_iterator & iterator,
+		Visibility const visibility) {
+	while (hasPrevious(iterator)
+			&& (visibility != Visibility::BOTH
+					&& current(iterator)->getVisibility() != visibility)) {
+		previous(iterator);
+	}
+	return hasPrevious(iterator);
+}
+
+EdgeIF * EdgeList::next(std::list<EdgeIF*>::const_iterator & iterator) {
+	return *(iterator++);
+}
+
+EdgeIF * EdgeList::current(std::list<EdgeIF*>::const_iterator & iterator) {
+	return *(iterator);
+}
+
+EdgeIF * EdgeList::previous(std::list<EdgeIF*>::const_iterator & iterator) {
+	return *(--iterator);
+}
+
+EdgeIF * EdgeList::peek(std::list<EdgeIF*>::const_iterator & iterator,
+		int moveIndex) throw (LogicExceptions::EmptyIteratorException) {
+	EdgeIF* item { };
+	std::list<EdgeIF*>::const_iterator tmpIterator = iterator;
+	if (this->numberOfEdges > 0) {
+		if (iterator == this->edgeIteratorEnd) {
+			iterator = std::prev(iterator);
+		}
+		if (moveIndex > 0) {
+			for (; moveIndex > 0; moveIndex -= 1) {
+				if (std::next(iterator) != this->edgeIteratorEnd) {
+					iterator++;
+				}
+			}
+		} else {
+			for (; moveIndex < 0; moveIndex += 1) {
+				if (hasPrevious(iterator)) {
+					--iterator;
+				}
+			}
+		}
+		item = *(iterator);
+		iterator = tmpIterator;
+		return item;
+	}
+
+	throw LogicExceptions::EmptyIteratorException();
+}
+
+//*********************************** PROTECTED CONSTANT FIELDS ************************************//
+
+//************************************ PROTECTED CLASS FIELDS **************************************//
+
+//************************************** PROTECTED FUNCTIONS ***************************************//
+
+void EdgeList::createIteratorIfNotExists(IteratorId const iteratorId) {
+	if (iteratorMap.count(iteratorId) == 0) {
+		iteratorMap.insert(
+				std::make_pair(iteratorId,
+						std::list<EdgeIF*>::const_iterator { }));
+	}
+}
+
+//************************************* PUBLIC CONSTANT FIELDS *************************************//
+
+//************************************** PUBLIC CLASS FIELDS ***************************************//
+
+//************************************ CONSTRUCTOR & DESTRUCTOR ************************************//
+
+EdgeList::EdgeList(EdgeSetIF * edgeList) :
+		EdgeSetIF(edgeList) {
+	edgeList->begin();
+	while (edgeList->hasNext()) {
+		this->edges.push_back(edgeList->next());
+	}
+}
+
+EdgeList::EdgeList(EdgeCount numberOfEdges) :
 		EdgeSetIF(numberOfEdges) {
-	TRACE(logger, LogBundleKey::EDGE_LIST_CONSTRUCTOR, numberOfEdges);
-	edges = std::list<EdgeIF*> { };
+	this->edges = std::list<EdgeIF*> { };
 }
 
 EdgeList::~EdgeList() {
-	begin();
-	while (hasNext()) {
-		delete next();
-	}
-	edges.clear();
+	this->edges.clear();
+	this->iteratorMap.clear();
 }
 
 //*************************************** PUBLIC FUNCTIONS *****************************************//
@@ -49,30 +149,118 @@ void EdgeList::push_back(EdgeIF * const & edge) {
 	edges.push_back(edge);
 }
 
-EdgeCount EdgeList::size() {
-	return (EdgeCount) edges.size();
+EdgeIF * EdgeList::getElementAt(EdgeIdx const edgeIdx) {
+	return *(std::next(edges.begin(), edgeIdx));
+}
+
+EdgeCount EdgeList::size() const {
+	return (EdgeCount) this->edges.size();
 }
 
 void EdgeList::begin() {
-	this->edgeIteratorBegin = this->edges.begin();
-	this->edgeIteratorEnd = this->edges.end();
+	begin(this->edgeIterator);
+}
+
+void EdgeList::begin(IteratorId const iteratorId) {
+	createIteratorIfNotExists(iteratorId);
+	begin(iteratorMap.at(iteratorId));
+}
+
+void EdgeList::end() {
+	end(this->edgeIterator);
+}
+
+void EdgeList::end(IteratorId const iteratorId) {
+	createIteratorIfNotExists(iteratorId);
+	end(iteratorMap.at(iteratorId));
 }
 
 bool EdgeList::hasNext() {
-	return this->edgeIteratorBegin != this->edgeIteratorEnd;
+	return hasNext(this->edgeIterator);
+}
+
+bool EdgeList::hasNext(IteratorId const iteratorId) {
+	return hasNext(iteratorMap.at(iteratorId));
 }
 
 bool EdgeList::hasNext(Visibility const visibility) {
-	while (hasNext()
-			&& (visibility != Visibility::BOTH
-					&& (*this->edgeIteratorBegin)->getVisibility() != visibility)) {
-		++this->edgeIteratorBegin;
-	}
-	return this->edgeIteratorBegin != this->edgeIteratorEnd;
+	return hasNext(this->edgeIterator, visibility);
+}
+
+bool EdgeList::hasNext(IteratorId const iteratorId,
+		Visibility const visibility) {
+	return hasNext(iteratorMap.at(iteratorId), visibility);
+}
+
+bool EdgeList::hasPrevious() {
+	return hasPrevious(this->edgeIterator);
+}
+
+bool EdgeList::hasPrevious(IteratorId const iteratorId) {
+	return hasPrevious(iteratorMap.at(iteratorId));
+}
+
+bool EdgeList::hasPrevious(Visibility const visibility) {
+	return hasPrevious(this->edgeIterator, visibility);
+}
+
+bool EdgeList::hasPrevious(IteratorId const iteratorId,
+		Visibility const visibility) {
+	return hasPrevious(iteratorMap.at(iteratorId), visibility);
 }
 
 EdgeIF * EdgeList::next() {
-	return *(this->edgeIteratorBegin++);
+	return next(this->edgeIterator);
+}
+
+EdgeIF * EdgeList::next(IteratorId const iteratorId) {
+	return next(iteratorMap.at(iteratorId));
+}
+
+EdgeIF * EdgeList::current() {
+	return current(this->edgeIterator);
+}
+
+EdgeIF * EdgeList::current(IteratorId const iteratorId) {
+	return current(iteratorMap.at(iteratorId));
+}
+
+EdgeIF * EdgeList::previous() {
+	return previous(this->edgeIterator);
+}
+
+EdgeIF * EdgeList::previous(IteratorId const iteratorId) {
+	return previous(iteratorMap.at(iteratorId));
+}
+
+EdgeIF * EdgeList::peek(int moveIndex)
+		throw (LogicExceptions::EmptyIteratorException) {
+	return peek(this->edgeIterator, moveIndex);
+}
+
+EdgeIF * EdgeList::peek(IteratorId const iteratorId, int moveIndex)
+		throw (LogicExceptions::EmptyIteratorException) {
+	return peek(iteratorMap.at(iteratorId), moveIndex);
+}
+
+IteratorId EdgeList::getIterator() {
+	std::set<IteratorId> iteratorIdSet;
+	IteratorId returnedId { 0 };
+	std::transform(this->iteratorMap.begin(), this->iteratorMap.end(),
+			std::inserter(iteratorIdSet, iteratorIdSet.begin()),
+			[](std::pair<IteratorId, std::list<EdgeIF*>::const_iterator> pair) {return pair.first;});
+
+	for (IteratorId id : iteratorIdSet) {
+		if (returnedId != id) {
+			return returnedId;
+		}
+		returnedId += 1;
+	}
+	return *(iteratorIdSet.end()) + 1;
+}
+
+void EdgeList::removeIterator(IteratorId const iteratorId) {
+	this->iteratorMap.erase(iteratorId);
 }
 
 //*************************************** GETTERS & SETTERS ****************************************//

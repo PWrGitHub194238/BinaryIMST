@@ -60,6 +60,8 @@ public:
 
 	//*************************************** PUBLIC FUNCTIONS *****************************************//
 
+	VertexCount size() const;
+
 	void push(VertexHeapItem * const vertex);
 
 	VertexIF * pop();

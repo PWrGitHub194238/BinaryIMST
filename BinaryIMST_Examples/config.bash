@@ -1,21 +1,63 @@
 #!/bin/bash
 
-log4cxxWgetURL='http://ftp.ps.pl/pub/apache/logging/log4cxx/0.10.0/apache-log4cxx-0.10.0.tar.gz'
+sharedLibConfigDir='/etc/ld.so.conf.d/'
+
+gTestSharedLibConfigFile='gTest.conf'
 gTestGitURL='https://github.com/google/googletest.git'
+rapidJSONURL='https://github.com/miloyip/rapidjson.git'
 
 # Public function
 # Parse command line arguments
 #
+#	autocompletion			add bash sugestions for all scripts to system
+#	help				print this message
+#	install	[arg]			run script with default settings that will install all dependencies required 
+#					if no argument was specify.
+#		log4cxx
+#		graphviz
+#		gTest
+#		rapidJSON
+#	initBuild			run Eclipse's headless build menager to recreate all makefiles and clean the project
 #	-d --defaults			set script not to prompt about any value which has a default one specified
 #	-f --force-yes			force every prompt to be skiped with 'y' value - use with caution
 #	--gtest-path <arg>		path where GTest project will be downloaded
 #	--gtest-lib-path <arg>		path where GTest static library will be moved
 #	--gtest-include-path <arg>	path where GTest header files will be moved
+#	--rapidjson-path <arg>		path where RapidJSON project will be downloaded
+#	--rapidjson-include-path <arg>	path where RapidJSON header files will be moved
 #
 function pasreBash() {
 	while [[ $# > 0 ]]
 	do
 		case $1 in
+			autocompletion)
+				ACTION='autocompletion'
+			;;
+			help)
+				ACTION='help'
+			;;
+			install)
+				ACTION='installAll'
+			;;
+			log4cxx)
+				ACTION='install'
+				LOG4CXX='y'
+			;;
+			graphviz)
+				ACTION='install'
+				GRAPHVIZ='y'
+			;;
+			gTest)
+				ACTION='install'
+				GTEST='y'
+			;;
+			rapidJSON)
+				ACTION='install'
+				RAPIDJSON='y'
+			;;
+			initBuild)
+				ACTION='initBuild'
+			;;
 			-d|--defaults)
 				DEFAULT='y'
 			;;
@@ -34,6 +76,14 @@ function pasreBash() {
 				bash_gtest_include_path=$(expandPath "$2")
 				shift # past argument
 				;;
+			--rapidjson-path)
+				bash_rapidjson_path=$(expandPath "$2")
+				shift # past argument
+				;;
+			--rapidjson-include-path)
+				bash_rapidjson_include_path=$(expandPath "$2")
+				shift # past argument
+				;;
 			*)
 				printHelp
 				exit;
@@ -48,12 +98,23 @@ function pasreBash() {
 # Print help for script
 #
 function printHelp() {
-	echo "Usage: [sudo] bash install.sh [-d|--defaults] [-f|--force-yes] [--gtest-path <arg>] [--gtest-lib-path <arg>] [--gtest-include-path <arg>]"
+	echo "Usage: [sudo] bash install.bash autocompletion|help|install|initBuild [log4cxx graphviz gTest rapidJSON] [-d|--defaults] [-f|--force-yes] [--gtest-path <arg>] [--gtest-lib-path <arg>] [--gtest-include-path <arg>] [--rapidjson-path <arg>] [--rapidjson-include-path <arg>]"
+	echo "	autocompletion			add bash sugestions for all scripts to system"
+	echo "	help				print this message"
+	echo "	install				run script with default settings that will install all dependencies required 
+					if no argument was specify.
+			log4cxx
+			graphviz
+			gTest
+			rapidJSON"
+	echo "	initBuild			run Eclipse's headless build menager to recreate all makefiles and clean the project"
 	echo "	-d --defaults			set script not to prompt about any value which has a default one specified"
 	echo "	-f --force-yes			force every prompt to be skiped with 'y' value - use with caution"
 	echo "	--gtest-path <arg>		path where GTest project will be downloaded"
-	echo "	--gtest-lib-path <arg>		path where GTest static library will be moved"
+	echo "	--gtest-lib-path <arg>		path where GTest shared library will be moved"
 	echo "	--gtest-include-path <arg>	path where GTest header files will be moved"
+	echo "	--rapidjson-path <arg>		path where RapidJSON project will be downloaded"
+	echo "	--rapidjson-include-path <arg>	path where RapidJSON header files will be moved"
 }
 
 
@@ -249,7 +310,7 @@ function bash_remakeDir() {
 function removeIfExists() {
 	if [ -d "$2" ]; then
 		if [ $(confirm "$1") == "y" ]; then
-			rm -fr "$2"
+			sudo rm -fr "$2"
 		fi;
 	fi
 }
@@ -264,7 +325,7 @@ function removeIfExists() {
 function bash_removeIfExists() {
 	if [ -d "$2" ]; then
 		if [ $(bash_confirm "$1") == "y" ]; then
-			rm -fr "$2"
+			sudo rm -fr "$2"
 		fi;
 	fi
 }
@@ -277,7 +338,7 @@ function bash_removeIfExists() {
 #
 function makeDirIfNotExists() {
 	if ! [ -d "$1" ]; then
-		mkdir -p "$1"
+		sudo mkdir -p "$1"
 	fi
 }
 
@@ -326,8 +387,8 @@ function installPackage() {
 	if [ $(dpkg-query -W -f='${Status}' "$1" 2>/dev/null | grep -c "ok installed") -eq 0 ];
 	then
 		if [ $(confirm "Confirm installation of package \"$1\"?") == "y" ]; then
-			apt-get -yf install "$1"
-			apt-get -yf install
+			sudo apt-get -yf install "$1"
+			sudo apt-get -yf install
 		fi;
 	else
 		echo "Package \"$1\" already has been installed."
@@ -344,12 +405,34 @@ function bash_installPackage() {
 	if [ $(dpkg-query -W -f='${Status}' "$1" 2>/dev/null | grep -c "ok installed") -eq 0 ];
 	then
 		if [ $(bash_confirm "Confirm installation of package \"$1"\"?) == "y" ]; then
-			apt-get -yf install "$1"
-			apt-get -yf install
+			sudo apt-get -yf install "$1"
+			sudo apt-get -yf install
 		fi;
 	else
 		echo "Package '$1' is already installed. Skipping..."
 	fi;
+}
+
+# Public function
+# Updates the cache of the linker with given shared objects
+#
+# Parameters:
+#	$1 - directory of shared libraries to be added
+#	$2 - name of a config file to be readed by the linker
+#	$3 - directory of configurations for the linker
+# Example:
+#	addSharedLibToLinker '/usr/local/lib/X' '/etc/ld.so.conf.d/' 'X.conf'
+#	will add config file with location of shared libraries in directory '/usr/local/lib/X'
+#
+function addSharedLibToLinker() {
+	echo "Create \"$3\" file in directory \"$2\"..."
+
+	sudo sh -c "echo \"$1\" > \"$2$3\""
+
+	echo 'Reload system configuration...'
+	sudo ldconfig
+
+	echo 'Done.'
 }
 
 ####################################################################################################################
@@ -358,14 +441,13 @@ function bash_installPackage() {
 # Checkout given GTest project stable version into given path and move generated static library to given directory.
 #
 function executeGTestCreation() {
+	echo -e "Installing 'gtest' library...\n\n"
 	local gtest_path=$(bash_remakeDir 'Enter where to checkout GTest project' $(pwd)'/GTest/' "$bash_gtest_path")
 	local gtest_lib_path=$(bash_remakeDir 'Enter where to move GTest library file' '/usr/local/lib/gtest/' "$bash_gtest_lib_path")
 	local gtest_include_path=$(bash_remakeDir 'Enter where to move GTest header files' '/usr/local/include/gtest/' "$bash_gtest_include_path")
-	getGTest "$gtest_path"
-	mv "$gtest_path"'libgtest.a' "$gtest_lib_path"
-	echo "GTest static library file has been moved to \"$gtest_lib_path\"."
+	getGTest "$gtest_path" "$gtest_lib_path"
 	
-	mv "$gtest_path"'googletest/include/gtest/'* "$gtest_include_path"
+	sudo mv "$gtest_path"'googletest/include/gtest/'* "$gtest_include_path"
 	echo "GTest header files have been moved to \"$gtest_include_path\"."
 
 	bash_removeIfExists "Delete GTest project sources?" "$gtest_path"
@@ -373,42 +455,143 @@ function executeGTestCreation() {
 }
 
 # Private function
-# Checkout GTest project into given path and call makeGTest()
+# Checkout GTest project into given path and call makeSharedGTest()
 #
 # Parameters:
 #	$1 - path where GTest project will be checked out.
+#	$2 - path where GTest library will be moved.
 # Example:
-#	getGTest '~/git/GTest'
-#	will download to '~/git/GTest' and generate static library of project
+#	getGTest '~/git/GTest' '/home/usr/local/lib/gtest'
+#	will download to '~/git/GTest' and generate shared library of project
+#	and will move it into '/home/usr/local/lib/gtest' directory.
 #
 function getGTest() {
 	local thisPath=$(pwd)
-	echo "\"git\" is needed to checkout GTest project's sources."
+	echo "\"git\" is required to checkout GTest project's sources."
 	bash_installPackage "git"
 	echo "\"pthread\" library will be needed to build GTest form sources."
 	bash_installPackage "libpthread-stubs0-dev"
 
 	echo 'Checking out the GTest project...'
-	git clone "$gTestGitURL" "$1"
+	sudo git clone "$gTestGitURL" "$1"
 
 	echo "GTest project has been saved into \"$1\"."
 	cd "$1"
-	makeGTest
+	makeSharedGTest "$1" "$2"
 	cd "$thisPath"
 }
 
-function makeGTest() {
-	echo "Building 'libgtest.a'..."
-	g++ -isystem googletest/include -Igoogletest -pthread -c googletest/src/gtest-all.cc
-	ar -rv libgtest.a gtest-all.o
+function makeSharedGTest() {
+	echo "\"cmake\" is required to checkout GTest project's sources."
+	bash_installPackage "cmake"
+	cd "googletest"
+	echo "Building 'libgtest.so'..."
+	sudo cmake -DBUILD_SHARED_LIBS=ON
+	sudo make
+	cd ../
+
+	sudo mv "$1"'googletest/libgtest_main.so' "$2"
+	sudo mv "$1"'googletest/libgtest.so' "$2"
+	echo "GTest static library file has been moved to \"$2\"."
+
+	addSharedLibToLinker "$2" "$sharedLibConfigDir" "$gTestSharedLibConfigFile"
+}
+
+function makeStaticGTest() {
+	echo "Building 'libgtest.so'..."
+	sudo g++ -isystem googletest/include -Igoogletest -pthread -c googletest/src/gtest-all.cc
+	sudo ar -rv libgtest.a gtest-all.o
+
+	sudo mv "$1"'libgtest.a' "$2"
+	echo "GTest static library file has been moved to \"$2\"."
 }
 
 ####################################################################################################################
 
+# Public function
+# Checkout given RapidJSON project stable version into given path and move all files to given directory.
+#
+function executeRapidJSONCreation() {
+	echo -e "Installing 'RapidJSON' library...\n\n"
+	local rapidJSON_path=$(bash_remakeDir 'Enter where to checkout RapidJSON project' $(pwd)'/RapidJSON/' "$bash_rapidjson_path")
+	local rapidJSON_include_path=$(bash_remakeDir 'Enter where to move RapidJSON header files' '/usr/local/include/rapidjson/' "$bash_rapidjson_include_path")
+	getRapidJSON "$rapidJSON_path"
+	
+	sudo mv "$rapidJSON_path"'include/rapidjson/'* "$rapidJSON_include_path"
+
+	echo "RapidJSON header files have been moved to \"$rapidJSON_include_path\"."
+
+	bash_removeIfExists "Delete RapidJSON project sources?" "$rapidJSON_path"
+	echo "Done"
+}
+
+# Private function
+# Checkout RapidJSON project into given path
+#
+# Parameters:
+#	$1 - path where RapidJSON project will be checked out.
+# Example:
+#	getRapidJSON '~/git/RapidJSON'
+#	will download to '~/git/RapidJSON'
+#
+function getRapidJSON() {
+	local thisPath=$(pwd)
+	echo "\"git\" is required to checkout GTest project's sources."
+	bash_installPackage "git"
+	echo "\"pthread\" library will be needed to build GTest form sources."
+	bash_installPackage "libpthread-stubs0-dev"
+
+	echo 'Checking out the RapidJSON project...'
+	sudo git clone "$rapidJSONURL" "$1"
+
+	echo "RapidJSON project has been saved into \"$1\"."
+	cd "$1"
+	
+	#sudo git submodule update --init
+
+	makeRapidJSON
+	cd "$thisPath"
+}
+
+function makeRapidJSON() {
+	makeDirIfNotExists "build"
+	cd "build"
+	sudo cmake ..
+	sudo make
+	#sudo make test
+}
+
+
+####################################################################################################################
+
+
 function executeLog4cxxCreation() {
+	echo -e "Installing 'Log4cxx' library...\n\n"
 	bash_installPackage "liblog4cxx10v5"
 	bash_installPackage "liblog4cxx10-dev"
 	echo "Done"
+}
+
+
+function executeGraphvizCreation() {
+	echo -e "Installing 'GraphViz' library...\n\n"
+	sudo add-apt-repository -y ppa:gviz-adm/graphviz-dev
+	set +e
+	sudo apt-get -y update
+	sudo apt-get -y autoremove graphviz
+	sudo apt-get -y remove libcdt4
+	sudo apt-get -y remove libpathplan4
+	set -e
+	sudo apt-get -y install graphviz graphviz-dev
+}
+
+
+####################################################################################################################
+
+
+function loadBashAutocompletion() {
+	source "BinaryIMST_Example_bac"
+	sudo cp "./BinaryIMST_Example_bac" "/etc/bash_completion.d/"
 }
 
 
@@ -419,5 +602,54 @@ set -e
 
 pasreBash $@
 
-executeLog4cxxCreation
-executeGTestCreation
+if [[ "$ACTION" == 'autocompletion' ]]; then
+	if [[ $UID != 0 ]]; then
+	    echo "In order to successfully execute this commamd, extra privileges will be needed:"
+	    sudo echo "You have granted this script root privileges."
+	fi
+	loadBashAutocompletion
+	echo "Please, restart shell in order to changes take effect."
+elif [[ "$ACTION" == 'installAll' || "$ACTION" == 'install' ]]; then
+	if [[ $UID != 0 ]]; then
+	    echo "In order to successfully install all dependencies, apt-get will be called, this extra privileges will be needed:"
+	    sudo echo "You have granted this script root privileges."
+	fi
+	if [[ "$ACTION" == 'installAll' ]]; then
+		echo -e "Following dependencies will be installed:\n\tliblog4cxx10v5\n\tliblog4cxx10-dev\n\tgtest\n\tgraphviz\n\tgraphviz-dev\n\tRapidJSON."
+		if [ $(confirm "Confirm installation of this packages?") == "y" ]; then
+			executeLog4cxxCreation
+			executeGTestCreation
+			executeGraphvizCreation
+			executeRapidJSONCreation
+			sudo apt-get -y autoremove
+		else
+			echo "Process aborted."
+		fi
+	else
+		if [ "$LOG4CXX" == 'y' ]; then
+			executeLog4cxxCreation
+			sudo apt-get -y autoremove
+		fi
+		if [ "$GRAPHVIZ" == 'y' ]; then
+			executeGraphvizCreation
+			sudo apt-get -y autoremove
+		fi
+		if [ "$GTEST" == 'y' ]; then
+			executeGTestCreation
+			sudo apt-get -y autoremove
+		fi
+		if [ "$RAPIDJSON" == 'y' ]; then
+			executeRapidJSONCreation
+			sudo apt-get -y autoremove
+		fi
+	fi
+	loadBashAutocompletion
+elif [[ "$ACTION" == 'initBuild' ]]; then
+	echo "WARNING: In order to Eclipse successfully generate project's makefiles, You have to run this script as Eclipse's owner."
+	eclipse -nosplash -application 'org.eclipse.cdt.managedbuilder.core.headlessbuild' -cleanBuild 'BinaryIMST_Examples'
+	bash clean.bash all
+elif [[ "$ACTION" == 'help' ]]; then
+	printHelp
+else
+	echo -e "You have to specify at least one action from these:\n\tautocompletion\n\thelp\n\tinstall\n\tinitBuild"
+fi

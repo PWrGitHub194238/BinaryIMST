@@ -15,7 +15,8 @@
 #include "../../../include/log/bundle/Bundle.hpp"
 #include "../../../include/log/utils/LogUtils.hpp"
 
-const static log4cxx::LoggerPtr logger(log4cxx::Logger::getLogger("Graph"));
+const static log4cxx::LoggerPtr logger(
+		log4cxx::Logger::getLogger("structures.Graph"));
 
 //************************************ PRIVATE CONSTANT FIELDS *************************************//
 
@@ -57,7 +58,7 @@ Graph::~Graph() {
 
 void Graph::addEdge(VertexIdx const vertexIdxU, VertexIdx const vertexIdxV,
 		EdgeCost const edgeCost) {
-	INFO(logger, LogBundleKey::EDGE_TO_GRAPH_IF_ADDED, vertexIdxU, vertexIdxV,
+	INFO(logger, LogBundleKey::GRAPH_EDGE_ADDED, vertexIdxU, vertexIdxV,
 			edgeCost);
 	GraphIF::addEdge(vertexIdxU, vertexIdxV, edgeCost,
 			EdgeConnectionType::UNDIRECTED);

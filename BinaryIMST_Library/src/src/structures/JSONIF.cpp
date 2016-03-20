@@ -7,12 +7,16 @@
 
 #include "../../include/structures/JSONIF.hpp"
 
+#include <log4cxx/logger.h>
 #include <rapidjson/prettywriter.h>
 #include <rapidjson/stringbuffer.h>
 #include <rapidjson/writer.h>
 
 #include "../../include/bundle/Bundle.hpp"
 #include "../../include/utils/BundleUtils.hpp"
+
+const static log4cxx::LoggerPtr logger(
+		log4cxx::Logger::getLogger("structures.JSONIF"));
 
 //************************************ PRIVATE CONSTANT FIELDS *************************************//
 

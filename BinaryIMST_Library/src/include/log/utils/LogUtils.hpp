@@ -14,6 +14,7 @@
 
 #include "../../utils/StringUtils.hpp"
 #include "../utils/Logger.hpp"
+#include "LocaleEnum.hpp"
 
 class VertexIF;
 
@@ -110,6 +111,8 @@ namespace LogUtils {
  * @param xmlFileConfig path to given XML log4cxx configuration file
  */
 void configureLog(const char* xmlFileConfig);
+
+void setLocale(LocaleEnum const locale);
 
 namespace impl {
 

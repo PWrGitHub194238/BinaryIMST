@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration PUBLIC
+  "-//APACHE//DTD LOG4J 1.2//EN" 
+  "http://logging.apache.org/log4j/1.2/apidocs/org/apache/log4j/xml/doc-files/log4j.dtd">
+
 <log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
 	<!-- Output the log message to system console. -->
 	<appender name="appxConsoleAppender" class="org.apache.log4j.ConsoleAppender">
 		<param name="Target" value="System.out" />
@@ -18,6 +23,7 @@
 		</layout>
 	</appender>
 
+	<!-- Output the log message to XML-formatted log file -->
 	<appender name="appxXMLAppender" class="org.apache.log4j.FileAppender">
 		<param name="file" value="appxLogFile.xml" />
 		<param name="append" value="true" />
@@ -37,20 +43,308 @@
 		</layout>
 	</appender>
 
+	<category name="cplex.MSTSolver_v1">
+		<priority value="all" />
+		<appender-ref ref="appxFileAppender" />
+		<appender-ref ref="appxConsoleAppender" />
+<!-- 		<appender-ref ref="appxXMLAppender" /> -->
+<!-- 		<appender-ref ref="appxChainsawXMLAppender" /> -->
+	</category>
+
+	<category name="heap.FibonacciHeap">
+		<priority value="all" />
+		<appender-ref ref="appxFileAppender" />
+		<appender-ref ref="appxConsoleAppender" />
+<!-- 		<appender-ref ref="appxXMLAppender" /> -->
+<!-- 		<appender-ref ref="appxChainsawXMLAppender" /> -->
+	</category>
+
+	<category name="heap.VertexHeapIF">
+		<priority value="all" />
+		<appender-ref ref="appxFileAppender" />
+		<appender-ref ref="appxConsoleAppender" />
+<!-- 		<appender-ref ref="appxXMLAppender" /> -->
+<!-- 		<appender-ref ref="appxChainsawXMLAppender" /> -->
+	</category>
+
+	<category name="heap.VertexHeapItem">
+		<priority value="all" />
+		<appender-ref ref="appxFileAppender" />
+		<appender-ref ref="appxConsoleAppender" />
+<!-- 		<appender-ref ref="appxXMLAppender" /> -->
+<!-- 		<appender-ref ref="appxChainsawXMLAppender" /> -->
+	</category>
+
+	<category name="imstsolver.BinarySearch_v1">
+		<priority value="all" />
+		<appender-ref ref="appxFileAppender" />
+		<appender-ref ref="appxConsoleAppender" />
+<!-- 		<appender-ref ref="appxXMLAppender" /> -->
+<!-- 		<appender-ref ref="appxChainsawXMLAppender" /> -->
+	</category>
+
+	<category name="imstsolver.IMSTSolverIF">
+		<priority value="all" />
+		<appender-ref ref="appxFileAppender" />
+		<appender-ref ref="appxConsoleAppender" />
+<!-- 		<appender-ref ref="appxXMLAppender" /> -->
+<!-- 		<appender-ref ref="appxChainsawXMLAppender" /> -->
+	</category>
+
+	<category name="mstsolver.MSTSolverIF">
+		<priority value="all" />
+		<appender-ref ref="appxFileAppender" />
+		<appender-ref ref="appxConsoleAppender" />
+<!-- 		<appender-ref ref="appxXMLAppender" /> -->
+<!-- 		<appender-ref ref="appxChainsawXMLAppender" /> -->
+	</category>
+
+	<category name="mstsolver.PrimeHeap">
+		<priority value="all" />
+		<appender-ref ref="appxFileAppender" />
+		<appender-ref ref="appxConsoleAppender" />
+<!-- 		<appender-ref ref="appxXMLAppender" /> -->
+<!-- 		<appender-ref ref="appxChainsawXMLAppender" /> -->
+	</category>
+
+	<category name="structures.Edge">
+		<priority value="all" />
+		<appender-ref ref="appxFileAppender" />
+		<appender-ref ref="appxConsoleAppender" />
+<!-- 		<appender-ref ref="appxXMLAppender" /> -->
+<!-- 		<appender-ref ref="appxChainsawXMLAppender" /> -->
+	</category>
+
+	<category name="structures.EdgeByVertexMap">
+		<priority value="all" />
+		<appender-ref ref="appxFileAppender" />
+		<appender-ref ref="appxConsoleAppender" />
+<!-- 		<appender-ref ref="appxXMLAppender" /> -->
+<!-- 		<appender-ref ref="appxChainsawXMLAppender" /> -->
+	</category>
+
+	<category name="structures.EdgeArray">
+		<priority value="all" />
+		<appender-ref ref="appxFileAppender" />
+		<appender-ref ref="appxConsoleAppender" />
+<!-- 		<appender-ref ref="appxXMLAppender" /> -->
+<!-- 		<appender-ref ref="appxChainsawXMLAppender" /> -->
+	</category>
+
+	<category name="structures.EdgeList">
+		<priority value="all" />
+		<appender-ref ref="appxFileAppender" />
+		<appender-ref ref="appxConsoleAppender" />
+<!-- 		<appender-ref ref="appxXMLAppender" /> -->
+<!-- 		<appender-ref ref="appxChainsawXMLAppender" /> -->
+	</category>
+
+	<category name="structures.Graph">
+		<priority value="all" />
+		<appender-ref ref="appxFileAppender" />
+		<appender-ref ref="appxConsoleAppender" />
+<!-- 		<appender-ref ref="appxXMLAppender" /> -->
+<!-- 		<appender-ref ref="appxChainsawXMLAppender" /> -->
+	</category>
+
+	<category name="structures.GraphEdgeCostsArray">
+		<priority value="all" />
+		<appender-ref ref="appxFileAppender" />
+		<appender-ref ref="appxConsoleAppender" />
+<!-- 		<appender-ref ref="appxXMLAppender" /> -->
+<!-- 		<appender-ref ref="appxChainsawXMLAppender" /> -->
+	</category>
+
+	<category name="structures.GraphEdgeCostsList">
+		<priority value="all" />
+		<appender-ref ref="appxFileAppender" />
+		<appender-ref ref="appxConsoleAppender" />
+<!-- 		<appender-ref ref="appxXMLAppender" /> -->
+<!-- 		<appender-ref ref="appxChainsawXMLAppender" /> -->
+	</category>
+
+	<category name="structures.Vertex">
+		<priority value="all" />
+		<appender-ref ref="appxFileAppender" />
+		<appender-ref ref="appxConsoleAppender" />
+<!-- 		<appender-ref ref="appxXMLAppender" /> -->
+<!-- 		<appender-ref ref="appxChainsawXMLAppender" /> -->
+	</category>
+
+	<category name="structures.VertexArray">
+		<priority value="all" />
+		<appender-ref ref="appxFileAppender" />
+		<appender-ref ref="appxConsoleAppender" />
+<!-- 		<appender-ref ref="appxXMLAppender" /> -->
+<!-- 		<appender-ref ref="appxChainsawXMLAppender" /> -->
+	</category>
+
+	<category name="structures.VertexList">
+		<priority value="all" />
+		<appender-ref ref="appxFileAppender" />
+		<appender-ref ref="appxConsoleAppender" />
+<!-- 		<appender-ref ref="appxXMLAppender" /> -->
+<!-- 		<appender-ref ref="appxChainsawXMLAppender" /> -->
+	</category>
+
+	<category name="structures.EdgeByVertexSetIF">
+		<priority value="all" />
+		<appender-ref ref="appxFileAppender" />
+		<appender-ref ref="appxConsoleAppender" />
+<!-- 		<appender-ref ref="appxXMLAppender" /> -->
+<!-- 		<appender-ref ref="appxChainsawXMLAppender" /> -->
+	</category>
+
+	<category name="structures.EdgeIF">
+		<priority value="all" />
+		<appender-ref ref="appxFileAppender" />
+		<appender-ref ref="appxConsoleAppender" />
+<!-- 		<appender-ref ref="appxXMLAppender" /> -->
+<!-- 		<appender-ref ref="appxChainsawXMLAppender" /> -->
+	</category>
+
+	<category name="structures.EdgeSetIF">
+		<priority value="all" />
+		<appender-ref ref="appxFileAppender" />
+		<appender-ref ref="appxConsoleAppender" />
+<!-- 		<appender-ref ref="appxXMLAppender" /> -->
+<!-- 		<appender-ref ref="appxChainsawXMLAppender" /> -->
+	</category>
+
+	<category name="structures.GraphEdgeCostsIF">
+		<priority value="all" />
+		<appender-ref ref="appxFileAppender" />
+		<appender-ref ref="appxConsoleAppender" />
+<!-- 		<appender-ref ref="appxXMLAppender" /> -->
+<!-- 		<appender-ref ref="appxChainsawXMLAppender" /> -->
+	</category>
+
+	<category name="structures.GraphIF">
+		<priority value="all" />
+		<appender-ref ref="appxFileAppender" />
+		<appender-ref ref="appxConsoleAppender" />
+<!-- 		<appender-ref ref="appxXMLAppender" /> -->
+<!-- 		<appender-ref ref="appxChainsawXMLAppender" /> -->
+	</category>
+
+	<category name="structures.IterableIF">
+		<priority value="all" />
+		<appender-ref ref="appxFileAppender" />
+		<appender-ref ref="appxConsoleAppender" />
+<!-- 		<appender-ref ref="appxXMLAppender" /> -->
+<!-- 		<appender-ref ref="appxChainsawXMLAppender" /> -->
+	</category>
+
+	<category name="structures.JSONIF">
+		<priority value="all" />
+		<appender-ref ref="appxFileAppender" />
+		<appender-ref ref="appxConsoleAppender" />
+<!-- 		<appender-ref ref="appxXMLAppender" /> -->
+<!-- 		<appender-ref ref="appxChainsawXMLAppender" /> -->
+	</category>
+
+	<category name="structures.VertexIF">
+		<priority value="all" />
+		<appender-ref ref="appxFileAppender" />
+		<appender-ref ref="appxConsoleAppender" />
+<!-- 		<appender-ref ref="appxXMLAppender" /> -->
+<!-- 		<appender-ref ref="appxChainsawXMLAppender" /> -->
+	</category>
+
+	<category name="structures.VertexSetIF">
+		<priority value="all" />
+		<appender-ref ref="appxFileAppender" />
+		<appender-ref ref="appxConsoleAppender" />
+<!-- 		<appender-ref ref="appxXMLAppender" /> -->
+<!-- 		<appender-ref ref="appxChainsawXMLAppender" /> -->
+	</category>
+
+	<category name="structures.VisibleElementIF">
+		<priority value="all" />
+		<appender-ref ref="appxFileAppender" />
+		<appender-ref ref="appxConsoleAppender" />
+<!-- 		<appender-ref ref="appxXMLAppender" /> -->
+<!-- 		<appender-ref ref="appxChainsawXMLAppender" /> -->
+	</category>
+
+	<category name="structures.VisibleIterableIF">
+		<priority value="all" />
+		<appender-ref ref="appxFileAppender" />
+		<appender-ref ref="appxConsoleAppender" />
+<!-- 		<appender-ref ref="appxXMLAppender" /> -->
+<!-- 		<appender-ref ref="appxChainsawXMLAppender" /> -->
+	</category>
+
+	<category name="utils.BundleUtils">
+		<priority value="all" />
+		<appender-ref ref="appxFileAppender" />
+		<appender-ref ref="appxConsoleAppender" />
+<!-- 		<appender-ref ref="appxXMLAppender" /> -->
+<!-- 		<appender-ref ref="appxChainsawXMLAppender" /> -->
+	</category>
+
+	<category name="utils.EnumUtils">
+		<priority value="all" />
+		<appender-ref ref="appxFileAppender" />
+		<appender-ref ref="appxConsoleAppender" />
+<!-- 		<appender-ref ref="appxXMLAppender" /> -->
+<!-- 		<appender-ref ref="appxChainsawXMLAppender" /> -->
+	</category>
+
+	<category name="utils.GraphUtils">
+		<priority value="all" />
+		<appender-ref ref="appxFileAppender" />
+		<appender-ref ref="appxConsoleAppender" />
+<!-- 		<appender-ref ref="appxXMLAppender" /> -->
+<!-- 		<appender-ref ref="appxChainsawXMLAppender" /> -->
+	</category>
+
+	<category name="utils.GraphVizUtils">
+		<priority value="all" />
+		<appender-ref ref="appxFileAppender" />
+		<appender-ref ref="appxConsoleAppender" />
+<!-- 		<appender-ref ref="appxXMLAppender" /> -->
+<!-- 		<appender-ref ref="appxChainsawXMLAppender" /> -->
+	</category>
+
+	<category name="utils.IOUtils">
+		<priority value="all" />
+		<appender-ref ref="appxFileAppender" />
+		<appender-ref ref="appxConsoleAppender" />
+<!-- 		<appender-ref ref="appxXMLAppender" /> -->
+<!-- 		<appender-ref ref="appxChainsawXMLAppender" /> -->
+	</category>
+
+	<category name="utils.JSONUtils">
+		<priority value="all" />
+		<appender-ref ref="appxFileAppender" />
+		<appender-ref ref="appxConsoleAppender" />
+<!-- 		<appender-ref ref="appxXMLAppender" /> -->
+<!-- 		<appender-ref ref="appxChainsawXMLAppender" /> -->
+	</category>
+
+	<category name="utils.MemoryUtils">
+		<priority value="all" />
+		<appender-ref ref="appxFileAppender" />
+		<appender-ref ref="appxConsoleAppender" />
+<!-- 		<appender-ref ref="appxXMLAppender" /> -->
+<!-- 		<appender-ref ref="appxChainsawXMLAppender" /> -->
+	</category>
+
+	<category name="utils.StringUtils">
+		<priority value="all" />
+		<appender-ref ref="appxFileAppender" />
+		<appender-ref ref="appxConsoleAppender" />
+<!-- 		<appender-ref ref="appxXMLAppender" /> -->
+<!-- 		<appender-ref ref="appxChainsawXMLAppender" /> -->
+	</category>
+
 	<root>
 		<priority value="all" />
 		<appender-ref ref="appxFileAppender" />
 		<appender-ref ref="appxConsoleAppender" />
-		<appender-ref ref="appxXMLAppender" />
-		<appender-ref ref="appxChainsawXMLAppender" />
-
+<!-- 		<appender-ref ref="appxXMLAppender" /> -->
+<!-- 		<appender-ref ref="appxChainsawXMLAppender" /> -->
 	</root>
-
-	<!-- Specify the level for some specific categories -->
-	<category name="functionA">
-		<priority value="all" />
-		<appender-ref ref="appxFileAppender" />
-		<appender-ref ref="appxConsoleAppender" />
-	</category>
 
 </log4j:configuration>

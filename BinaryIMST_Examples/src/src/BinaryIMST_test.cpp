@@ -1,12 +1,13 @@
-#include <gtest.h>
+#include <gtest/gtest.h>
+#include <gtest/internal/gtest-port.h>
+#include <IMST/log/bundle/Bundle.hpp>
+#include <IMST/log/utils/LocaleEnum.hpp>
+#include <IMST/log/utils/LogUtils.hpp>
+#include <log4cxx/helpers/messagebuffer.h>
 #include <log4cxx/logger.h>
-#include <exception>
-#include <iostream>
+#include <string>
 
-#include "../include/log/utils/LogUtils.hpp"
 
-#include <enums/InputMode.hpp>
-#include <utils/InputUtils.hpp>
 int main(int argc, char **argv) {
 	::testing::InitGoogleTest(&argc, argv);
 
@@ -14,14 +15,11 @@ int main(int argc, char **argv) {
 
 	LogUtils::configureLog("Log4cxxConfig.xml");
 
-	try {
-		char const * filename = "OK";
+	LogUtils::setLocale(LocaleEnum::EN_US_UTF8);
 
-		InputUtils::readGraph(filename, InputMode::RAM);
-	} catch (const std::exception& e) {
-		std::cout << e.what() << std::endl;
-	}
+
 	//return 0;
+	::testing::GTEST_FLAG(filter) = "UNDIRECTED_VERTEX_TEST.OUT_IN_EDGES_100_10000";
 	return RUN_ALL_TESTS();
 }
 

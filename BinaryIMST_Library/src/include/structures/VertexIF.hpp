@@ -11,14 +11,16 @@
 #include <rapidjson/document.h>
 #include <string>
 
+#include "../enums/Visibility.hpp"
 #include "../typedefs/primitive.hpp"
 #include "JSONIF.hpp"
+#include "VisibleElementIF.hpp"
 
 class EdgeIF;
 
 class EdgeByVertexSetIF;
 
-class VertexIF: public JSONIF {
+class VertexIF: public VisibleElement, public JSONIF {
 private:
 
 	//************************************ PRIVATE CONSTANT FIELDS *************************************//
@@ -45,6 +47,8 @@ public:
 	//************************************** PUBLIC CLASS FIELDS ***************************************//
 
 	//************************************ CONSTRUCTOR & DESTRUCTOR ************************************//
+
+	VertexIF(VertexIdx vertexIdx, Visibility const visibility);
 
 	VertexIF(VertexIdx vertexIdx);
 
@@ -92,7 +96,11 @@ public:
 
 	bool hasNextInputEdge();
 
+	bool hasNextInputEdge(Visibility const visibility);
+
 	bool hasAnyInputEdge();
+
+	bool hasAnyInputEdge(Visibility const visibility);
 
 	EdgeIF * nextInputEdge();
 
@@ -102,11 +110,19 @@ public:
 
 	bool hasNextOutputEdge();
 
-	EdgeIF * nextOutputEdge();
+	bool hasNextOutputEdge(Visibility const visibility);
 
 	bool hasAnyOutputEdge();
 
+	bool hasAnyOutputEdge(Visibility const visibility);
+
+	EdgeIF * nextOutputEdge();
+
+	EdgeIF * currentOutputEdge();
+
 	VertexIF * nextOutputEdgeTarget();
+
+	VertexIF * currentOutputEdgeTarget();
 
 	virtual void fillJSON(rapidjson::Document& jsonDoc,
 			rapidjson::Document::AllocatorType& allocator,
@@ -124,7 +140,11 @@ public:
 
 	VertexCount getNumberOfInputEdges() const;
 
+	VertexCount getNumberOfInputEdges(Visibility const visibility) const;
+
 	VertexCount getNumberOfOutputEdges() const;
+
+	VertexCount getNumberOfOutputEdges(Visibility const visibility) const;
 
 };
 

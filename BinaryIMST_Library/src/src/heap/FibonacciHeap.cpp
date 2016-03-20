@@ -23,17 +23,26 @@ class VertexIF;
 #include "../../include/log/utils/LogUtils.hpp"
 
 const static log4cxx::LoggerPtr logger(
-		log4cxx::Logger::getLogger("FibonacciHeap"));
+		log4cxx::Logger::getLogger("heap.FibonacciHeap"));
 
 //************************************ PRIVATE CONSTANT FIELDS *************************************//
+
 //************************************** PRIVATE CLASS FIELDS **************************************//
+
 //*************************************** PRIVATE FUNCTIONS ****************************************//
+
 //*********************************** PROTECTED CONSTANT FIELDS ************************************//
+
 //************************************ PROTECTED CLASS FIELDS **************************************//
+
 //************************************** PROTECTED FUNCTIONS ***************************************//
+
 //************************************* PUBLIC CONSTANT FIELDS *************************************//
+
 //************************************** PUBLIC CLASS FIELDS ***************************************//
+
 //************************************ CONSTRUCTOR & DESTRUCTOR ************************************//
+
 FibonacciHeap::FibonacciHeap() :
 		VertexHeapIF() {
 }
@@ -47,6 +56,10 @@ FibonacciHeap::~FibonacciHeap() {
 }
 
 //*************************************** PUBLIC FUNCTIONS *****************************************//
+
+VertexCount FibonacciHeap::size() const {
+	return (VertexCount) this->heap.size();
+}
 
 void FibonacciHeap::push(VertexHeapItem * const vertex) {
 	TRACE(logger, LogBundleKey::VERTEX_PUSHED_INTO_FIB_HEAP,

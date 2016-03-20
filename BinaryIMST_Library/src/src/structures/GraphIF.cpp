@@ -16,27 +16,37 @@
 #include "../../include/log/utils/LogUtils.hpp"
 #include "../../include/structures/EdgeInclude.hpp"
 #include "../../include/structures/EdgeSetInclude.hpp"
+#include "../../include/structures/IterableIF.hpp"
 #include "../../include/structures/VertexInclude.hpp"
 #include "../../include/structures/VertexSetInclude.hpp"
+#include "../../include/structures/VisibleIterableIF.hpp"
 #include "../../include/typedefs/struct.hpp"
 #include "../../include/utils/JSONUtils.hpp"
 
-const static log4cxx::LoggerPtr base_logger(
-		log4cxx::Logger::getLogger("GraphIF"));
+const static log4cxx::LoggerPtr logger(
+		log4cxx::Logger::getLogger("structures.GraphIF"));
 
 //************************************ PRIVATE CONSTANT FIELDS *************************************//
+
 //************************************** PRIVATE CLASS FIELDS **************************************//
+
 //*************************************** PRIVATE FUNCTIONS ****************************************//
+
 //*********************************** PROTECTED CONSTANT FIELDS ************************************//
+
 //************************************ PROTECTED CLASS FIELDS **************************************//
+
 //************************************** PROTECTED FUNCTIONS ***************************************//
+
 //************************************* PUBLIC CONSTANT FIELDS *************************************//
+
 //************************************** PUBLIC CLASS FIELDS ***************************************//
+
 //************************************ CONSTRUCTOR & DESTRUCTOR ************************************//
+
 GraphIF::GraphIF(VertexCount const vertexCount, EdgeCount const edgeCount,
 		GraphConstructMode constructMode) {
-	TRACE(base_logger, LogBundleKey::GRAPH_IF_CONSTRUCTOR, vertexCount,
-			edgeCount);
+	TRACE(logger, LogBundleKey::GRAPH_IF_CONSTRUCTOR, vertexCount, edgeCount);
 	VertexCount i { 0 };
 	this->vertexSet = new VertexSetImpl { vertexCount };
 	this->edgeSet = new EdgeSetImpl { edgeCount };
@@ -57,15 +67,12 @@ GraphIF::GraphIF(VertexSetIF * const & vertexSet, EdgeSetIF * const & edgeSet) {
 }
 
 GraphIF::~GraphIF() {
-	delete this->vertexSet;
-	delete this->edgeSet;
 }
 
 //*************************************** PUBLIC FUNCTIONS *****************************************//
 
 void GraphIF::addVertex(VertexIF* const vertex) {
-	INFO(base_logger, LogBundleKey::VERTEX_TO_GRAPH_IF_ADDED,
-			vertex->getVertexIdx());
+	INFO(logger, LogBundleKey::VERTEX_TO_GRAPH_IF_ADDED, vertex->getVertexIdx());
 	vertexSet->push_back(vertex);
 }
 
@@ -97,6 +104,10 @@ VertexIF * GraphIF::getVertexByIdx(VertexIdx const vertexIdx) {
 	return this->vertexSet->getElementAt(vertexIdx);
 }
 
+EdgeCost GraphIF::getTotalEdgeCost() {
+	return this->edgeSet->getTotalEdgeCost();
+}
+
 void GraphIF::beginVertex() {
 	this->vertexSet->begin();
 }
@@ -105,12 +116,34 @@ bool GraphIF::hasNextVertex() {
 	return this->vertexSet->hasNext();
 }
 
+bool GraphIF::hasNextVertex(Visibility const visibility) {
+	return this->vertexSet->hasNext(visibility);
+}
+
 bool GraphIF::hasAnyVertex() {
-	return this->vertexSet->hasAny();
+	return this->vertexSet->Iterable::hasAny();
+}
+
+bool GraphIF::hasAnyVertex(Visibility const visibility) {
+	return this->vertexSet->hasAny(visibility);
 }
 
 VertexIF * GraphIF::nextVertex() {
 	return this->vertexSet->next();
+}
+
+VertexIF * GraphIF::nextVertex(Visibility visibility) {
+	return this->vertexSet->hasNext(visibility) ?
+			this->vertexSet->next() : nullptr;
+}
+
+VertexIF * GraphIF::currentVertex() {
+	return this->vertexSet->current();
+}
+
+VertexIF * GraphIF::peekPreviousVertex()
+		throw (LogicExceptions::EmptyIteratorException) {
+	return this->vertexSet->peek(-1);
 }
 
 void GraphIF::beginEdge() {
@@ -121,8 +154,16 @@ bool GraphIF::hasNextEdge() {
 	return this->edgeSet->hasNext();
 }
 
+bool GraphIF::hasNextEdge(Visibility const visibility) {
+	return this->edgeSet->hasNext(visibility);
+}
+
 bool GraphIF::hasAnyEdge() {
 	return this->edgeSet->Iterable::hasAny();
+}
+
+bool GraphIF::hasAnyEdge(Visibility const visibility) {
+	return this->edgeSet->hasAny(visibility);
 }
 
 EdgeIF * GraphIF::nextEdge() {
@@ -168,6 +209,14 @@ EdgeCount GraphIF::getNumberOfEdges() const {
 	return this->edgeSet->size();
 }
 
+EdgeCount GraphIF::getNumberOfEdges(Visibility const visibility) const {
+	return this->edgeSet->size(visibility);
+}
+
 VertexCount GraphIF::getNumberOfVertices() const {
 	return this->vertexSet->size();
+}
+
+VertexCount GraphIF::getNumberOfVertices(Visibility const visibility) const {
+	return this->vertexSet->size(visibility);
 }

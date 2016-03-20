@@ -11,10 +11,16 @@
 #include <rapidjson/document.h>
 #include <string>
 
+#include "../utils/MemoryUtils.hpp"
+
 #include "../enums/EdgeConnectionType.hpp"
 #include "../enums/GraphConstructMode.hpp"
 #include "../enums/Visibility.hpp"
 #include "JSONIF.hpp"
+
+namespace LogicExceptions {
+class EmptyIteratorException;
+} /* namespace LogicExceptions */
 
 class EdgeIF;
 class VertexIF;
@@ -25,6 +31,10 @@ class VertexSetIF;
 #include "../typedefs/primitive.hpp"
 
 class GraphIF: public JSONIF {
+
+	friend void MemoryUtils::removeGraph(GraphIF* const & graph,
+			bool withVertices, bool withEdges);
+
 private:
 
 	//************************************ PRIVATE CONSTANT FIELDS *************************************//
@@ -100,19 +110,36 @@ public:
 
 	VertexIF * getVertexByIdx(VertexIdx const vertexIdx);
 
+	EdgeCost getTotalEdgeCost();
+
 	void beginVertex();
 
 	bool hasNextVertex();
 
+	bool hasNextVertex(Visibility const visibility);
+
 	bool hasAnyVertex();
 
+	bool hasAnyVertex(Visibility const visibility);
+
 	VertexIF * nextVertex();
+
+	VertexIF * nextVertex(Visibility const visibility);
+
+	VertexIF * currentVertex();
+
+	VertexIF * peekPreviousVertex()
+			throw (LogicExceptions::EmptyIteratorException);
 
 	void beginEdge();
 
 	bool hasNextEdge();
 
+	bool hasNextEdge(Visibility const visibility);
+
 	bool hasAnyEdge();
+
+	bool hasAnyEdge(Visibility const visibility);
 
 	EdgeIF * nextEdge();
 
@@ -132,8 +159,11 @@ public:
 
 	EdgeCount getNumberOfEdges() const;
 
+	EdgeCount getNumberOfEdges(Visibility const visibility) const;
+
 	VertexCount getNumberOfVertices() const;
 
+	VertexCount getNumberOfVertices(Visibility const visibility) const;
 };
 
 #endif /* INCLUDE_STRUCTURES_GRAPHIF_HPP_ */

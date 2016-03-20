@@ -92,6 +92,8 @@ public:
 
 	EdgeCost getEdgeCost() const;
 
+	void setEdgeCost(EdgeCost edgeCost);
+
 	/** Jeśli krawędź nie jest BACKWARD wtedy zwróć jako źródło krawędzi (u,v) normalnie u.
 	 * Jeśli krawędź jest BACKWARD wtedy z pary (u,v), v jest źródłem
 	 *
@@ -126,6 +128,7 @@ public:
 	VertexIF* getOtherVertex(VertexIdx vertexIdx) const;
 
 	EdgeConnectionType getConnectionType() const;
+
 };
 
 #endif /* INCLUDE_STRUCTURES_EDGEIF_HPP_ */

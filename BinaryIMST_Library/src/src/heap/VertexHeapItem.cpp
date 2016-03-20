@@ -7,10 +7,14 @@
 
 #include "../../include/heap/VertexHeapItem.hpp"
 
+#include <log4cxx/logger.h>
 #include <limits>
 
 #include "../../include/structures/VertexIF.hpp"
 #include "../../include/utils/JSONUtils.hpp"
+
+const static log4cxx::LoggerPtr logger(
+		log4cxx::Logger::getLogger("heap.VertexHeapItem"));
 
 //************************************ PRIVATE CONSTANT FIELDS *************************************//
 

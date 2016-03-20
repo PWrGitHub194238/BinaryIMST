@@ -7,6 +7,11 @@
 
 #include "../../../include/structures/Vertex/Vertex.hpp"
 
+#include <log4cxx/logger.h>
+
+const static log4cxx::LoggerPtr logger(
+		log4cxx::Logger::getLogger("structures.Vertex"));
+
 //************************************ PRIVATE CONSTANT FIELDS *************************************//
 
 //************************************** PRIVATE CLASS FIELDS **************************************//

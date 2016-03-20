@@ -7,12 +7,21 @@
 
 #include "../../../include/structures/EdgeByVertexSet/EdgeByVertexMap.hpp"
 
+#include <log4cxx/logger.h>
+#include <algorithm>
+#include <iostream>
+#include <iterator>
+#include <set>
 #include <utility>
 
+#include "../../../include/exp/LogicExceptions.hpp"
 #include "../../../include/structures/EdgeIF.hpp"
 #include "../../../include/structures/VertexIF.hpp"
 
 class EdgeByVertexSetIF;
+
+const static log4cxx::LoggerPtr logger(
+		log4cxx::Logger::getLogger("structures.EdgeByVertexMap"));
 
 //************************************ PRIVATE CONSTANT FIELDS *************************************//
 
@@ -20,11 +29,105 @@ class EdgeByVertexSetIF;
 
 //*************************************** PRIVATE FUNCTIONS ****************************************//
 
+void EdgeByVertexMap::begin(EdgeByVertexIdxMap::const_iterator & iterator) {
+	this->edgeIteratorBegin = this->edgeMap.begin();
+	iterator = this->edgeMap.begin();
+	this->edgeIteratorEnd = this->edgeMap.end();
+}
+
+void EdgeByVertexMap::end(EdgeByVertexIdxMap::const_iterator & iterator) {
+	this->edgeIteratorBegin = this->edgeMap.begin();
+	iterator = this->edgeMap.end();
+	this->edgeIteratorEnd = this->edgeMap.end();
+}
+
+bool EdgeByVertexMap::hasNext(EdgeByVertexIdxMap::const_iterator & iterator) {
+	return iterator != this->edgeIteratorEnd;
+}
+
+bool EdgeByVertexMap::hasNext(EdgeByVertexIdxMap::const_iterator & iterator,
+		Visibility const visibility) {
+	while (hasNext(iterator)
+			&& (visibility != Visibility::BOTH
+					&& current(iterator).second->getVisibility() != visibility)) {
+		next(iterator);
+	}
+	return hasNext(iterator);
+}
+
+bool EdgeByVertexMap::hasPrevious(
+		EdgeByVertexIdxMap::const_iterator & iterator) {
+	return iterator != this->edgeIteratorBegin;
+}
+
+bool EdgeByVertexMap::hasPrevious(EdgeByVertexIdxMap::const_iterator & iterator,
+		Visibility const visibility) {
+	while (hasPrevious(iterator)
+			&& (visibility != Visibility::BOTH
+					&& current(iterator).second->getVisibility() != visibility)) {
+		previous(iterator);
+	}
+	return hasPrevious(iterator);
+}
+
+EdgeByVertexIdxPair EdgeByVertexMap::next(
+		EdgeByVertexIdxMap::const_iterator & iterator) {
+	return *(iterator++);
+}
+
+EdgeByVertexIdxPair EdgeByVertexMap::current(
+		EdgeByVertexIdxMap::const_iterator & iterator) {
+	return *(iterator);
+}
+
+EdgeByVertexIdxPair EdgeByVertexMap::previous(
+		EdgeByVertexIdxMap::const_iterator & iterator) {
+	return *(--iterator);
+}
+
+EdgeByVertexIdxPair EdgeByVertexMap::peek(
+		EdgeByVertexIdxMap::const_iterator & iterator, int moveIndex)
+				throw (LogicExceptions::EmptyIteratorException) {
+	EdgeByVertexIdxPair item { };
+	EdgeByVertexIdxMap::const_iterator tmpIterator = iterator;
+	if (this->numberOfEdges > 0) {
+		if (iterator == this->edgeIteratorEnd) {
+			iterator = std::prev(iterator);
+		}
+		if (moveIndex > 0) {
+			for (; moveIndex > 0; moveIndex -= 1) {
+				if (std::next(iterator) != this->edgeIteratorEnd) {
+					iterator++;
+				}
+			}
+		} else {
+			for (; moveIndex < 0; moveIndex += 1) {
+				if (hasPrevious(iterator)) {
+					--iterator;
+				}
+			}
+		}
+		item = *(iterator);
+		iterator = tmpIterator;
+		return item;
+	}
+
+	throw LogicExceptions::EmptyIteratorException();
+}
+
 //*********************************** PROTECTED CONSTANT FIELDS ************************************//
 
 //************************************ PROTECTED CLASS FIELDS **************************************//
 
 //************************************** PROTECTED FUNCTIONS ***************************************//
+
+void EdgeByVertexMap::createIteratorIfNotExists(IteratorId const iteratorId) {
+	if (iteratorMap.count(iteratorId) == 0) {
+		iteratorMap.insert(
+				std::make_pair(iteratorId,
+						EdgeByVertexIdxMap::const_iterator { }));
+	}
+}
 
 void EdgeByVertexMap::addUndirectedEdge(EdgeIF * const edge) {
 	if (edge->getTargetVertex()->getVertexIdx() == this->vertexIdx) {
@@ -43,6 +146,8 @@ void EdgeByVertexMap::addForwardEdge(EdgeIF * const edge) {
 			edgeMap.insert(
 					std::make_pair(edge->getSourceVertex()->getVertexIdx(),
 							edge));
+			/*std::cout << "ADD In[" << this->vertexIdx << "] = "
+					<< edge->getSourceVertex()->getVertexIdx() << std::endl;*/
 		}
 		break;
 	case EdgeByVertexKey::OUTGOING_EDGES:
@@ -50,6 +155,9 @@ void EdgeByVertexMap::addForwardEdge(EdgeIF * const edge) {
 			edgeMap.insert(
 					std::make_pair(edge->getTargetVertex()->getVertexIdx(),
 							edge));
+			/*std::cout << "ADD Out[" << this->vertexIdx << "] = "
+					<< edge->getTargetVertex()->getVertexIdx() << std::endl;*/
+
 		}
 		break;
 	default:
@@ -74,7 +182,8 @@ EdgeByVertexMap::EdgeByVertexMap(VertexIF const * const vertex,
 }
 
 EdgeByVertexMap::~EdgeByVertexMap() {
-	// TODO Auto-generated destructor stub
+	this->edgeMap.clear();
+	this->iteratorMap.clear();
 }
 
 //*************************************** PUBLIC FUNCTIONS *****************************************//
@@ -102,21 +211,114 @@ void EdgeByVertexMap::removeEdge(VertexIF * const vertex) {
 	removeEdge(vertex->getVertexIdx());
 }
 
-EdgeCount EdgeByVertexMap::size() {
+EdgeCount EdgeByVertexMap::size() const {
 	return (EdgeCount) this->edgeMap.size();
 }
 
 void EdgeByVertexMap::begin() {
-	this->edgeIteratorBegin = this->edgeMap.begin();
-	this->edgeIteratorEnd = this->edgeMap.end();
+	begin(this->edgeIterator);
+}
+
+void EdgeByVertexMap::begin(IteratorId const iteratorId) {
+	createIteratorIfNotExists(iteratorId);
+	begin(iteratorMap.at(iteratorId));
+}
+
+void EdgeByVertexMap::end() {
+	end(this->edgeIterator);
+}
+
+void EdgeByVertexMap::end(IteratorId const iteratorId) {
+	createIteratorIfNotExists(iteratorId);
+	end(iteratorMap.at(iteratorId));
 }
 
 bool EdgeByVertexMap::hasNext() {
-	return this->edgeIteratorBegin != this->edgeIteratorEnd;
+	return hasNext(this->edgeIterator);
+}
+
+bool EdgeByVertexMap::hasNext(IteratorId const iteratorId) {
+	return hasNext(iteratorMap.at(iteratorId));
+}
+
+bool EdgeByVertexMap::hasNext(Visibility const visibility) {
+	return hasNext(this->edgeIterator, visibility);
+}
+
+bool EdgeByVertexMap::hasNext(IteratorId const iteratorId,
+		Visibility const visibility) {
+	return hasNext(iteratorMap.at(iteratorId), visibility);
+}
+
+bool EdgeByVertexMap::hasPrevious() {
+	return hasPrevious(this->edgeIterator);
+}
+
+bool EdgeByVertexMap::hasPrevious(IteratorId const iteratorId) {
+	return hasPrevious(iteratorMap.at(iteratorId));
+}
+
+bool EdgeByVertexMap::hasPrevious(Visibility const visibility) {
+	return hasPrevious(this->edgeIterator, visibility);
+}
+
+bool EdgeByVertexMap::hasPrevious(IteratorId const iteratorId,
+		Visibility const visibility) {
+	return hasPrevious(iteratorMap.at(iteratorId), visibility);
 }
 
 EdgeByVertexIdxPair EdgeByVertexMap::next() {
-	return *(this->edgeIteratorBegin++);
+	return next(this->edgeIterator);
+}
+
+EdgeByVertexIdxPair EdgeByVertexMap::next(IteratorId const iteratorId) {
+	return next(iteratorMap.at(iteratorId));
+}
+
+EdgeByVertexIdxPair EdgeByVertexMap::current() {
+	return current(this->edgeIterator);
+}
+
+EdgeByVertexIdxPair EdgeByVertexMap::current(IteratorId const iteratorId) {
+	return current(iteratorMap.at(iteratorId));
+}
+
+EdgeByVertexIdxPair EdgeByVertexMap::previous() {
+	return previous(this->edgeIterator);
+}
+
+EdgeByVertexIdxPair EdgeByVertexMap::previous(IteratorId const iteratorId) {
+	return previous(iteratorMap.at(iteratorId));
+}
+
+EdgeByVertexIdxPair EdgeByVertexMap::peek(int moveIndex)
+		throw (LogicExceptions::EmptyIteratorException) {
+	return peek(this->edgeIterator, moveIndex);
+}
+
+EdgeByVertexIdxPair EdgeByVertexMap::peek(IteratorId const iteratorId,
+		int moveIndex) throw (LogicExceptions::EmptyIteratorException) {
+	return peek(iteratorMap.at(iteratorId), moveIndex);
+}
+
+IteratorId EdgeByVertexMap::getIterator() {
+	std::set<IteratorId> iteratorIdSet;
+	IteratorId returnedId { 0 };
+	std::transform(this->iteratorMap.begin(), this->iteratorMap.end(),
+			std::inserter(iteratorIdSet, iteratorIdSet.begin()),
+			[](std::pair<IteratorId, EdgeByVertexIdxMap::const_iterator> pair) {return pair.first;});
+
+	for (IteratorId id : iteratorIdSet) {
+		if (returnedId != id) {
+			return returnedId;
+		}
+		returnedId += 1;
+	}
+	return *(iteratorIdSet.end()) + 1;
+}
+
+void EdgeByVertexMap::removeIterator(IteratorId const iteratorId) {
+	this->iteratorMap.erase(iteratorId);
 }
 
 //*************************************** GETTERS & SETTERS ****************************************//

@@ -16,9 +16,9 @@ class GraphIF;
 
 namespace StringUtils {
 
-const static char SPECIAL_SIGN = { '%' };
+extern const char SPECIAL_SIGN;
 
-const static int MESSAGE_BUFFER_SIZE { 1024 };
+extern const int MESSAGE_BUFFER_SIZE;
 
 /** @brief Function replaces all occurrences of user-defined formatters with valid ones.
  *

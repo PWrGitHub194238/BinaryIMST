@@ -11,20 +11,24 @@
 #include <rapidjson/document.h>
 #include <string>
 
-#include "../../include/exp/LogicExceptions.hpp"
 #include "../enums/EdgeByVertexKey.hpp"
+#include "../enums/Visibility.hpp"
 #include "../typedefs/primitive.hpp"
 #include "../typedefs/struct.hpp"
-#include "IterableIF.hpp"
 #include "JSONIF.hpp"
+#include "VisibleIterableIF.hpp"
+
+#include "../exp/LogicExceptions.hpp"
 
 class EdgeIF;
 class VertexIF;
 
-/** Klasa powinna zawierać np. krawędzie wychodzące z danego węzła i zwracać odpowiednią krawędź po podaniu wierzchołka, do którego prowadzi
+/** Klasa powinna zawierać np. krawędzie wychodzące z danego węzła
+ * i zwracać odpowiednią krawędź po podaniu wierzchołka, do którego prowadzi
  *
  */
-class EdgeByVertexSetIF: public Iterable<EdgeByVertexIdxPair>, public JSONIF {
+class EdgeByVertexSetIF: public VisibleIterable<EdgeByVertexIdxPair>,
+		public JSONIF {
 private:
 
 	//************************************ PRIVATE CONSTANT FIELDS *************************************//
@@ -41,6 +45,7 @@ protected:
 
 	VertexIdx vertexIdx;
 	EdgeByVertexKey key;
+	EdgeCount numberOfEdges;
 
 	//************************************** PROTECTED FUNCTIONS ***************************************//
 
@@ -149,15 +154,59 @@ public:
 	 */
 	virtual void removeEdge(VertexIF * const vertex) = 0;
 
-	virtual EdgeCount size() = 0;
+	virtual EdgeCount size() const = 0;
+
+	EdgeCount size(Visibility const visibility);
+
+	EdgeCount size(IteratorId const iteratorId, Visibility const visibility);
 
 	virtual void begin() = 0;
 
+	virtual void begin(IteratorId const iteratorId) = 0;
+
+	virtual void end() = 0;
+
+	virtual void end(IteratorId const iteratorId) = 0;
+
 	virtual bool hasNext() = 0;
 
-	//virtual bool hasNext(Visibility const visibility) = 0;
+	virtual bool hasNext(IteratorId const iteratorId) = 0;
+
+	virtual bool hasNext(Visibility const visibility) = 0;
+
+	virtual bool hasNext(IteratorId const iteratorId,
+			Visibility const visibility) = 0;
+
+	virtual bool hasPrevious() = 0;
+
+	virtual bool hasPrevious(IteratorId const iteratorId) = 0;
+
+	virtual bool hasPrevious(Visibility const visibility) = 0;
+
+	virtual bool hasPrevious(IteratorId const iteratorId,
+			Visibility const visibility) = 0;
 
 	virtual EdgeByVertexIdxPair next() = 0;
+
+	virtual EdgeByVertexIdxPair next(IteratorId const iteratorId) = 0;
+
+	virtual EdgeByVertexIdxPair current() = 0;
+
+	virtual EdgeByVertexIdxPair current(IteratorId const iteratorId) = 0;
+
+	virtual EdgeByVertexIdxPair previous() = 0;
+
+	virtual EdgeByVertexIdxPair previous(IteratorId const iteratorId) = 0;
+
+	virtual EdgeByVertexIdxPair peek(int moveIndex)
+			throw (LogicExceptions::EmptyIteratorException) = 0;
+
+	virtual EdgeByVertexIdxPair peek(IteratorId const iteratorId, int moveIndex)
+			throw (LogicExceptions::EmptyIteratorException) = 0;
+
+	virtual IteratorId getIterator() = 0;
+
+	virtual void removeIterator(IteratorId const iteratorId) = 0;
 
 	/** Iterator po krawędziach w zbiorze, ale zwraca od razu odpowiedni numer wierchołka (e = (u,v), u.idx dla INCOMING_EDGES i v.idx dla OUTGOING_EDGES.
 	 *
@@ -165,17 +214,23 @@ public:
 	 */
 	VertexIdx nextVertexIdx();
 
+	VertexIdx nextVertexIdx(IteratorId const iteratorId);
+
 	/** Iterator po krawędziach w zbiorze, ale zwraca od razu odpowiedni wierzchołek (którego idx jest przeciwne do vertexIdx)
 	 *
 	 * @return
 	 */
 	VertexIF * nextVertex();
 
+	VertexIF * currentVertex();
+
 	/** Po prostu zwykły next(), zwraca krawędź
 	 *
 	 * @return
 	 */
 	EdgeIF * nextEdge();
+
+	EdgeIF * currentEdge();
 
 	virtual void fillJSON(rapidjson::Document& jsonDoc,
 			rapidjson::Document::AllocatorType& allocator,

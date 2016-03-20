@@ -21,8 +21,6 @@ private:
 
 	//************************************** PRIVATE CLASS FIELDS **************************************//
 
-	VertexHeapIF * vertexHeap;
-
 	//*************************************** PRIVATE FUNCTIONS ****************************************//
 
 	/** Returns heap with all vertexes except first one in graph.
@@ -45,8 +43,13 @@ protected:
 
 	//************************************** PROTECTED FUNCTIONS ***************************************//
 
-	EdgeSetIF * resolve();
-
+	/** Chowa wszystkie krawędzie, bada po kolei wierzchołki, dodając krawędż do MST
+	 * odsłania ją, nastepnie analizuje wyjściowe krawędzie nowych wierzchołków, które
+	 * są ukryte (nie ma ich w MST).
+	 *
+	 * @param initialVertex
+	 * @return
+	 */
 	EdgeSetIF * resolve(VertexIF * const initialVertex);
 
 public:
@@ -59,7 +62,9 @@ public:
 
 	PrimeHeap(GraphIF * graph);
 
-	virtual ~PrimeHeap();
+	virtual ~PrimeHeap() {
+
+	}
 
 	//*************************************** PUBLIC FUNCTIONS *****************************************//
 

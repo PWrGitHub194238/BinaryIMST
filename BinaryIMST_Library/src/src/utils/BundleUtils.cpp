@@ -5,12 +5,17 @@
  *      Author: tomasz
  */
 
+#include "../../include/utils/BundleUtils.hpp"
+
+#include <log4cxx/logger.h>
 #include <memory>
 #include <string>
 
 #include "../../include/bundle/Bundle.hpp"
 #include "../../include/utils/StringUtils.hpp"
-#include "../../include/utils/BundleUtils.hpp"
+
+const static log4cxx::LoggerPtr logger(
+		log4cxx::Logger::getLogger("utils.BundleUtils"));
 
 std::string BundleUtils::getString(AppBundleKey key) {
 	return StringUtils::formatMessage(BundleUtils::impl::getBundle(key).get());

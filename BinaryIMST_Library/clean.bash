@@ -1,5 +1,7 @@
 #!/bin/bash
 
+BASE_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
 appName="BinaryIMST_Library"
 
 # Public function
@@ -59,24 +61,23 @@ function printHelp() {
 ###########################################################################################
 
 function clean() {
-	rm *.log
-	rm -fr *~
+	rm "$BASE_DIR/"*.log
+	rm -fr "$BASE_DIR/"*~
 }
 
 function cleanDoc() {
-	rm -fr html/
-	rm -fr latex/
+	rm -fr "$BASE_DIR/html/"
+	rm -fr "$BASE_DIR/latex/"
 }
 
 function cleanProject() {
-	cd "$1"
+	cd "$BASE_DIR/$1"
 	make clean
 	cd ../
 	rm "$2"
 }
 
 function cleanAll() {
-	clean
 	cleanDoc
 	cleanProject 'Debug' "$appName"
 	cleanProject 'Shared' "lib$appName.so"
@@ -86,3 +87,4 @@ function cleanAll() {
 ###########################################################################################
 
 pasreBash $@
+clean

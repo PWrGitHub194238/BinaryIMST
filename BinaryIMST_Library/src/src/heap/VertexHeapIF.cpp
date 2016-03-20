@@ -7,7 +7,12 @@
 
 #include "../../include/heap/VertexHeapIF.hpp"
 
+#include <log4cxx/logger.h>
+
 #include "../../include/heap/VertexHeapItem.hpp"
+
+const static log4cxx::LoggerPtr logger(
+		log4cxx::Logger::getLogger("heap.VertexHeapIF"));
 
 //************************************ PRIVATE CONSTANT FIELDS *************************************//
 

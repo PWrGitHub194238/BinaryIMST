@@ -11,6 +11,7 @@
 #include "../enums/EdgeByVertexKey.hpp"
 #include "../enums/EdgeConnectionType.hpp"
 #include "../enums/Visibility.hpp"
+#include "enums/GraphVizEngine.hpp"
 
 namespace EnumUtils {
 
@@ -19,6 +20,8 @@ const char* getEdgeByVertexKeyString(EdgeByVertexKey key);
 const char* getEdgeConnectionTypeString(EdgeConnectionType key);
 
 const char* getVisibilityString(Visibility key);
+
+const char* getGraphVizEngineString(GraphVizEngine key);
 
 }  // namespace EnumUtils
 

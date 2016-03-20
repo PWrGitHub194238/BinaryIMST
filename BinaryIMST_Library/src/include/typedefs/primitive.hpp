@@ -10,12 +10,18 @@
 
 typedef unsigned int VertexCount;
 
-typedef unsigned int VertexKey;
+typedef double VertexKey;
 
 typedef unsigned int EdgeCount;
 
 typedef unsigned int VertexIdx;
 typedef unsigned int EdgeIdx;
-typedef unsigned int EdgeCost;
+typedef double EdgeCost;
+
+typedef double LambdaValue;
+typedef unsigned int LambdaIdx;
+typedef unsigned int LambdaCount;
+
+typedef unsigned int IteratorId;
 
 #endif /* INCLUDE_TYPEDEFS_PRIMITIVE_HPP_ */

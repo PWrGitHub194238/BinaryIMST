@@ -11,6 +11,7 @@
 #include <map>
 
 #include "../../enums/EdgeByVertexKey.hpp"
+#include "../../enums/Visibility.hpp"
 #include "../../typedefs/primitive.hpp"
 #include "../../typedefs/struct.hpp"
 #include "../EdgeByVertexSetIF.hpp"
@@ -29,9 +30,36 @@ private:
 
 	EdgeByVertexIdxMap::const_iterator edgeIteratorBegin;
 
+	EdgeByVertexIdxMap::const_iterator edgeIterator;
+
+	std::map<IteratorId, EdgeByVertexIdxMap::const_iterator> iteratorMap;
+
 	EdgeByVertexIdxMap::const_iterator edgeIteratorEnd;
 
 	//*************************************** PRIVATE FUNCTIONS ****************************************//
+
+	void begin(EdgeByVertexIdxMap::const_iterator & iterator);
+
+	void end(EdgeByVertexIdxMap::const_iterator & iterator);
+
+	bool hasNext(EdgeByVertexIdxMap::const_iterator & iterator);
+
+	bool hasNext(EdgeByVertexIdxMap::const_iterator & iterator,
+			Visibility const visibility);
+
+	bool hasPrevious(EdgeByVertexIdxMap::const_iterator & iterator);
+
+	bool hasPrevious(EdgeByVertexIdxMap::const_iterator & iterator,
+			Visibility const visibility);
+
+	EdgeByVertexIdxPair next(EdgeByVertexIdxMap::const_iterator & iterator);
+
+	EdgeByVertexIdxPair current(EdgeByVertexIdxMap::const_iterator & iterator);
+
+	EdgeByVertexIdxPair previous(EdgeByVertexIdxMap::const_iterator & iterator);
+
+	EdgeByVertexIdxPair peek(EdgeByVertexIdxMap::const_iterator & iterator,
+			int moveIndex) throw (LogicExceptions::EmptyIteratorException);
 
 protected:
 
@@ -40,6 +68,8 @@ protected:
 	//************************************ PROTECTED CLASS FIELDS **************************************//
 
 	//************************************** PROTECTED FUNCTIONS ***************************************//
+
+	void createIteratorIfNotExists(IteratorId const iteratorId);
 
 	void addUndirectedEdge(EdgeIF * const edge);
 
@@ -57,7 +87,7 @@ public:
 
 	EdgeByVertexMap(VertexIF const * const vertex, EdgeByVertexKey const key);
 
-	virtual ~EdgeByVertexMap();
+	~EdgeByVertexMap();
 
 	//*************************************** PUBLIC FUNCTIONS *****************************************//
 
@@ -75,13 +105,53 @@ public:
 
 	void removeEdge(VertexIF * const vertex);
 
-	EdgeCount size();
+	EdgeCount size() const;
 
 	void begin();
 
+	void begin(IteratorId const iteratorId);
+
+	void end();
+
+	void end(IteratorId const iteratorId);
+
 	bool hasNext();
 
+	bool hasNext(IteratorId const iteratorId);
+
+	bool hasNext(Visibility const visibility);
+
+	bool hasNext(IteratorId const iteratorId, Visibility const visibility);
+
+	bool hasPrevious();
+
+	bool hasPrevious(IteratorId const iteratorId);
+
+	bool hasPrevious(Visibility const visibility);
+
+	bool hasPrevious(IteratorId const iteratorId, Visibility const visibility);
+
 	EdgeByVertexIdxPair next();
+
+	EdgeByVertexIdxPair next(IteratorId const iteratorId);
+
+	EdgeByVertexIdxPair current();
+
+	EdgeByVertexIdxPair current(IteratorId const iteratorId);
+
+	EdgeByVertexIdxPair previous();
+
+	EdgeByVertexIdxPair previous(IteratorId const iteratorId);
+
+	EdgeByVertexIdxPair peek(int moveIndex)
+			throw (LogicExceptions::EmptyIteratorException);
+
+	EdgeByVertexIdxPair peek(IteratorId const iteratorId, int moveIndex)
+			throw (LogicExceptions::EmptyIteratorException);
+
+	IteratorId getIterator();
+
+	void removeIterator(IteratorId const iteratorId);
 
 	//*************************************** GETTERS & SETTERS ****************************************//
 

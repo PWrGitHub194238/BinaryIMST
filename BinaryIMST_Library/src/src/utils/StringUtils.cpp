@@ -7,11 +7,22 @@
 
 #include "../../include/utils/StringUtils.hpp"
 
+#include <log4cxx/logger.h>
+#include <stddef.h>
 #include <cstdarg>
 #include <cstdio>
 #include <cstring>
+#include <memory>
+#include <string>
 
 #include "../../include/utils/FormatUtils.hpp"
+
+const static log4cxx::LoggerPtr logger(
+		log4cxx::Logger::getLogger("utils.StringUtils"));
+
+const char StringUtils::SPECIAL_SIGN { '%' };
+
+const int StringUtils::MESSAGE_BUFFER_SIZE { 1024 };
 
 std::unique_ptr<char[]> StringUtils::parseStringFormatSpecifiers(
 		const char* const formatString) {
@@ -56,6 +67,10 @@ size_t StringUtils::impl::insertRightFormat(std::string& sourceFormat,
 		sourceFormat.replace(beginIdx, length + 1,
 				FormatUtils::Formats::VertexCountFormat);
 		return beginIdx + FormatUtils::Formats::Lengths::VertexCountLength;
+	} else if (subStr.compare(FormatUtils::Tokens::VertexKeytToken) == 0) {
+		sourceFormat.replace(beginIdx, length + 1,
+				FormatUtils::Formats::VertexKeyFormat);
+		return beginIdx + FormatUtils::Formats::Lengths::VertexKeyLength;
 	} else if (subStr.compare(FormatUtils::Tokens::EdgeCountToken) == 0) {
 		sourceFormat.replace(beginIdx, length + 1,
 				FormatUtils::Formats::EdgeCountFormat);
@@ -71,7 +86,27 @@ size_t StringUtils::impl::insertRightFormat(std::string& sourceFormat,
 	} else if (subStr.compare(FormatUtils::Tokens::EdgeCostToken) == 0) {
 		sourceFormat.replace(beginIdx, length + 1,
 				FormatUtils::Formats::EdgeCostFormat);
-		return beginIdx + FormatUtils::Formats::Lengths::VertexCountLength;
+		return beginIdx + FormatUtils::Formats::Lengths::EdgeCostLength;
+	} else if (subStr.compare(FormatUtils::Tokens::IOEdgeCostToken) == 0) {
+		sourceFormat.replace(beginIdx, length + 1,
+				FormatUtils::Formats::IOEdgeCostFormat);
+		return beginIdx + FormatUtils::Formats::Lengths::IOEdgeCostLength;
+	} else if (subStr.compare(FormatUtils::Tokens::LambdaValueToken) == 0) {
+		sourceFormat.replace(beginIdx, length + 1,
+				FormatUtils::Formats::LambdaValueFormat);
+		return beginIdx + FormatUtils::Formats::Lengths::LambdaValueLength;
+	} else if (subStr.compare(FormatUtils::Tokens::LambdaIdxToken) == 0) {
+		sourceFormat.replace(beginIdx, length + 1,
+				FormatUtils::Formats::LambdaIdxFormat);
+		return beginIdx + FormatUtils::Formats::Lengths::LambdaIdxLength;
+	} else if (subStr.compare(FormatUtils::Tokens::LambdaCountToken) == 0) {
+		sourceFormat.replace(beginIdx, length + 1,
+				FormatUtils::Formats::LambdaCountFormat);
+		return beginIdx + FormatUtils::Formats::Lengths::LambdaCountLength;
+	} else if (subStr.compare(FormatUtils::Tokens::IteratorIdToken) == 0) {
+		sourceFormat.replace(beginIdx, length + 1,
+				FormatUtils::Formats::IteratorIdFormat);
+		return beginIdx + FormatUtils::Formats::Lengths::IteratorIdLength;
 	} else {
 		return endIdx;
 	}

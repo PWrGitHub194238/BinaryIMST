@@ -7,6 +7,11 @@
 
 #include "../../../include/structures/Edge/Edge.hpp"
 
+#include <log4cxx/logger.h>
+
+const static log4cxx::LoggerPtr logger(
+		log4cxx::Logger::getLogger("structures.Edge"));
+
 //************************************ PRIVATE CONSTANT FIELDS *************************************//
 
 //************************************** PRIVATE CLASS FIELDS **************************************//

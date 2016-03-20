@@ -9,8 +9,7 @@
 #define INCLUDE_BUNDLE_H_
 
 enum BundleKey {
-	//*********************************** Test cases ***********************************//
-	TEST_EN_WITHOUT_FORMAT
+
 };
 
 extern const char* dictionary[];

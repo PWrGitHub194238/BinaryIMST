@@ -46,6 +46,8 @@ public:
 	virtual bool compare(VertexHeapItem * const vertexU,
 			VertexHeapItem * const vertexV);
 
+	virtual VertexCount size() const = 0;
+
 	virtual void push(VertexHeapItem * const vertex) = 0;
 
 	virtual VertexIF * pop() = 0;

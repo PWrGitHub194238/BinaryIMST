@@ -5,26 +5,41 @@
 # and toggleLogs.bash executable scripts. Who wants to read man pages/help text...
 
 _build() {
-    local cur opts
+		local cur prev base opts opts2
     COMPREPLY=()
     cur="${COMP_WORDS[COMP_CWORD]}"
+    prev="${COMP_WORDS[COMP_CWORD-1]}"
 
     #
     #  The basic options we'll complete.
     #
-    opts="all debug shared static doc"
+    base="all debug shared static doc"
+		opts="-f --force"
 
     #
     #  Complete the arguments to some of the basic commands.
     #
-   COMPREPLY=($(compgen -W "${opts}" -- ${cur}))  
+		case "${prev}" in
+			all|debug|shared|static)
+				COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
+				return 0
+			;;
+			doc)
+				COMPREPLY=()
+				return 0
+			;;
+			*)
+			;;
+		esac
+   COMPREPLY=($(compgen -W "${base}" -- ${cur}))  
    return 0
 }
 
 _clean() {
-    local cur opts
+		local cur prev base
     COMPREPLY=()
     cur="${COMP_WORDS[COMP_CWORD]}"
+    prev="${COMP_WORDS[COMP_CWORD-1]}"
 
     #
     #  The basic options we'll complete.
@@ -34,7 +49,15 @@ _clean() {
     #
     #  Complete the arguments to some of the basic commands.
     #
-   COMPREPLY=($(compgen -W "${opts}" -- ${cur}))  
+		case "${prev}" in
+			all|debug|shared|static|doc)
+				COMPREPLY=()
+				return 0
+			;;
+			*)
+			;;
+		esac
+   COMPREPLY=($(compgen -W "${base}" -- ${cur}))  
    return 0
 }
 
@@ -48,7 +71,7 @@ _config() {
     #  The basic options we'll complete.
     #
     base="autocompletion help install initBuild"
-    opts="-d --defaults -f --force-yes --gtest-path --gtest-lib-path --gtest-include-path --rapidjson-path --rapidjson-include-path"
+    opts="-d --defaults -f --force-yes log4cxx graphviz rapidJSON --rapidjson-path --rapidjson-include-path"
 
     #
     #  Complete the arguments to some of the basic commands.
@@ -94,21 +117,23 @@ _memcheck() {
     #  Complete the arguments to some of the basic commands.
     #
     case "${prev}" in
-	-r|--runnable)
-		# Find all files with -x option and get only files that are x-executable
-	    COMPREPLY=( $(find ./ -type f -executable -exec sh -c "file -i '{}' | grep -q 'x-executable; charset=binary'" \; -print) )
-            return 0
-            ;;
-	-o|--output)
-	    COMPREPLY=()
-            return 0
-            ;;
-	-s|--suppressions)
-	    COMPREPLY=( $(find ./ -type f -name *.supp) )
-            return 0
-            ;;
-        *)
-        ;;
+		-r|--runnable)
+			# Find all files with -x option and get only files that are x-executable
+			executables=$(find ./ -type f -executable -exec sh -c "file -i '{}' | grep -q 'x-executable; charset=binary'" \; -print)
+			COMPREPLY=( $(compgen -W "${executables}" -- ${cur}) )  
+			return 0
+	 	;;
+		-o|--output)
+			COMPREPLY=()
+			return 0
+		;;
+		-s|--suppressions)
+			suppressionsFiles=( $(find ./ -type f -name *.supp) )
+			COMPREPLY=($(compgen -W "${suppressionsFiles}" -- ${cur}))  
+	 		return 0
+			;;
+		*)
+		;;
     esac
 
    COMPREPLY=($(compgen -W "${opts}" -- ${cur}))  

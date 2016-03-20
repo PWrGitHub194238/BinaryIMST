@@ -7,22 +7,68 @@
 
 #include "../../include/mstsolver/MSTSolverIF.hpp"
 
+#include <log4cxx/helpers/messagebuffer.h>
+#include <log4cxx/logger.h>
+#include <memory>
+
+#include "../../include/enums/Visibility.hpp"
+#include "../../include/log/bundle/Bundle.hpp"
+#include "../../include/log/utils/LogUtils.hpp"
+#include "../../include/structures/EdgeSetInclude.hpp"
+#include "../../include/structures/GraphIF.hpp"
+#include "../../include/structures/VertexIF.hpp"
 #include "../../include/utils/GraphUtils.hpp"
+
+const static log4cxx::LoggerPtr logger(
+		log4cxx::Logger::getLogger("mstsolver.MSTSolverIF"));
+
+//************************************ PRIVATE CONSTANT FIELDS *************************************//
+
+//************************************** PRIVATE CLASS FIELDS **************************************//
+
+//*************************************** PRIVATE FUNCTIONS ****************************************//
+
+//*********************************** PROTECTED CONSTANT FIELDS ************************************//
+
+//************************************ PROTECTED CLASS FIELDS **************************************//
+
+//************************************** PROTECTED FUNCTIONS ***************************************//
+
+//************************************* PUBLIC CONSTANT FIELDS *************************************//
+
+//************************************** PUBLIC CLASS FIELDS ***************************************//
+
+//************************************ CONSTRUCTOR & DESTRUCTOR ************************************//
+
+MSTSolverIF::MSTSolverIF(GraphIF * const graph) {
+	this->graph = graph;
+}
+
+//*************************************** PUBLIC FUNCTIONS *****************************************//
 
 EdgeSetIF * MSTSolverIF::getMST()
 		throw (GraphExceptions::DisconnectedGraphException) {
-	if (GraphUtils::isGraphConnected(graph) == false) {
-		throw GraphExceptions::DisconnectedGraphException();
+	if (!graph->hasAnyVertex(Visibility::VISIBLE)) {
+		WARN(logger, LogBundleKey::MSTS_IF_EMPTY_INPUT_GRAPH);
+		return new EdgeSetImpl { };
 	} else {
-		return resolve();
+		return getMST(graph->nextVertex(Visibility::VISIBLE));
 	}
 }
 
 EdgeSetIF * MSTSolverIF::getMST(VertexIF * const initialVertex)
 		throw (GraphExceptions::DisconnectedGraphException) {
+	if (initialVertex == nullptr) {
+		return getMST();
+	}
 	if (GraphUtils::isGraphConnected(graph) == false) {
+		ERROR(logger, LogBundleKey::MSTS_IF_GRAPH_NOT_CONNECTED);
 		throw GraphExceptions::DisconnectedGraphException();
 	} else {
+		INFO(logger, LogBundleKey::MSTS_IF_CONSTRUCT_FROM_SOURCE,
+				graph->getNumberOfVertices(Visibility::VISIBLE),
+				graph->getNumberOfEdges(Visibility::VISIBLE),
+				initialVertex->getVertexIdx());
 		return resolve(initialVertex);
 	}
 }

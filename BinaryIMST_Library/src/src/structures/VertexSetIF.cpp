@@ -7,10 +7,14 @@
 
 #include "../../include/structures/VertexSetIF.hpp"
 
+#include <log4cxx/logger.h>
 #include <rapidjson/rapidjson.h>
 #include <sstream>
 
 #include "../../include/utils/JSONUtils.hpp"
+
+const static log4cxx::LoggerPtr logger(
+		log4cxx::Logger::getLogger("structures.VertexSetIF"));
 
 //************************************ PRIVATE CONSTANT FIELDS *************************************//
 
@@ -44,6 +48,27 @@ VertexSetIF::~VertexSetIF() {
 }
 
 //*************************************** PUBLIC FUNCTIONS *****************************************//
+
+VertexCount VertexSetIF::size(Visibility const visibility) {
+	VertexCount setSize { 0 };
+	begin();
+	while (hasNext(visibility)) {
+		setSize += 1;
+		next();
+	}
+	return setSize;
+}
+
+VertexCount VertexSetIF::size(IteratorId const iteratorId,
+		Visibility const visibility) {
+	VertexCount setSize { 0 };
+	begin(iteratorId);
+	while (hasNext(iteratorId, visibility)) {
+		setSize += 1;
+		next(iteratorId);
+	}
+	return setSize;
+}
 
 void VertexSetIF::fillJSON(rapidjson::Document& jsonDoc,
 		rapidjson::Document::AllocatorType& allocator, unsigned short depth) {

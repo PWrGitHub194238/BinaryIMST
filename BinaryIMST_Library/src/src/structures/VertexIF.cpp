@@ -7,13 +7,19 @@
 
 #include "../../include/structures/VertexIF.hpp"
 
+#include <log4cxx/logger.h>
 #include <iostream>
 #include <sstream>
 
 #include "../../include/enums/EdgeByVertexKey.hpp"
 #include "../../include/exp/LogicExceptions.hpp"
 #include "../../include/structures/EdgeByVertexSetInclude.hpp"
+#include "../../include/structures/IterableIF.hpp"
+#include "../../include/structures/VisibleIterableIF.hpp"
 #include "../../include/utils/JSONUtils.hpp"
+
+const static log4cxx::LoggerPtr logger(
+		log4cxx::Logger::getLogger("structures.VertexIF"));
 
 //************************************ PRIVATE CONSTANT FIELDS *************************************//
 
@@ -33,12 +39,17 @@
 
 //************************************ CONSTRUCTOR & DESTRUCTOR ************************************//
 
-VertexIF::VertexIF(VertexIdx vertexIdx) {
+VertexIF::VertexIF(VertexIdx vertexIdx, Visibility const visibility) {
 	this->vertexIdx = vertexIdx;
+	this->visibility = visibility;
 	this->inputEdges = new EdgeByVertexSetImpl { this,
 			EdgeByVertexKey::INCOMING_EDGES };
 	this->outputEdges = new EdgeByVertexSetImpl { this,
 			EdgeByVertexKey::OUTGOING_EDGES };
+}
+
+VertexIF::VertexIF(VertexIdx vertexIdx) :
+		VertexIF::VertexIF(vertexIdx, Visibility::VISIBLE) {
 }
 
 VertexIF::~VertexIF() {
@@ -108,8 +119,16 @@ bool VertexIF::hasNextInputEdge() {
 	return inputEdges->hasNext();
 }
 
+bool VertexIF::hasNextInputEdge(Visibility const visibility) {
+	return inputEdges->hasNext(visibility);
+}
+
 bool VertexIF::hasAnyInputEdge() {
-	return inputEdges->hasAny();
+	return inputEdges->Iterable::hasAny();
+}
+
+bool VertexIF::hasAnyInputEdge(Visibility const visibility) {
+	return inputEdges->hasAny(visibility);
 }
 
 EdgeIF * VertexIF::nextInputEdge() {
@@ -128,16 +147,32 @@ bool VertexIF::hasNextOutputEdge() {
 	return outputEdges->hasNext();
 }
 
+bool VertexIF::hasNextOutputEdge(Visibility const visibility) {
+	return outputEdges->hasNext(visibility);
+}
+
 bool VertexIF::hasAnyOutputEdge() {
-	return outputEdges->hasAny();
+	return outputEdges->Iterable::hasAny();
+}
+
+bool VertexIF::hasAnyOutputEdge(Visibility const visibility) {
+	return outputEdges->hasAny(visibility);
 }
 
 EdgeIF * VertexIF::nextOutputEdge() {
 	return outputEdges->nextEdge();
 }
 
+EdgeIF * VertexIF::currentOutputEdge() {
+	return outputEdges->currentEdge();
+}
+
 VertexIF * VertexIF::nextOutputEdgeTarget() {
 	return outputEdges->nextVertex();
+}
+
+VertexIF * VertexIF::currentOutputEdgeTarget() {
+	return outputEdges->currentVertex();
 }
 
 void VertexIF::fillJSON(rapidjson::Document& jsonDoc,
@@ -153,7 +188,7 @@ void VertexIF::fillJSON(rapidjson::Document& jsonDoc,
 
 std::string VertexIF::toString() {
 	std::ostringstream oss { };
-	oss << "(" << this->getVertexIdx() << ")";
+	oss << "(" << this->getVertexIdx() << ")" << std::flush;
 	return oss.str();
 }
 
@@ -175,6 +210,15 @@ VertexCount VertexIF::getNumberOfInputEdges() const {
 	return this->inputEdges->size();
 }
 
+VertexCount VertexIF::getNumberOfInputEdges(Visibility const visibility) const {
+	return this->inputEdges->size(visibility);
+}
+
 VertexCount VertexIF::getNumberOfOutputEdges() const {
 	return this->outputEdges->size();
+}
+
+VertexCount VertexIF::getNumberOfOutputEdges(
+		Visibility const visibility) const {
+	return this->outputEdges->size(visibility);
 }

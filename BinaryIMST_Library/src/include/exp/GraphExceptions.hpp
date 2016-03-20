@@ -12,10 +12,11 @@
 
 namespace GraphExceptions {
 
+extern const unsigned short BUFFER_SIZE;
+
 class DisconnectedGraphException: public std::exception {
-	virtual const char* what() const throw () {
-		return "Cannot perform operation on non-connected graph.";
-	}
+public:
+	virtual const char* what() const throw ();
 };
 
 }  // namespace GraphExceptions

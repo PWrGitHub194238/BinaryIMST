@@ -7,9 +7,13 @@
 
 #include "../../include/utils/JSONUtils.hpp"
 
+#include <log4cxx/logger.h>
 #include <rapidjson/document.h>
 
 #include "../../include/structures/JSONIF.hpp"
+
+const static log4cxx::LoggerPtr logger(
+		log4cxx::Logger::getLogger("utils.JSONUtils"));
 
 rapidjson::Document JSONUtils::getDepthLimitedJSON(JSONIF* const jsonClass,
 		rapidjson::Document::AllocatorType& allocator, const char* overdepthKey,

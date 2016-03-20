@@ -13,7 +13,7 @@ class VertexIF;
 class EdgeSetIF;
 class GraphIF;
 
-#include "../../include/exp/GraphExceptions.hpp"
+#include "../exp/GraphExceptions.hpp"
 
 class MSTSolverIF {
 private:
@@ -34,12 +34,6 @@ protected:
 
 	//************************************** PROTECTED FUNCTIONS ***************************************//
 
-	/** Zwraca zbiór krawędzi tworzących MST. Zaczyna konstruować je od pierwszego wierzchołka w zbiorze wierzchołków grafu
-	 *
-	 * @return
-	 */
-	virtual EdgeSetIF * resolve() = 0;
-
 	/** Zwraca zbiór krawędzi tworzących MST. Zaczyna konstruować je od wierzchołka initialVertex
 	 *
 	 * @param
@@ -55,9 +49,7 @@ public:
 
 	//************************************ CONSTRUCTOR & DESTRUCTOR ************************************//
 
-	MSTSolverIF(GraphIF * const graph) {
-		this->graph = graph;
-	}
+	MSTSolverIF(GraphIF * const graph);
 
 	// Empty virtual destructor for proper cleanup
 	virtual ~MSTSolverIF() {

@@ -7,12 +7,16 @@
 
 #include "../../include/structures/EdgeIF.hpp"
 
+#include <log4cxx/logger.h>
 #include <sstream>
 #include <utility>
 
 #include "../../include/structures/VertexIF.hpp"
 #include "../../include/utils/EnumUtils.hpp"
 #include "../../include/utils/JSONUtils.hpp"
+
+const static log4cxx::LoggerPtr logger(
+		log4cxx::Logger::getLogger("structures.EdgeIF"));
 
 //************************************ PRIVATE CONSTANT FIELDS *************************************//
 
@@ -170,7 +174,8 @@ std::string EdgeIF::toString() {
 			<< ((isHidden()) ? "- - - -" : "-------")
 			<< ((connectionType == EdgeConnectionType::UNDIRECTED
 					|| connectionType == EdgeConnectionType::FORWARD) ?
-					">" : "-") << "\t" << getTargetVertex()->toString();
+					">" : "-") << "\t" << getTargetVertex()->toString()
+			<< std::flush;
 
 	return oss.str();
 }
@@ -179,6 +184,10 @@ std::string EdgeIF::toString() {
 
 EdgeCost EdgeIF::getEdgeCost() const {
 	return this->edgeCost;
+}
+
+void EdgeIF::setEdgeCost(EdgeCost const edgeCost) {
+	this->edgeCost = edgeCost;
 }
 
 VertexIF * EdgeIF::getSourceVertex() const {

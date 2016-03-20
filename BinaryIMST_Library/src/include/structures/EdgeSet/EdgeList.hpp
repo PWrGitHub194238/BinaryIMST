@@ -9,6 +9,7 @@
 #define INCLUDE_STRUCTURES_EDGESET_EDGELIST_HPP_
 
 #include <list>
+#include <map>
 
 #include "../../enums/Visibility.hpp"
 #include "../../typedefs/primitive.hpp"
@@ -26,9 +27,36 @@ private:
 
 	std::list<EdgeIF*>::const_iterator edgeIteratorBegin;
 
+	std::list<EdgeIF*>::const_iterator edgeIterator;
+
+	std::map<IteratorId, std::list<EdgeIF*>::const_iterator> iteratorMap;
+
 	std::list<EdgeIF*>::const_iterator edgeIteratorEnd;
 
 	//*************************************** PRIVATE FUNCTIONS ****************************************//
+
+	void begin(std::list<EdgeIF*>::const_iterator & iterator);
+
+	void end(std::list<EdgeIF*>::const_iterator & iterator);
+
+	bool hasNext(std::list<EdgeIF*>::const_iterator & iterator);
+
+	bool hasNext(std::list<EdgeIF*>::const_iterator & iterator,
+			Visibility const visibility);
+
+	bool hasPrevious(std::list<EdgeIF*>::const_iterator & iterator);
+
+	bool hasPrevious(std::list<EdgeIF*>::const_iterator & iterator,
+			Visibility const visibility);
+
+	EdgeIF * next(std::list<EdgeIF*>::const_iterator & iterator);
+
+	EdgeIF * current(std::list<EdgeIF*>::const_iterator & iterator);
+
+	EdgeIF * previous(std::list<EdgeIF*>::const_iterator & iterator);
+
+	EdgeIF * peek(std::list<EdgeIF*>::const_iterator & iterator, int moveIndex)
+			throw (LogicExceptions::EmptyIteratorException);
 
 protected:
 
@@ -38,6 +66,8 @@ protected:
 
 	//************************************** PROTECTED FUNCTIONS ***************************************//
 
+	void createIteratorIfNotExists(IteratorId const iteratorId);
+
 public:
 
 	//************************************* PUBLIC CONSTANT FIELDS *************************************//
@@ -46,25 +76,66 @@ public:
 
 	//************************************ CONSTRUCTOR & DESTRUCTOR ************************************//
 
+	EdgeList(EdgeSetIF * edgeList);
+
 	EdgeList();
 
 	EdgeList(EdgeCount numberOfEdges);
 
-	virtual ~EdgeList();
+	~EdgeList();
 
 	//*************************************** PUBLIC FUNCTIONS *****************************************//
 
 	void push_back(EdgeIF * const & edge);
 
-	EdgeCount size();
+	EdgeIF * getElementAt(EdgeIdx const edgeIdx);
+
+	EdgeCount size() const;
 
 	void begin();
 
+	void begin(IteratorId const iteratorId);
+
+	void end();
+
+	void end(IteratorId const iteratorId);
+
 	bool hasNext();
+
+	bool hasNext(IteratorId const iteratorId);
 
 	bool hasNext(Visibility const visibility);
 
+	bool hasNext(IteratorId const iteratorId, Visibility const visibility);
+
+	bool hasPrevious();
+
+	bool hasPrevious(IteratorId const iteratorId);
+
+	bool hasPrevious(Visibility const visibility);
+
+	bool hasPrevious(IteratorId const iteratorId, Visibility const visibility);
+
 	EdgeIF * next();
+
+	EdgeIF * next(IteratorId const iteratorId);
+
+	EdgeIF * current();
+
+	EdgeIF * current(IteratorId const iteratorId);
+
+	EdgeIF * previous();
+
+	EdgeIF * previous(IteratorId const iteratorId);
+
+	EdgeIF * peek(int moveIndex) throw (LogicExceptions::EmptyIteratorException);
+
+	EdgeIF * peek(IteratorId const iteratorId, int moveIndex)
+			throw (LogicExceptions::EmptyIteratorException);
+
+	IteratorId getIterator();
+
+	void removeIterator(IteratorId const iteratorId);
 
 	//*************************************** GETTERS & SETTERS ****************************************//
 

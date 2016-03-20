@@ -7,16 +7,18 @@
 
 #include "../../include/structures/EdgeByVertexSetIF.hpp"
 
+#include <log4cxx/logger.h>
 #include <rapidjson/rapidjson.h>
 #include <sstream>
 #include <utility>
 
-#include "../../include/enums/EdgeConnectionType.hpp"
-#include "../../include/exp/LogicExceptions.hpp"
 #include "../../include/structures/EdgeIF.hpp"
 #include "../../include/structures/VertexIF.hpp"
 #include "../../include/utils/EnumUtils.hpp"
 #include "../../include/utils/JSONUtils.hpp"
+
+const static log4cxx::LoggerPtr logger(
+		log4cxx::Logger::getLogger("structures.EdgeByVertexSetIF"));
 
 //************************************ PRIVATE CONSTANT FIELDS *************************************//
 
@@ -38,7 +40,7 @@
 
 EdgeByVertexSetIF::EdgeByVertexSetIF(VertexIF const * const vertex,
 		EdgeByVertexKey const key) :
-		vertexIdx { vertex->getVertexIdx() }, key { key } {
+		vertexIdx { vertex->getVertexIdx() }, key { key }, numberOfEdges { 0 } {
 }
 
 // Empty virtual destructor for proper cleanup
@@ -49,8 +51,10 @@ EdgeByVertexSetIF::~EdgeByVertexSetIF() {
 
 void EdgeByVertexSetIF::addEdge(EdgeIF * const edge)
 		throw (LogicExceptions::EdgeNullPointerException) {
-	if (edge == nullptr)
+	if (edge == nullptr) {
 		throw LogicExceptions::EdgeNullPointerException();
+	}
+	numberOfEdges += 1;
 	switch (edge->getConnectionType()) {
 	case EdgeConnectionType::UNDIRECTED:
 		return addUndirectedEdge(edge);
@@ -59,8 +63,30 @@ void EdgeByVertexSetIF::addEdge(EdgeIF * const edge)
 	case EdgeConnectionType::BACKWARD:
 		return addBackwardEdge(edge);
 	default:
+		numberOfEdges -= 1;
 		break;
 	}
+}
+
+EdgeCount EdgeByVertexSetIF::size(Visibility const visibility) {
+	VertexCount setSize { 0 };
+	begin();
+	while (hasNext(visibility)) {
+		setSize += 1;
+		next();
+	}
+	return setSize;
+}
+
+EdgeCount EdgeByVertexSetIF::size(IteratorId const iteratorId,
+		Visibility const visibility) {
+	VertexCount setSize { 0 };
+	begin(iteratorId);
+	while (hasNext(iteratorId, visibility)) {
+		setSize += 1;
+		next(iteratorId);
+	}
+	return setSize;
 }
 
 VertexIdx EdgeByVertexSetIF::nextVertexIdx() {
@@ -70,12 +96,21 @@ VertexIdx EdgeByVertexSetIF::nextVertexIdx() {
 VertexIF * EdgeByVertexSetIF::nextVertex() {
 	EdgeIF* edge = this->next().second;
 	return (this->vertexIdx == edge->getTargetVertex()->getVertexIdx()) ?
-			edge->getSourceVertex() :
-			edge->getTargetVertex();
+			edge->getSourceVertex() : edge->getTargetVertex();
+}
+
+VertexIF * EdgeByVertexSetIF::currentVertex() {
+	EdgeIF* edge = this->current().second;
+	return (this->vertexIdx == edge->getTargetVertex()->getVertexIdx()) ?
+			edge->getSourceVertex() : edge->getTargetVertex();
 }
 
 EdgeIF * EdgeByVertexSetIF::nextEdge() {
 	return this->next().second;
+}
+
+EdgeIF * EdgeByVertexSetIF::currentEdge() {
+	return this->current().second;
 }
 
 void EdgeByVertexSetIF::fillJSON(rapidjson::Document& jsonDoc,

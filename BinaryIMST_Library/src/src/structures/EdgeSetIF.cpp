@@ -7,11 +7,15 @@
 
 #include "../../include/structures/EdgeSetIF.hpp"
 
+#include <log4cxx/logger.h>
 #include <rapidjson/rapidjson.h>
 #include <sstream>
 
 #include "../../include/utils/EnumUtils.hpp"
 #include "../../include/utils/JSONUtils.hpp"
+
+const static log4cxx::LoggerPtr logger(
+		log4cxx::Logger::getLogger("structures.EdgeSetIF"));
 
 //************************************ PRIVATE CONSTANT FIELDS *************************************//
 
@@ -31,6 +35,10 @@
 
 //************************************ CONSTRUCTOR & DESTRUCTOR ************************************//
 
+EdgeSetIF::EdgeSetIF(EdgeSetIF * edgeSetIF) {
+	this->numberOfEdges = edgeSetIF->size();
+}
+
 EdgeSetIF::EdgeSetIF() :
 		numberOfEdges { 0 } {
 }
@@ -44,6 +52,40 @@ EdgeSetIF::~EdgeSetIF() {
 }
 
 //*************************************** PUBLIC FUNCTIONS *****************************************//
+
+EdgeCount EdgeSetIF::size(Visibility const visibility) {
+	EdgeCount setSize { 0 };
+	begin();
+	while (hasNext(visibility)) {
+		setSize += 1;
+		next();
+	}
+	return setSize;
+}
+
+EdgeCount EdgeSetIF::size(IteratorId const iteratorId,
+		Visibility const visibility) {
+	EdgeCount setSize { 0 };
+	begin(iteratorId);
+	while (hasNext(iteratorId, visibility)) {
+		setSize += 1;
+		next(iteratorId);
+	}
+	return setSize;
+}
+
+EdgeCost EdgeSetIF::getTotalEdgeCost(Visibility const visibility) {
+	EdgeCost totalCost { 0 };
+	begin();
+	while (hasNext(visibility)) {
+		totalCost += next()->getEdgeCost();
+	}
+	return totalCost;
+}
+
+EdgeCost EdgeSetIF::getTotalEdgeCost() {
+	return getTotalEdgeCost(Visibility::BOTH);
+}
 
 void EdgeSetIF::fillJSON(rapidjson::Document& jsonDoc,
 		rapidjson::Document::AllocatorType& allocator, unsigned short depth) {

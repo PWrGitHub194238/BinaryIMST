@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#!/bin/bash
+BASE_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 appName="BinaryIMST_Library"
 
@@ -12,6 +12,7 @@ appName="BinaryIMST_Library"
 #	shared		build only 'Shared' configuration
 #	static		build only 'Static' configuration
 #	doc		build documentation only
+#	-f --force	force complite project rebuild
 #
 function pasreBash() {
 	if [[ $# -eq 0 ]]; then
@@ -22,20 +23,23 @@ function pasreBash() {
 	do
 		case $1 in
 			all)
-				buildAll
+				ACTION='all'
 			;;
 			debug)
-				buildProject 'Debug' "$appName"
+				ACTION='debug'
 			;;
 			shared)
-				buildProject 'Shared' "lib$appName.so"
+				ACTION='shared'
 			;;
 			static)
-				buildProject 'Static' "lib$appName.a"
-				;;
+				ACTION='static'
+			;;
 			doc)
-				buildDoc
-				;;
+				ACTION='doc'
+			;;
+			-f|--force)
+				FORCE='y'
+			;;
 			*)
 				printHelp
 				exit;
@@ -50,12 +54,13 @@ function pasreBash() {
 # Print help for script
 #
 function printHelp() {
-	echo "Usage: [sudo] bash build.bash [all|debug|shared|static|doc]"
+	echo "Usage: [sudo] bash build.bash all|debug|shared|static|doc [-f|--force]"
 	echo "	all		build entire project"
 	echo "	debug		build only 'Debug' configuration"
 	echo "	shared		build only 'Shared' configuration"
 	echo "	static		build only 'Static' configuration"
 	echo "	doc		build documentation only"
+	echo "	-f --force	force complite project rebuild"
 }
 
 ###########################################################################################
@@ -65,9 +70,13 @@ function buildDoc() {
 }
 
 function buildProject() {
-	cd "$1"
-	make clean
-	make -B all
+	cd "$BASE_DIR/$1"
+	if [ "$FORCE" == 'y' ]; then
+		make clean
+		make -B all	
+	else
+		make all
+	fi
 	if [ $? -eq 0 ]; then
 		mv "./$2" "../$2"
 		echo "Done..."
@@ -75,14 +84,25 @@ function buildProject() {
 	cd ../
 }
 
-function buildAll() {
+###########################################################################################
+
+set -e
+
+pasreBash $@
+
+if [ "$ACTION" == 'all' ]; then
 	buildDoc "$appName.Doxyfile"
 	buildProject 'Debug' "$appName"
 	buildProject 'Shared' "lib$appName.so"
 	buildProject 'Static' "lib$appName.a"
-}
-
-###########################################################################################
-
-pasreBash $@
-
+elif [ "$ACTION" == 'debug' ]; then
+	buildProject 'Debug' "$appName"
+elif [ "$ACTION" == 'shared' ]; then
+	buildProject 'Shared' "lib$appName.so"
+elif [ "$ACTION" == 'static' ]; then
+	buildProject 'Static' "lib$appName.a"
+elif [ "$ACTION" == 'doc' ]; then
+	buildDoc "$appName.Doxyfile"
+else
+	printHelp
+fi
