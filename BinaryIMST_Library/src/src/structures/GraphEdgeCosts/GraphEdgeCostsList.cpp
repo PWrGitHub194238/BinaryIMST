@@ -13,10 +13,12 @@
 #include <set>
 #include <utility>
 
+#include "../../../include/bundle/Bundle.hpp"
 #include "../../../include/exp/LogicExceptions.hpp"
 #include "../../../include/structures/EdgeIF.hpp"
 #include "../../../include/structures/EdgeSetIF.hpp"
 #include "../../../include/structures/GraphIF.hpp"
+#include "../../../include/utils/BundleUtils.hpp"
 
 const static log4cxx::LoggerPtr logger(
 		log4cxx::Logger::getLogger("structures.GraphEdgeCostsList"));
@@ -115,16 +117,41 @@ void GraphEdgeCostsList::createIteratorIfNotExists(
 
 //************************************ CONSTRUCTOR & DESTRUCTOR ************************************//
 
-GraphEdgeCostsList::GraphEdgeCostsList(GraphEdgeCostsIF& graphEdgeCosts) {
+GraphEdgeCostsList::GraphEdgeCostsList() :
+		GraphEdgeCostsIF() {
+
+}
+
+GraphEdgeCostsList::GraphEdgeCostsList(std::string scenarioName) :
+		GraphEdgeCostsIF(scenarioName) {
+
+}
+
+GraphEdgeCostsList::GraphEdgeCostsList(GraphEdgeCostsIF * graphEdgeCosts) :
+		GraphEdgeCostsList(graphEdgeCosts,
+				BundleUtils::getString(AppBundleKey::DEFAULT_SCENARIO_NAME)) {
+
+}
+
+GraphEdgeCostsList::GraphEdgeCostsList(GraphEdgeCostsIF * graphEdgeCosts,
+		std::string scenarioName) {
+	this->name = scenarioName;
 	this->edgeCosts = std::list<EdgeCost> { };
-	graphEdgeCosts.begin();
-	while (graphEdgeCosts.hasNext()) {
-		this->edgeCosts.push_back(graphEdgeCosts.next());
+	graphEdgeCosts->begin();
+	while (graphEdgeCosts->hasNext()) {
+		this->edgeCosts.push_back(graphEdgeCosts->next());
 	}
 }
 
 GraphEdgeCostsList::GraphEdgeCostsList(GraphIF* const graph) :
-		GraphEdgeCostsIF(graph) {
+		GraphEdgeCostsList(graph,
+				BundleUtils::getString(AppBundleKey::DEFAULT_SCENARIO_NAME)) {
+
+}
+
+GraphEdgeCostsList::GraphEdgeCostsList(GraphIF* const graph,
+		std::string scenarioName) :
+		GraphEdgeCostsIF(graph, scenarioName) {
 	this->edgeCosts = std::list<EdgeCost> { };
 	graph->beginEdge();
 	while (graph->hasNextEdge()) {
@@ -133,7 +160,14 @@ GraphEdgeCostsList::GraphEdgeCostsList(GraphIF* const graph) :
 }
 
 GraphEdgeCostsList::GraphEdgeCostsList(EdgeSetIF* const edgeSet) :
-		GraphEdgeCostsIF(edgeSet) {
+		GraphEdgeCostsList(edgeSet,
+				BundleUtils::getString(AppBundleKey::DEFAULT_SCENARIO_NAME)) {
+
+}
+
+GraphEdgeCostsList::GraphEdgeCostsList(EdgeSetIF* const edgeSet,
+		std::string scenarioName) :
+		GraphEdgeCostsIF(edgeSet, scenarioName) {
 	this->edgeCosts = std::list<EdgeCost> { };
 	edgeSet->begin();
 	while (edgeSet->hasNext()) {
@@ -142,8 +176,33 @@ GraphEdgeCostsList::GraphEdgeCostsList(EdgeSetIF* const edgeSet) :
 }
 
 GraphEdgeCostsList::GraphEdgeCostsList(EdgeCount numberOfEdges) :
-		GraphEdgeCostsIF(numberOfEdges) {
+		GraphEdgeCostsList(numberOfEdges,
+				BundleUtils::getString(AppBundleKey::DEFAULT_SCENARIO_NAME)) {
+
+}
+
+GraphEdgeCostsList::GraphEdgeCostsList(EdgeCount numberOfEdges,
+		std::string scenarioName) :
+		GraphEdgeCostsIF(numberOfEdges, scenarioName) {
 	this->edgeCosts = std::list<EdgeCost>(numberOfEdges, 0);
+}
+
+GraphEdgeCostsList::GraphEdgeCostsList(EdgeCount numberOfEdges,
+		bool fillWithZeros) :
+		GraphEdgeCostsList(numberOfEdges,
+				BundleUtils::getString(AppBundleKey::DEFAULT_SCENARIO_NAME),
+				fillWithZeros) {
+
+}
+
+GraphEdgeCostsList::GraphEdgeCostsList(EdgeCount numberOfEdges,
+		std::string scenarioName, bool fillWithZeros) :
+		GraphEdgeCostsIF(numberOfEdges, scenarioName) {
+	if (fillWithZeros) {
+		this->edgeCosts = std::list<EdgeCost>(numberOfEdges, 0);
+	} else {
+		this->edgeCosts = std::list<EdgeCost>();
+	}
 }
 
 GraphEdgeCostsList::~GraphEdgeCostsList() {
@@ -152,6 +211,10 @@ GraphEdgeCostsList::~GraphEdgeCostsList() {
 }
 
 //*************************************** PUBLIC FUNCTIONS *****************************************//
+
+EdgeCost& GraphEdgeCostsList::operator[](EdgeIdx const edgeIdx) {
+	return *(std::next(this->edgeCosts.begin(), edgeIdx));
+}
 
 void GraphEdgeCostsList::push_back(EdgeCost edgecost) {
 	this->edgeCosts.push_back(edgecost);
@@ -242,19 +305,31 @@ EdgeCost GraphEdgeCostsList::peek(IteratorId const iteratorId, int moveIndex)
 }
 
 IteratorId GraphEdgeCostsList::getIterator() {
-	std::set<IteratorId> iteratorIdSet;
+	std::set<IteratorId> iteratorIdSet { };
 	IteratorId returnedId { 0 };
 	std::transform(this->iteratorMap.begin(), this->iteratorMap.end(),
 			std::inserter(iteratorIdSet, iteratorIdSet.begin()),
 			[](std::pair<IteratorId, std::list<EdgeCost>::const_iterator> pair) {return pair.first;});
 
+	if (iteratorMap.empty()) {
+		iteratorMap.insert(
+				std::make_pair(0, std::list<EdgeCost>::const_iterator { }));
+		return 0;
+	}
+
 	for (IteratorId id : iteratorIdSet) {
 		if (returnedId != id) {
+			iteratorMap.insert(
+					std::make_pair(returnedId,
+							std::list<EdgeCost>::const_iterator { }));
 			return returnedId;
 		}
 		returnedId += 1;
 	}
-	return *(iteratorIdSet.end()) + 1;
+	iteratorMap.insert(
+			std::make_pair(returnedId,
+					std::list<EdgeCost>::const_iterator { }));
+	return returnedId;
 }
 
 void GraphEdgeCostsList::removeIterator(IteratorId const iteratorId) {

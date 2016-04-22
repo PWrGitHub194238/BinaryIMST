@@ -68,11 +68,19 @@ public:
 	 */
 	void addOutputEdge(EdgeIF * outputEdge);
 
+	EdgeIF * findInputEdge(VertexIdx const vertexId, bool searchOutputIfNoResult);
+
 	EdgeIF * findInputEdge(VertexIdx const vertexId);
+
+	EdgeIF * findInputEdge(VertexIF * vertex, bool searchOutputIfNoResult);
 
 	EdgeIF * findInputEdge(VertexIF * vertex);
 
+	EdgeIF * findOutputEdge(VertexIdx const vertexId, bool searchInputIfNoResult);
+
 	EdgeIF * findOutputEdge(VertexIdx const vertexId);
+
+	EdgeIF * findOutputEdge(VertexIF * vertex, bool searchInputIfNoResult);
 
 	EdgeIF * findOutputEdge(VertexIF * vertex);
 
@@ -91,6 +99,8 @@ public:
 	void removeOutputEdge(VertexIdx const vertexIdx);
 
 	void removeOutputEdge(VertexIF * const vertex);
+
+	VertexIF* getRandomSuccessor();
 
 	void beginInputEdges();
 

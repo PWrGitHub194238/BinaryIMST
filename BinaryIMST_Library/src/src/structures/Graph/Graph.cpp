@@ -56,11 +56,11 @@ Graph::~Graph() {
 
 //*************************************** PUBLIC FUNCTIONS *****************************************//
 
-void Graph::addEdge(VertexIdx const vertexIdxU, VertexIdx const vertexIdxV,
-		EdgeCost const edgeCost) {
+void Graph::addEdge(EdgeIdx const edgeIdx, VertexIdx const vertexIdxU,
+		VertexIdx const vertexIdxV, EdgeCost const edgeCost) {
 	INFO(logger, LogBundleKey::GRAPH_EDGE_ADDED, vertexIdxU, vertexIdxV,
 			edgeCost);
-	GraphIF::addEdge(vertexIdxU, vertexIdxV, edgeCost,
+	GraphIF::addEdge(edgeIdx, vertexIdxU, vertexIdxV, edgeCost,
 			EdgeConnectionType::UNDIRECTED);
 }
 

@@ -94,8 +94,8 @@ std::string VertexSetIF::toString() {
 	begin();
 	oss << "\t";
 	while (hasNext()) {
-		oss << next()->toString();
-		oss << (hasNext() ? ", " : "");
+		oss << next()->toString() << std::flush;
+		oss << (hasNext() ? ", " : "") << std::flush;
 	}
 	begin();
 	return oss.str();

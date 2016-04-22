@@ -9,6 +9,7 @@
 #define SRC_INCLUDE_STRUCTURES_EDGEBYVERTEXSET_EDGEBYVERTEXMAP_HPP_
 
 #include <map>
+#include <set>
 
 #include "../../enums/EdgeByVertexKey.hpp"
 #include "../../enums/Visibility.hpp"
@@ -106,6 +107,10 @@ public:
 	void removeEdge(VertexIF * const vertex);
 
 	EdgeCount size() const;
+
+	EdgeIF* getRandomEdge();
+
+	EdgeIF* getRandomEdge(std::set<VertexIdx> excludedList);
 
 	void begin();
 

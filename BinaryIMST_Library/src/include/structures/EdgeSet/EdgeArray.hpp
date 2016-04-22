@@ -88,6 +88,10 @@ public:
 
 	void push_back(EdgeIF * const & edge);
 
+	void pop_back();
+
+	void remove(EdgeIF * const & edge);
+
 	EdgeIF * getElementAt(EdgeIdx const edgeIdx);
 
 	EdgeCount size() const;

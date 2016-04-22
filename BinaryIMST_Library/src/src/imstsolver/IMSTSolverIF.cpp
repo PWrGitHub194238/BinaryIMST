@@ -16,13 +16,13 @@
 #include "../../include/log/bundle/Bundle.hpp"
 #include "../../include/log/utils/LogStringUtils.hpp"
 #include "../../include/log/utils/LogUtils.hpp"
-#include "../../include/mstsolver/MSTSolverIF.hpp"
+#include "../../include/mstsolver/MSTSolverInclude.hpp"
 #include "../../include/structures/EdgeIF.hpp"
-#include "../../include/structures/EdgeSetIF.hpp"
+#include "../../include/structures/EdgeSetInclude.hpp"
 #include "../../include/structures/GraphEdgeCostsInclude.hpp"
 #include "../../include/structures/GraphIF.hpp"
 #include "../../include/structures/VertexIF.hpp"
-#include "../../include/structures/VisibleIterableIF.hpp"
+#include "../../include/utils/GraphUtils.hpp"
 #include "../../include/utils/MemoryUtils.hpp"
 
 const static log4cxx::LoggerPtr logger(
@@ -64,13 +64,9 @@ void IMSTSolverIF::replaceEdgeCosts(GraphEdgeCostsIF* newGraphCosts) {
 	} else if (newGraphCosts->size() == graph->getNumberOfEdges()) {
 		INFO(logger, LogBundleKey::IMSTS_IF_GRAPH_COST_CHANGED,
 				LogStringUtils::edgeSetCostChanged(graph, newGraphCosts, "\t").c_str());
-		this->baseGraphEdgeCosts = newGraphCosts;
-		this->isCostChanged = true;
-		graph->beginEdge();
-		newGraphCosts->begin();
-		while (graph->hasNextEdge()) {
-			graph->nextEdge()->setEdgeCost(newGraphCosts->next());
-		}
+		this->baseGraphEdgeCosts = new GraphEdgeCostsImpl { newGraphCosts };
+		this->isCostChanged = GraphUtils::changeGraphCostsWithCheck(graph,
+				newGraphCosts);
 		return;
 	}
 	WARN(logger, LogBundleKey::IMSTS_IF_NEW_GRAPH_COST_SIZE_MISMATCH,
@@ -87,7 +83,6 @@ void IMSTSolverIF::restoreBaseEdgeCosts() {
 		while (graph->hasNextEdge()) {
 			graph->nextEdge()->setEdgeCost(baseGraphEdgeCosts->next());
 		}
-		delete this->baseGraphEdgeCosts;
 		return;
 	}
 	ERROR(logger, LogBundleKey::IMSTS_IF_RESTORE_GRAPH_COST_SIZE_MISMATCH,
@@ -95,13 +90,14 @@ void IMSTSolverIF::restoreBaseEdgeCosts() {
 }
 
 EdgeCount IMSTSolverIF::getMSTDiff(EdgeSetIF* const currentMSTSolution) {
-	EdgeCount edgesNotInBase;
+	EdgeCount edgesNotInBase { };
+	VisibilityList visibilityList = baseMSTSolution->storeVisibility();
 	baseMSTSolution->hideAll();
 	edgesNotInBase = currentMSTSolution->size(Visibility::VISIBLE);
-	baseMSTSolution->showAll();
 	INFO(logger, IMSTS_IF_EDGES_NOT_IN_BASE_SOLUTION,
 			LogStringUtils::mstEdgeDifference(baseMSTSolution,
 					currentMSTSolution, "\t").c_str(), edgesNotInBase);
+	baseMSTSolution->restoreVisibilityAll(visibilityList);
 	return edgesNotInBase;
 }
 
@@ -112,20 +108,26 @@ EdgeCount IMSTSolverIF::getMSTDiff(EdgeSetIF* const currentMSTSolution) {
 //************************************ CONSTRUCTOR & DESTRUCTOR ************************************//
 
 IMSTSolverIF::IMSTSolverIF(MSTSolverIF* const mstSolver, GraphIF* const graph,
-		VertexIF* initialVertex, LambdaValue lowerBound,
-		LambdaValue upperBound) {
-	this->mstSolver = mstSolver;
+		EdgeSetIF * baseSolution, VertexIF* initialVertex,
+		LambdaValue lowerBound, LambdaValue upperBound) {
+	this->defaultSolverUsed = (mstSolver == nullptr);
+	this->mstSolver = (mstSolver ? mstSolver : new MSTSolverImpl { graph });
 	this->graph = graph;
 	this->baseGraphEdgeCosts = nullptr;
-	this->baseMSTSolution = mstSolver->getMST();
+	this->baseMSTSolution =
+			(baseSolution ?
+					new EdgeSetImpl { baseSolution } : this->mstSolver->getMST());
 	this->lowerBound = lowerBound;
 	this->upperBound = upperBound;
 	this->isCostChanged = false;
 }
 
 IMSTSolverIF::~IMSTSolverIF() {
-	delete baseGraphEdgeCosts;
-	MemoryUtils::removeCollection(baseMSTSolution, false);
+	if (this->defaultSolverUsed) {
+		delete this->mstSolver;
+	}
+	delete this->baseGraphEdgeCosts;
+	MemoryUtils::removeCollection(this->baseMSTSolution, false);
 }
 
 //*************************************** PUBLIC FUNCTIONS *****************************************//

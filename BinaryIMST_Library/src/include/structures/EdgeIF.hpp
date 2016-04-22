@@ -47,6 +47,8 @@ protected:
 
 	//************************************ PROTECTED CLASS FIELDS **************************************//
 
+	EdgeIdx edgeIdx;
+
 	VertexPair edgeConnection;
 
 	EdgeCost edgeCost;
@@ -63,16 +65,18 @@ public:
 
 	//************************************ CONSTRUCTOR & DESTRUCTOR ************************************//
 
-	EdgeIF(VertexPair const & edgeConnections, EdgeCost const edgeCost,
-			EdgeConnectionType isConnect, Visibility visibility);
+	EdgeIF(EdgeIdx const edgeIdx, VertexPair const & edgeConnections,
+			EdgeCost const edgeCost, EdgeConnectionType isConnect,
+			Visibility const visibility);
 
-	EdgeIF(VertexPair const & edgeConnections, EdgeCost const edgeCost,
-			EdgeConnectionType isConnect);
+	EdgeIF(EdgeIdx const edgeIdx, VertexPair const & edgeConnections,
+			EdgeCost const edgeCost, EdgeConnectionType isConnect);
 
-	EdgeIF(VertexPair const & edgeConnections, EdgeCost const edgeCost,
-			Visibility visibility);
+	EdgeIF(EdgeIdx const edgeIdx, VertexPair const & edgeConnections,
+			EdgeCost const edgeCost, Visibility visibility);
 
-	EdgeIF(VertexPair const & edgeConnections, EdgeCost const edgeCost);
+	EdgeIF(EdgeIdx const edgeIdx, VertexPair const & edgeConnections,
+			EdgeCost const edgeCost);
 
 	virtual ~EdgeIF();
 
@@ -86,9 +90,11 @@ public:
 			rapidjson::Document::AllocatorType& allocator,
 			unsigned short depth);
 
-	virtual std::string toString();
+	virtual std::string toString() const;
 
 	//*************************************** GETTERS & SETTERS ****************************************//
+
+	EdgeIdx getEdgeIdx() const;
 
 	EdgeCost getEdgeCost() const;
 

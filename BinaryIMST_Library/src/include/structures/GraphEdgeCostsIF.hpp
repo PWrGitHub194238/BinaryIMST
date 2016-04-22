@@ -8,8 +8,14 @@
 #ifndef SRC_INCLUDE_STRUCTURES_GRAPHEDGECOSTSIF_HPP_
 #define SRC_INCLUDE_STRUCTURES_GRAPHEDGECOSTSIF_HPP_
 
+#include <rapidjson/document.h>
+#include <string>
+
+#include "../bundle/Bundle.hpp"
 #include "../typedefs/primitive.hpp"
+#include "../utils/BundleUtils.hpp"
 #include "IterableIF.hpp"
+#include "JSONIF.hpp"
 
 class VertexIF;
 
@@ -30,7 +36,7 @@ struct compare_EdgeCost_dec {
 	}
 };
 
-class GraphEdgeCostsIF: public Iterable<EdgeCost> {
+class GraphEdgeCostsIF: public Iterable<EdgeCost>, public JSONIF {
 private:
 
 	//************************************ PRIVATE CONSTANT FIELDS *************************************//
@@ -46,6 +52,8 @@ protected:
 	//************************************ PROTECTED CLASS FIELDS **************************************//
 
 	EdgeCount numberOfEdges;
+	std::string name = BundleUtils::getString(
+			AppBundleKey::DEFAULT_SCENARIO_NAME);
 
 	//************************************** PROTECTED FUNCTIONS ***************************************//
 
@@ -59,15 +67,25 @@ public:
 
 	GraphEdgeCostsIF();
 
+	GraphEdgeCostsIF(std::string scenarioName);
+
 	GraphEdgeCostsIF(GraphIF* const graph);
+
+	GraphEdgeCostsIF(GraphIF* const graph, std::string scenarioName);
 
 	GraphEdgeCostsIF(EdgeSetIF* const edgeSet);
 
+	GraphEdgeCostsIF(EdgeSetIF* const edgeSet, std::string scenarioName);
+
 	GraphEdgeCostsIF(EdgeCount numberOfEdges);
+
+	GraphEdgeCostsIF(EdgeCount numberOfEdges, std::string scenarioName);
 
 	virtual ~GraphEdgeCostsIF();
 
 	//*************************************** PUBLIC FUNCTIONS *****************************************//
+
+	virtual EdgeCost& operator[](EdgeIdx const edgeIdx) = 0;
 
 	virtual void push_back(EdgeCost edgeCost) = 0;
 
@@ -119,7 +137,15 @@ public:
 
 	EdgeCost getTotalEdgeCost();
 
+	void fillJSON(rapidjson::Document& jsonDoc,
+			rapidjson::Document::AllocatorType& allocator,
+			unsigned short depth);
+
+	std::string toString();
+
 	//*************************************** GETTERS & SETTERS ****************************************//
+
+	std::string getName() const;
 
 };
 

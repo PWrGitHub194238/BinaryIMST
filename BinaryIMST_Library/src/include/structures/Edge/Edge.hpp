@@ -39,16 +39,18 @@ public:
 
 	//************************************ CONSTRUCTOR & DESTRUCTOR ************************************//
 
-	Edge(VertexPair const & edgeConnections, EdgeCost const edgeCost,
-			EdgeConnectionType connectionType, Visibility visibility);
-
-	Edge(VertexPair const & edgeConnections, EdgeCost const edgeCost,
-			EdgeConnectionType connectionType);
-
-	Edge(VertexPair const & edgeConnections, EdgeCost const edgeCost,
+	Edge(EdgeIdx const edgeIdx, VertexPair const & edgeConnections,
+			EdgeCost const edgeCost, EdgeConnectionType connectionType,
 			Visibility visibility);
 
-	Edge(VertexPair const & edgeConnections, EdgeCost const edgeCost);
+	Edge(EdgeIdx const edgeIdx, VertexPair const & edgeConnections,
+			EdgeCost const edgeCost, EdgeConnectionType connectionType);
+
+	Edge(EdgeIdx const edgeIdx, VertexPair const & edgeConnections,
+			EdgeCost const edgeCost, Visibility visibility);
+
+	Edge(EdgeIdx const edgeIdx, VertexPair const & edgeConnections,
+			EdgeCost const edgeCost);
 
 	virtual ~Edge();
 

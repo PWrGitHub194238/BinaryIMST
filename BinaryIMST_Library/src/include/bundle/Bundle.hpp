@@ -12,6 +12,7 @@ enum AppBundleKey {
 
 	//*********************************** JSONIF.hpp ***********************************//
 	JSONIF_TO_STRING_UNIMPLEMENTED,
+	DEFAULT_SCENARIO_NAME,
 
 };
 

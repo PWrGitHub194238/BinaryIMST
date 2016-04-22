@@ -208,6 +208,8 @@ public:
 
 	virtual void removeIterator(IteratorId const iteratorId) = 0;
 
+	virtual EdgeIF* getRandomEdge() = 0;
+
 	/** Iterator po krawędziach w zbiorze, ale zwraca od razu odpowiedni numer wierchołka (e = (u,v), u.idx dla INCOMING_EDGES i v.idx dla OUTGOING_EDGES.
 	 *
 	 * @return

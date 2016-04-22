@@ -48,8 +48,8 @@ public:
 
 	//*************************************** PUBLIC FUNCTIONS *****************************************//
 
-	void addEdge(VertexIdx const vertexIdxU, VertexIdx const vertexIdxV,
-			EdgeCost const edgeCost);
+	void addEdge(EdgeIdx const edgeIdx, VertexIdx const vertexIdxU,
+			VertexIdx const vertexIdxV, EdgeCost const edgeCost);
 
 	//*************************************** GETTERS & SETTERS ****************************************//
 

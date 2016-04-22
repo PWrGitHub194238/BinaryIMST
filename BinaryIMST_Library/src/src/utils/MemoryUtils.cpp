@@ -13,9 +13,11 @@
 #include "../../include/enums/Visibility.hpp"
 #include "../../include/structures/EdgeIF.hpp"
 #include "../../include/structures/EdgeSetIF.hpp"
+#include "../../include/structures/GraphEdgeCostsIF.hpp"
 #include "../../include/structures/GraphIF.hpp"
 #include "../../include/structures/VertexSetIF.hpp"
 #include "../../include/structures/VisibleIterableIF.hpp"
+#include "../../include/typedefs/struct.hpp"
 
 class GraphIF;
 
@@ -50,9 +52,14 @@ void MemoryUtils::removeGraph(GraphIF* const & graph) {
 	removeGraph(graph, true, true);
 }
 
+void MemoryUtils::removeScenarioSet(GraphEdgeCostsSet scenarioSet) {
+	for (GraphEdgeCostsIF* scenario : scenarioSet) {
+		delete scenario;
+	}
+}
+
 template void MemoryUtils::removeCollection<EdgeIF*>(
 		VisibleIterable<EdgeIF*>* const & collection, bool withItems);
 
 template void MemoryUtils::removeCollection<EdgeIF*>(
 		VisibleIterable<EdgeIF*>* const & collection);
-

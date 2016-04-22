@@ -82,24 +82,28 @@ void EdgeIF::disconnectBackward() {
 
 //************************************ CONSTRUCTOR & DESTRUCTOR ************************************//
 
-EdgeIF::EdgeIF(VertexPair const & edgeConnections, EdgeCost const edgeCost) :
-		EdgeIF(edgeConnections, edgeCost, EdgeConnectionType::UNDIRECTED,
+EdgeIF::EdgeIF(EdgeIdx const edgeIdx, VertexPair const & edgeConnections,
+		EdgeCost const edgeCost) :
+		EdgeIF(edgeIdx, edgeConnections, edgeCost,
+				EdgeConnectionType::UNDIRECTED, Visibility::VISIBLE) {
+}
+
+EdgeIF::EdgeIF(EdgeIdx const edgeIdx, VertexPair const & edgeConnections,
+		EdgeCost const edgeCost, Visibility visibility) :
+		EdgeIF(edgeIdx, edgeConnections, edgeCost,
+				EdgeConnectionType::UNDIRECTED, visibility) {
+}
+
+EdgeIF::EdgeIF(EdgeIdx const edgeIdx, VertexPair const & edgeConnections,
+		EdgeCost const edgeCost, EdgeConnectionType connectionType) :
+		EdgeIF(edgeIdx, edgeConnections, edgeCost, connectionType,
 				Visibility::VISIBLE) {
 }
 
-EdgeIF::EdgeIF(VertexPair const & edgeConnections, EdgeCost const edgeCost,
-		Visibility visibility) :
-		EdgeIF(edgeConnections, edgeCost, EdgeConnectionType::UNDIRECTED,
-				visibility) {
-}
-
-EdgeIF::EdgeIF(VertexPair const & edgeConnections, EdgeCost const edgeCost,
-		EdgeConnectionType connectionType) :
-		EdgeIF(edgeConnections, edgeCost, connectionType, Visibility::VISIBLE) {
-}
-
-EdgeIF::EdgeIF(VertexPair const & edgeConnections, EdgeCost const edgeCost,
-		EdgeConnectionType connectionType, Visibility visibility) {
+EdgeIF::EdgeIF(EdgeIdx const edgeIdx, VertexPair const & edgeConnections,
+		EdgeCost const edgeCost, EdgeConnectionType connectionType,
+		Visibility visibility) {
+	this->edgeIdx = edgeIdx;
 	this->edgeConnection = edgeConnections;
 	this->edgeCost = edgeCost;
 	this->visibility = visibility;
@@ -164,7 +168,7 @@ void EdgeIF::fillJSON(rapidjson::Document& jsonDoc,
 					"VertexIF", depth), allocator);
 }
 
-std::string EdgeIF::toString() {
+std::string EdgeIF::toString() const {
 	std::ostringstream oss { };
 	oss << getSourceVertex()->toString() << "\t"
 			<< ((connectionType == EdgeConnectionType::UNDIRECTED
@@ -181,6 +185,10 @@ std::string EdgeIF::toString() {
 }
 
 //*************************************** GETTERS & SETTERS ****************************************//
+
+EdgeIdx EdgeIF::getEdgeIdx() const {
+	return this->edgeIdx;
+}
 
 EdgeCost EdgeIF::getEdgeCost() const {
 	return this->edgeCost;

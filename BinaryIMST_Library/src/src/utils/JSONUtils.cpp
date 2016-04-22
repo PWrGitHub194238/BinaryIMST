@@ -24,7 +24,7 @@ rapidjson::Document JSONUtils::getDepthLimitedJSON(JSONIF* const jsonClass,
 		jsonClass->fillJSON(jsonDoc, allocator, depth - 1);
 		return jsonDoc;
 	} else {
-		rapidjson::Value key;
+		rapidjson::Value key { };
 		key.SetString(overdepthKey, allocator);
 		jsonDoc.AddMember(key, "{ ... }", allocator);
 		return jsonDoc;

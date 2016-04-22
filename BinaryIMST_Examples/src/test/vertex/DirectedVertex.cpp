@@ -32,6 +32,7 @@ TEST ( DIRECTED_VERTEX_TEST, OUT_IN_EDGES_100_10000 ) {
 	VertexSetIF* vertexSet = new VertexSetImpl { numberOfVertices };
 
 	EdgeCount j;
+	EdgeIdx edgeIdx;
 	EdgeCount numberOfEdges = 10000;
 	EdgeIF* edge;
 	EdgeSetIF* edgeSet = new EdgeSetImpl { numberOfEdges };
@@ -42,6 +43,8 @@ TEST ( DIRECTED_VERTEX_TEST, OUT_IN_EDGES_100_10000 ) {
 
 	numberOfEdges = std::min(numberOfEdges,
 			numberOfVertices * (numberOfVertices - 1));
+	edgeIdx = 0;
+
 	for (i = 0; i < numberOfVertices; i += 1) {
 		vertexSet->push_back(new VertexImpl { i });
 	}
@@ -64,7 +67,7 @@ TEST ( DIRECTED_VERTEX_TEST, OUT_IN_EDGES_100_10000 ) {
 		if (!sourceTestData.at(uIdx).count(vIdx)) {
 			sourceTestData.at(uIdx).insert(std::make_pair(vIdx, eCost));
 			edgeSet->push_back(
-					new EdgeImpl { VertexPair(vertexSet->getElementAt(uIdx),
+					new EdgeImpl { edgeIdx++, VertexPair(vertexSet->getElementAt(uIdx),
 							vertexSet->getElementAt(vIdx)), eCost,
 							EdgeConnectionType::FORWARD });
 			/*std::cout << "ADD: (" << uIdx << " -> " << vIdx << ") : " << eCost

@@ -30,9 +30,9 @@ TEST ( MST_2_TEST, SMALL ) {
 	std::cout << v2->toString() << std::endl;
 	std::cout << v3->toString() << std::endl;
 
-	EdgeIF* e1 = new EdgeImpl { VertexPair(v1, v2), 3 };
-	EdgeIF* e2 = new EdgeImpl { VertexPair(v2, v3), 4 };
-	EdgeIF* e3 = new EdgeImpl { VertexPair(v3, v1), 5 };
+	EdgeIF* e1 = new EdgeImpl { 0, VertexPair(v1, v2), 3 };
+	EdgeIF* e2 = new EdgeImpl { 1,  VertexPair(v2, v3), 4 };
+	EdgeIF* e3 = new EdgeImpl { 2, VertexPair(v3, v1), 5 };
 	EdgeSetIF* eSet = new EdgeSetImpl { 3 };
 
 //	std::cout << e1->toString() << std::endl;

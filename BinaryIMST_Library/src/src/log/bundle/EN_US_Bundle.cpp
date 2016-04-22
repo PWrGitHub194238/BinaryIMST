@@ -7,6 +7,17 @@
 
 const char* logDictionary[] = {
 
+	//*********************************** LP_MSTSolverIF.cpp ***********************************//
+	//**************** Trace ****************//
+	// LPMSTIF_INIT
+	"Linear model for graph:\n%s\nwill be constructed for Minimum Spanning Tree problem.",
+	//**************** Debug ****************//
+	//**************** Info *****************//
+
+	//**************** Warn *****************//
+	//**************** Error ****************//
+	//**************** Fatal ****************//
+
 	//*********************************** FibonacciHeap ***********************************//
 	//**************** Trace ****************//
 	// VERTEX_PUSHED_INTO_FIB_HEAP
@@ -45,7 +56,7 @@ const char* logDictionary[] = {
 
 	//**************** Info *****************//
 	// GRAPH_EDGE_ADDED
-	"Adding edge (%VertexIdx%, %VertexIdx%) with cost %Edgecost% to graph.",
+	"Adding edge (%VertexIdx%, %VertexIdx%) with cost %EdgeCost% to graph.",
 
 	//**************** Warn *****************//
 
@@ -101,16 +112,22 @@ const char* logDictionary[] = {
 	"The program encountered a comment line. Line has been skipped.",
 	// IOU_MST_PROBLEM_READ
 	"Now reading graph data for MST problem with given number of vertices: %VertexCount% and given number of edges: %EdgeCount%...",
+	// IOU_MST_PROBLEM_READ_GET_EDGES
+	"Now reading costs data for MST problem with given number of vertices: %VertexCount% and given number of edges: %EdgeCount%...",
 	// IOU_MST_PROBLEM_WRITE
 	"Writing graph data for MST problem with given number of vertices: %VertexCount% and given number of edges: %EdgeCount% into file named '%s'...",
 	// IOU_ARC_DEF_READ
 	"Edge between vertices: (%VertexIdx%, %VertexIdx%) with cost: %EdgeCost% has been read.",
+	// IOU_ARC_COST_READ
+	"Cost %EdgeCost% of edge: (%VertexIdx%, %VertexIdx%) has been read.",
 	// IOU_ARC_DEF_WRITE
 	"Writing following edge into data file:\n%s...",
 	// IOU_VERTEX_DEF_WRITE
 	"Writing following vertex into data file:\n%s...",
 	// IOU_END_OF_READ
 	"Reached end of file while reading. Following graph was read from data file '%s':\n%s.",
+	// IOU_END_OF_READ_COSTS
+	"Reached end of file while reading. Following costs were read from data file '%s':\n%s.",
 	// IOU_END_OF_WRITE
 	"Reached end of data stream while writing into file '%s'. Following graph has been saved:\n%s.",
 
@@ -204,15 +221,81 @@ const char* logDictionary[] = {
 	"Analising discovery array shows that at least one vertex in given graph (with ID: %VertexIdx%) was not visited.",
 	// GU_CHECK_GRAPH_CONNECTIVITY_POSITIVE
 	"Graph is connected.",
+	// GU_RND_MST_SEARCH_INIT
+	"Generating random spanning tree for graph:\n%s.",
+	// GU_RND_MST_SEARCH_ROOT
+	"Adding vertex with ID: %VertexIdx% as root of spanning tree.",
+	// GU_RND_MST_SEARCH_BREAK
+	"There is no need to build path from vertex with ID: %VertexIdx%. Spanning tree was generated.",
+	// GU_RND_MST_SEARCH_CONSTRUCT_PATH
+	"New path from vertex with ID: %VertexIdx% will be build.",
+	// GU_RND_MST_SEARCH_NOT_DISCOVERED
+	"Vertex with ID: %VertexIdx% is not yet a part of spanning tree so new path will be generated.",
+	// GU_RND_MST_SEARCH_BUILD_PATH
+	"Successor of vertex with ID: %VertexIdx% will be chose at random from it's output edge set:\n%s.",
+	// GU_RND_MST_SEARCH_ADD_TO_PATH
+	"Add vertex with ID: %VertexIdx% to path.",
+	// GU_RND_MST_SEARCH_ADD_EDGES_FROM_PATH
+	"Edges from generated path between vertices with ID's: %VertexIdx% and %VertexIdx% of length %EdgeCount% will be added to spanning tree.",
+	// GU_RND_MST_SEARCH_ADD_EDGE_FROM_PATH
+	"Adding edge from vertex with ID: %VertexIdx% to vertex with ID: %VertexIdx%:\n%s.",
+	// GU_RND_MST_SEARCH_CONSTRUCT_PATH_END
+	"End of path processing generated from vertex with ID: %VertexIdx%.",
+	// GU_RND_MST_FOUND
+	"Random spanning tree was found:\n%s.",
+	// GU_EDGES_ON_SP_TREE_PATH_INIT
+	"Begin to search for every path from vertex with ID: %VertexIdx% to vertex with ID: %VertexIdx%.",
+	// GU_EDGES_ON_SP_TREE_PATH_SCAN_SRC
+	"Source vertex with ID: %VertexIdx% has following set of output edges:\n%s.",
+	// GU_EDGES_ON_SP_TREE_PATH_SRC_PUSH_1
+	"Scanning given edge:\n%s...",
+	// GU_EDGES_ON_SP_TREE_PATH_SRC_PUSH_1
+	"...results in adding vertex with ID: %VertexIdx% to vertex and path queue.",
+	// GU_EDGES_ON_SP_TREE_PATH_SCAN_INIT
+	"After scanning a source node, vertex queue has %d elements.",
+	// GU_EDGES_ON_SP_TREE_PATH_POP
+	"Pop vertex with ID: %VertexIdx% and given path from source node:\n%s\nfrom queue. Remaining elements: %d.",
+	// GU_EDGES_ON_SP_TREE_PATH_SCAN
+	"Returned vertex with ID: %VertexIdx% has following set of output edges:\n%s\nthat will be processed.",
+	// GU_EDGES_ON_SP_TREE_PATH_VERTEX_PROCESS
+	"Processing vertex with ID: %VertexIdx%...",
+	// GU_EDGES_ON_SP_TREE_PATH_VERTEX_VISITED
+	"Vertex with given ID: %VertexIdx% was already visited and will no be processed.",
+	// GU_EDGES_ON_SP_TREE_PATH_VERTEX_NOT_VISITED
+	"Vertex with ID: %VertexIdx% was not yet visited. It will be added to queue along with new path to it:\n%s.",
+	// GU_EDGES_ON_SP_TREE_PATH_STORED
+	"Path in spanning tree from source vertex with ID: %VertexIdx% to target vertex with ID: %VertexIdx% was stored:\n%s.",
+	// GU_FIND_NEIGHBORHOOD_INIT
+	"Looking for neighborhood for given set of edges:\n%s.",
+	// GU_FIND_NEIGHBORHOOD_ADD_EDGE
+	"Generating neighbor sets with additional edge:\n%s.",
+	// GU_FIND_NEIGHBORHOOD_PATH_INSTEAD_EDGE
+	"In order to create neighbor set with extra edge:\n%s\none of the following edges on path from vertex with ID: %VertexIdx% to vertex with ID: %VertexIdx%:\n%s\nmust be removed from original set.",
+	// GU_FIND_NEIGHBORHOOD_STORE_SET
+	"New neighborhood was generated:\n%s.\nFollowing edge was inserted into above set:\n%s.\nFollowing edge was removed from above set:\n%s.",
+	// GU_FIND_NEIGHBORHOOD_END
+	"All neighborhoods for original set of edges:\n%s\n was generated. %d neighborhood sets was created.",
 
 	//**************** Warn *****************//
 	// GU_VERTEX_INPUT_DEGREE_ZERO
 	"At least one vertex (with ID: %VertexIdx%) has no input edges. Graph is disconnected.",
 	// GU_NO_VERTEX_GRAPH
 	"There is no visible vertices in given graph:\n%s.",
+	// GU_RND_MST_GRAPH_DISCONNECTED
+	"Cannot generate any spanning tree from not connected graph.",
 
 	//**************** Error ****************//
 	//**************** Fatal ****************//
+
+
+	//*********************************** TabuSearchUtils.cpp ***********************************//
+	//**************** Trace ****************//
+	//**************** Debug ****************//
+	//**************** Info *****************//
+	//**************** Warn *****************//
+	//**************** Error ****************//
+	//**************** Fatal ****************//
+
 
 	//*********************************** IMSTSolverIF.cpp ***********************************//
 	//**************** Trace ****************//
@@ -251,17 +334,17 @@ const char* logDictionary[] = {
 	// BS_V1_ADD_LAMBDA_PARAM_TO_SET
 	"New λ parameter has been added:\n\tλ(%LambdaIdx%,%LambdaIdx%)\t=\t%EdgeCost%\t-\t%EdgeCost%\t=\t%LambdaValue%.",
 	// BS_V1_FIND_MIN_EDGE_IDX_LAMBDA
-	"Performing search for minimal index 'j' such that:\n\tλ_{LB}\t<=\tλ(%LambdaIdx%,j),\n\tλ_{LB}\n=\n%LambdaValue%.",
+	"Performing search for minimal index 'j' such that:\n\tλ_{LB}\t<=\tλ(%LambdaIdx%,j),\n\tλ_{LB}\t=\t%LambdaValue%.",
 	// BS_V1_SEARCHING_MIN_EDGE_IDX_LAMBDA
 	"Search for minimal index 'j'...\n\t(%LambdaValue%\t<=\tλ(%LambdaIdx%,%LambdaIdx%)\t=\t%LambdaValue%)",
 	// BS_V1_FOUND_MIN_EDGE_IDX_LAMBDA
-	"Minimal index 'j' such that:\n\tλ_{LB}\t<=\tλ(%LambdaIdx%,j),\n\tλ_{LB}\n=\n%LambdaValue%\nhas been found and it equals %LambdaIdx%.",
+	"Minimal index 'j' such that:\n\tλ_{LB}\t<=\tλ(%LambdaIdx%,j),\n\tλ_{LB}\t=\t%LambdaValue%\nhas been found and it equals %LambdaIdx%.",
 	// BS_V1_FIND_MAX_EDGE_IDX_LAMBDA
-	"Performing search for maximal index 'j' such that:\n\tλ(%LambdaIdx%,j)\t<=\tλ_{UB},\n\tλ_{UB}\n=\t%LambdaValue%.",
+	"Performing search for maximal index 'j' such that:\n\tλ(%LambdaIdx%,j)\t<=\tλ_{UB},\n\tλ_{UB}\t=\t%LambdaValue%.",
 	// BS_V1_SEARCHING_MAX_EDGE_IDX_LAMBDA
 	"Search for maximal index 'j'...\n\t(%LambdaValue%\t=\tλ(%LambdaIdx%,%LambdaIdx%)\t<=\t%LambdaValue%)",
 	// BS_V1_FOUND_MAX_EDGE_IDX_LAMBDA
-	"Maximal index 'j' such that:\n\tλ(%LambdaIdx%,j)\t<=\tλ_{UB},\n\tλ_{UB}\n=\t%LambdaValue%\nhas been found and it equals %LambdaIdx%.",
+	"Maximal index 'j' such that:\n\tλ(%LambdaIdx%,j)\t<=\tλ_{UB},\n\tλ_{UB}\t=\t%LambdaValue%\nhas been found and it equals %LambdaIdx%.",
 	// BS_V1_IMST_BIN_SEARCH_GEN_LAMBDA_SET
 	"Generating λ parameter feasible set for base edge with ID: %EdgeIdx%...",
 
@@ -296,11 +379,11 @@ const char* logDictionary[] = {
 	// BS_V1_MST_BIN_SEARCH_TO_BIGGER
 	"Selected λ parameter value %LambdaValue% results in MST set with number of different edges compared to base set smaller than optimal value (%EdgeCount% out of %EdgeCount%). Decreasing upper index bound to %LambdaIdx% (decreasing λ value).",
 	// BS_V1_MST_BIN_SEARCH_SOLUTION
-	"For λ parameter value %LambdaValue% an optimal solution has been found (with total cost of edges: %EdgeCost%). Solution includes following edges:\n%s\nin which there are %EdgeCount% edges that are not in base edge set:\n%s.",
+	"For λ parameter value %LambdaValue% an optimal solution has been found (with total cost of edges: %EdgeCost%). Solution includes following edges:\n%s\nin which there are %EdgeCount% edges that are not in base edge set:\n%s\n.",
 	// BS_V1_UNBOUNDED_SOLVE
 	"There are some changes it costs of graph's edges. New unbounded solution will be calculated for k parameter value: %EdgeCount%.",
 	// BS_V1_UNBOUNDED_OPTIMAL
-	"Unbounded solution that was found has got less or equal number of edges that are not in base solution than %EdgeCount% so it is an optimal solution (with total cost of edges: %Edgecost%). Solution includes following edges:\n%sin which there are edges that are not in base edge set:\n%s.",
+	"Unbounded solution that was found has got less or equal number of edges that are not in base solution than %EdgeCount% so it is an optimal solution (with total cost of edges: %Edgecost%). Solution includes following edges:\n%s\nin which there are edges that are not in base edge set:\n%s.",
 	// BS_V1_UNBOUNDED_UNACCEPTABLE
 	"Unbounded solution that was found has got unacceptable number of edges that are not in base solution. Looking for 1-bounded optimal solution for Incremental MST problem...",
 	// BS_V1_NO_CHANGE
@@ -325,6 +408,82 @@ const char* logDictionary[] = {
 	"For λ parameter value %LambdaValue% a feasible solution has been found (with total cost of edges: %EdgeCost%). Solution includes following edges:\n%s\nin which there are %EdgeCount% edges that are not in base edge set:\n%s. This solution was returned as a result of λ-based MST binary search (with 'k value: %EdgeCount%) termination. This solution has no guarantee to be an optimal one.",
 
 	//**************** Error ****************//
+	//**************** Fatal ****************//
+
+
+	//*********************************** RIMSTSolverIF.cpp ***********************************//
+	//**************** Trace ****************//
+	//**************** Debug ****************//
+	//**************** Info *****************//
+	// RIMSTS_IF_GRAPH_COST_BACKUP
+	"New set of edges' costs has been given. Changing costs of edges as shown below:\n%s.",
+
+	//**************** Warn *****************//
+	// RIMSTS_IF_NEW_GRAPH_COST_SIZE_MISMATCH
+	"Newly given set of costs has different number of elements (%EdgeCount%) than number of edges in graph (%EdgeCount%). Costs of edges cannot be updated.",
+
+	//**************** Error ****************//
+
+	//**************** Fatal ****************//
+
+
+	//*********************************** TabuSearch.cpp ***********************************//
+	//**************** Trace ****************//
+	//**************** Debug ****************//
+	//**************** Info *****************//
+	// TS_WORST_CASE_GEN
+	"Generating worst case scenario for given set of edges:\n%s\nbased on %ScenarioCount% adversarial scenarios. For each graph edges, the best cost will be assigned to new scenario.",
+	// TS_WORST_CASE_SEARCH_BEST_EDGE_COST
+	"Looking for the best cost of edge with ID: %EdgeIdx%:\n%s\namong %ScenarioCount% adversarial scenarios.",
+	// TS_WORST_CASE_EDGE_SCENARIO_BEST_COST
+	"Cost of edge with ID: %EdgeIdx% in scenario named '%s' is %EdgeCost%.",
+	// TS_WORST_CASE_EDGE_BEST_COST
+	"The best cost for edge with ID: %EdgeIdx% was found (%EdgeCost%).",
+	// TS_WORST_CASE_EDGE_WORST_COST_GEN
+	"For each of the following edges:\n%s\nthe worst costs will be assign to new scenario.",
+	// TS_WORST_CASE_SEARCH_WORST_EDGE_COST
+	"Looking for the worst cost of edge with ID: %EdgeIdx%:\n%s\namong %ScenarioCount% adversarial scenarios.",
+	// TS_WORST_CASE_EDGE_SCENARIO_WORST_COST
+	"Cost of edge with ID: %EdgeIdx% in scenario named '%s' is %EdgeCost%.",
+	// TS_WORST_CASE_EDGE_WORST_COST
+	"The worst cost for edge with ID: %EdgeIdx% was found (%EdgeCost%).",
+	// TS_WORST_CASE_GENERATED
+	"Following scenario was generated:\n%s.",
+	// TS_FIND_NEIGHBORHOOD_INIT
+	"Looking for best neighborhood for given set of edges:\n%s.",
+	// TS_FIND_NEIGHBORHOOD_ADD_EDGE
+	"Checking neighbor sets with additional edge:\n%s.",
+	// TS_FIND_NEIGHBORHOOD_PATH_INSTEAD_EDGE
+	"In order to create neighbor set with extra edge:\n%s\none of the following edges on path from vertex with ID: %VertexIdx% to vertex with ID: %VertexIdx%:\n%s\nmust be removed from original set.",
+	// TS_FIND_NEIGHBORHOOD_GEN_SET
+	"New neighborhood was generated:\n%s.\nFollowing edge with ID: %EdgeIdx% was inserted into above set:\n%s.\nFollowing edge with ID: %EdgeIdx% was removed from above set:\n%s.\nGenerated set has a total cost: %EdgeCost%.",
+	// TS_FIND_NEIGHBORHOOD_ASP_CRIT_TRUE
+	"Generated neighbor solution has smaller cost (%EdgeCost%) then temporary solution (%EdgeCost%). Therefore it will be used despite of tabu list.",
+	// TS_FIND_NEIGHBORHOOD_ASP_CRIT_FALSE
+	"The cost of generated neighbor solution (%EdgeCost%) is not better then temporary solution (%EdgeCost%).",
+	// TS_FIND_NEIGHBORHOOD_TABU_CRIT
+	"Checking if move like that:\n\tremoving edge with ID\t:\t%EdgeIdx%,\n\taddidng edge with ID\t:\t%EdgeIdx%\nis allowed by tabu list.",
+	// TS_FIND_NEIGHBORHOOD_TABU_CANNOT_DROP
+	"Move that drops edge with ID: %EdgeIdx% is not allowed by tabu list (iterations to expire: %TabuIterationCount%).",
+	// TS_FIND_NEIGHBORHOOD_TABU_CANNOT_ADD
+	"Move that adds edge with ID: %EdgeIdx% is not allowed by tabu list (iterations to expire: %TabuIterationCount%).",
+	// TS_FIND_NEIGHBORHOOD_TABU_CRIT_OK
+	"Move:\n\tremoving edge with ID\t:\t%EdgeIdx%,\n\taddidng edge with ID\t:\t%EdgeIdx%\nis allowed by tabu list.",
+	// TS_FIND_NEIGHBORHOOD_BETTER_MOVE_FOUND
+	"Generating new neighbor edge set by removing edge with ID: %EdgeIdx% and adding edge with ID: %EdgeIdx% results in better cost value. New edge set:\n%s\nhas cost: %EdgeCost% (old solution has cost: %s).",
+	// TS_FIND_NEIGHBORHOOD_END
+	"All neighborhoods for original set of edges:\n%s\n was checked with following edge set:\n%s\nas the best neighborhood solution with cost: %EdgeCost%.",
+	// TS_UPDATE_TABU
+	"Updating tabu list...",
+	// TS_FIND_NEIGHBORHOOD_ADD_TABU_DROP
+	"Updating tabu list. New element that prohibits removing edge with ID: %EdgeIdx% from edge set for next %TabuIterationCount% iterations was added.",
+	// TS_FIND_NEIGHBORHOOD_ADD_TABU_ADD
+	"Updating tabu list. New element that prohibits adding new edge with ID: %EdgeIdx% to edge set for next %TabuIterationCount% iterations was added.",
+
+	//**************** Warn *****************//
+
+	//**************** Error ****************//
+
 	//**************** Fatal ****************//
 
 

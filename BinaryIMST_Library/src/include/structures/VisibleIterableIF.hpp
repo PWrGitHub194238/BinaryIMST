@@ -10,6 +10,7 @@
 
 #include "../enums/Visibility.hpp"
 #include "../typedefs/primitive.hpp"
+#include "../typedefs/struct.hpp"
 #include "IterableIF.hpp"
 
 template<typename Item>
@@ -173,15 +174,39 @@ public:
 	 */
 	void hideAll();
 
+	/** Hide all elements and return an array that stores visibility of all elements before this operation
+	 * allowing to restore their state by calling restoreVisibilityAll().
+	 *
+	 * @return
+	 */
+	VisibilityList storeVisibility();
+
 	/** Hide all visible elements. This method will use iterator with given id.
 	 *
 	 */
 	void hideAll(IteratorId const iteratorId);
 
+	/** Hide all elements and return an array that stores visibility of all elements before this operation
+	 * allowing to restore their state by calling restoreVisibilityAll(iteratorId).
+	 *
+	 */
+	VisibilityList storeVisibility(IteratorId const iteratorId);
+
+	/** Restore visibility of all elements from given list
+	 *
+	 */
+	void restoreVisibilityAll(VisibilityList const & visibilityList);
+
 	/** Make visible all hidden elements. This method will use default iterator.
 	 *
 	 */
 	void showAll();
+
+	/** Restore visibility of all elements from given list by using iterator with given id.
+	 *
+	 */
+	void restoreVisibilityAll(VisibilityList const & visibilityList,
+			IteratorId const iteratorId);
 
 	/** Make visible all hidden elements. This method will use iterator with given id.
 	 *

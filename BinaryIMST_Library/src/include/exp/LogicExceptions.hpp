@@ -19,6 +19,11 @@ public:
 	virtual const char* what() const throw ();
 };
 
+class VertexNotFoundException: public std::exception {
+public:
+	virtual const char* what() const throw ();
+};
+
 class EdgeNotFoundException: public std::exception {
 public:
 	virtual const char* what() const throw ();

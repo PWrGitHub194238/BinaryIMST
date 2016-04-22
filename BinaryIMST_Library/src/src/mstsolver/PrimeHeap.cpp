@@ -9,6 +9,7 @@
 
 #include <log4cxx/helpers/messagebuffer.h>
 #include <log4cxx/logger.h>
+#include <iostream>
 #include <memory>
 #include <string>
 
@@ -22,6 +23,8 @@
 #include "../../include/structures/EdgeSetInclude.hpp"
 #include "../../include/structures/GraphIF.hpp"
 #include "../../include/structures/VertexIF.hpp"
+#include "../../include/typedefs/primitive.hpp"
+#include "../../include/typedefs/struct.hpp"
 
 const static log4cxx::LoggerPtr logger(
 		log4cxx::Logger::getLogger("mstsolver.PrimeHeap"));
@@ -91,7 +94,9 @@ EdgeSetIF * PrimeHeap::resolve(VertexIF * const initialVertex) {
 
 	VertexHeapIF * vertexHeap = this->createEdgeHeap(graph, initialVertex);
 
+	VisibilityList visibilityConfiguration = this->graph->storeEdgeVisibility();
 	this->graph->hideAllEdges();
+
 	while (mstEdgeSet->size() < mstEdgeCount) {
 		predecessor = vertexHeap->peek()->getPredecessor();
 		vertex = vertexHeap->pop();
@@ -126,6 +131,7 @@ EdgeSetIF * PrimeHeap::resolve(VertexIF * const initialVertex) {
 	INFO(logger, LogBundleKey::PH_MST_SOLUTION,
 			LogStringUtils::edgeSetVisualization(mstEdgeSet, "\t").c_str(),
 			mstEdgeSet->getTotalEdgeCost());
+	this->graph->restoreVisibilityAllEdges(visibilityConfiguration);
 	delete vertexHeap;
 	return mstEdgeSet;
 }

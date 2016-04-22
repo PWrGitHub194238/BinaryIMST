@@ -159,6 +159,14 @@ void EdgeArray::push_back(EdgeIF * const & edge) {
 	edges.push_back(edge);
 }
 
+void EdgeArray::pop_back() {
+	edges.pop_back();
+}
+
+void EdgeArray::remove(EdgeIF * const & edge) {
+	edges.erase(std::remove(edges.begin(), edges.end(), edge), edges.end());
+}
+
 EdgeCount EdgeArray::size() const {
 	return (EdgeCount) this->edges.size();
 }
@@ -250,19 +258,31 @@ EdgeIF * EdgeArray::peek(IteratorId const iteratorId, int moveIndex)
 }
 
 IteratorId EdgeArray::getIterator() {
-	std::set<IteratorId> iteratorIdSet;
+	std::set<IteratorId> iteratorIdSet { };
 	IteratorId returnedId { 0 };
 	std::transform(this->iteratorMap.begin(), this->iteratorMap.end(),
 			std::inserter(iteratorIdSet, iteratorIdSet.begin()),
 			[](std::pair<IteratorId, std::vector<EdgeIF*>::const_iterator> pair) {return pair.first;});
 
+	if (iteratorMap.empty()) {
+		iteratorMap.insert(
+				std::make_pair(0, std::vector<EdgeIF*>::const_iterator { }));
+		return 0;
+	}
+
 	for (IteratorId id : iteratorIdSet) {
 		if (returnedId != id) {
+			iteratorMap.insert(
+					std::make_pair(returnedId,
+							std::vector<EdgeIF*>::const_iterator { }));
 			return returnedId;
 		}
 		returnedId += 1;
 	}
-	return *(iteratorIdSet.end()) + 1;
+	iteratorMap.insert(
+			std::make_pair(returnedId,
+					std::vector<EdgeIF*>::const_iterator { }));
+	return returnedId;
 }
 
 void EdgeArray::removeIterator(IteratorId const iteratorId) {

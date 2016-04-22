@@ -107,6 +107,16 @@ size_t StringUtils::impl::insertRightFormat(std::string& sourceFormat,
 		sourceFormat.replace(beginIdx, length + 1,
 				FormatUtils::Formats::IteratorIdFormat);
 		return beginIdx + FormatUtils::Formats::Lengths::IteratorIdLength;
+	} else if (subStr.compare(FormatUtils::Tokens::TabuIterationCountToken)
+			== 0) {
+		sourceFormat.replace(beginIdx, length + 1,
+				FormatUtils::Formats::TabuIterationCountFormat);
+		return beginIdx
+				+ FormatUtils::Formats::Lengths::TabuIterationCountLength;
+	} else if (subStr.compare(FormatUtils::Tokens::ScenarioCountToken) == 0) {
+		sourceFormat.replace(beginIdx, length + 1,
+				FormatUtils::Formats::ScenarioCountFormat);
+		return beginIdx + FormatUtils::Formats::Lengths::ScenarioCountLength;
 	} else {
 		return endIdx;
 	}

@@ -12,10 +12,7 @@
 #include "../typedefs/struct.hpp"
 #include "IMSTSolverIF.hpp"
 
-namespace LogicExceptions {
-class EdgeNotFoundException;
-class EdgeNullPointerException;
-} /* namespace LogicExceptions */
+#include "../exp/LogicExceptions.hpp"
 
 class EdgeSetIF;
 class GraphIF;
@@ -35,6 +32,10 @@ private:
 
 	//************************************** PRIVATE CLASS FIELDS **************************************//
 
+	VisibilityList visibilityList;
+	/** Przed zabawą z obniżaniem kosztów mst lambdami, chcemy zachować stare koszty mst. Potem je przywrócimy.
+	 *
+	 */
 	GraphEdgeCostsIF* baseMSTEdgeCosts;
 	LambdaParamPairMap lambdaSet;
 
@@ -55,6 +56,9 @@ private:
 	 */
 	// TODO
 	void edgeCostsPreConfiguration();
+
+	EdgeCost edgeCostPerturbFunction(EdgeCount const numberOfEdges,
+			EdgeIdx const edgeIdx, EdgeCost const edgeCost);
 
 	void generateLambdaSet(EdgeSetIF* const unboundedMSTSolution);
 
@@ -94,20 +98,99 @@ public:
 
 	//************************************ CONSTRUCTOR & DESTRUCTOR ************************************//
 
-	/** Znajduje na wstępie MST dla podanego grafu.
+	/** Ustawia początkowe rozwiazanie na baseSolution,
+	 * do rozwiązywania wykorzysta mstSolver.
 	 *
+	 * @param mstSolver
+	 * @param graph
+	 * @param baseSolution
+	 * @param initialVertex
+	 * @param lowerBound
+	 * @param upperBound
+	 */
+	BinarySearch_v1(MSTSolverIF* const mstSolver, GraphIF* const graph,
+			EdgeSetIF* baseSolution, VertexIF* initialVertex,
+			LambdaValue lowerBound, LambdaValue upperBound);
+
+	/** Ustawia początkowe rozwiazanie na MST grafu,
+	 * do rozwiązywania wykorzysta mstSolver.
+	 *
+	 * @param mstSolver
+	 * @param graph
+	 * @param initialVertex
+	 * @param lowerBound
+	 * @param upperBound
 	 */
 	BinarySearch_v1(MSTSolverIF* const mstSolver, GraphIF* const graph,
 			VertexIF* initialVertex, LambdaValue lowerBound,
 			LambdaValue upperBound);
 
-	BinarySearch_v1(MSTSolverIF* const mstSolver, GraphIF* const graph,
+	/** Ustawia początkowe rozwiazanie na baseSolution,
+	 * do rozwiązywania wykorzysta domyślny mstSolver.
+	 *
+	 * @param graph
+	 * @param baseSolution
+	 * @param initialVertex
+	 * @param lowerBound
+	 * @param upperBound
+	 */
+	BinarySearch_v1(GraphIF* const graph, EdgeSetIF* baseSolution,
+			VertexIF* initialVertex, LambdaValue lowerBound,
+			LambdaValue upperBound);
+
+	/** Znajduje na wstępie MST dla podanego grafu. Klasa bazowa stworzy domyślną implementację MSTSolvera.
+	 *
+	 * @param graph
+	 * @param initialVertex
+	 * @param lowerBound
+	 * @param upperBound
+	 */
+	BinarySearch_v1(GraphIF* const graph, VertexIF* initialVertex,
 			LambdaValue lowerBound, LambdaValue upperBound);
 
+	/** Znajduje na wstępie MST dla podanego grafu. Korzysta z podanego mstSolvera.
+	 * Sam znajdzie parametry lambda.
+	 *
+	 * @param mstSolver
+	 * @param graph
+	 * @param initialVertex
+	 */
 	BinarySearch_v1(MSTSolverIF* const mstSolver, GraphIF* const graph,
 			VertexIF* initialVertex);
 
+	/** Znajduje na wstępie MST dla podanego grafu. Korzysta z podanego mstSolvera.
+	 *
+	 *
+	 * @param mstSolver
+	 * @param graph
+	 * @param lowerBound
+	 * @param upperBound
+	 */
+	BinarySearch_v1(MSTSolverIF* const mstSolver, GraphIF* const graph,
+			LambdaValue lowerBound, LambdaValue upperBound);
+
+	/** Znajduje na wstępie MST dla podanego grafu. Korzysta z podanego mstSolvera.
+	 * Sam znajdzie lambdy.
+	 *
+	 * @param mstSolver
+	 * @param graph
+	 */
 	BinarySearch_v1(MSTSolverIF* const mstSolver, GraphIF* const graph);
+
+	/** Ustawia wstępne rozwiązanie na podane. Korzysta z domyślnego mstSolvera.
+	 * Sam znajdzie lambdy.
+	 *
+	 * @param graph
+	 * @param baseSolution
+	 */
+	BinarySearch_v1(GraphIF* const graph, EdgeSetIF* baseSolution);
+
+	/** Znajduje na wstępie MST dla podanego grafu. Korzysta z domyślnego mstSolvera.
+	 * Sam znajdzie lambdy.
+	 *
+	 * @param graph
+	 */
+	BinarySearch_v1(GraphIF* const graph);
 
 	// Empty virtual destructor for proper cleanup
 	virtual ~BinarySearch_v1() {

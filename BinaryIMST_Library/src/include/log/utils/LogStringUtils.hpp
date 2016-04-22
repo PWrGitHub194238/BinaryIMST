@@ -40,6 +40,9 @@ std::string graphBasicDescription(GraphIF* const graph,
 std::string graphDescription(GraphIF* const graph, const char* newLinePrefix =
 		"");
 
+std::string edgeCostSetDescription(GraphEdgeCostsIF * const egeCostSet,
+		const char* newLinePrefix = "");
+
 std::string vertexBasicVisualization(VertexIF* const vertex,
 		const char* newLinePrefix = "");
 
@@ -56,6 +59,18 @@ std::string vertexSetVisualization(VertexSetIF* const vertexSet,
 		Visibility const visibility, const char* newLinePrefix = "");
 
 std::string vertexSetVisualization(VertexSetIF* const vertexSet,
+		const char* newLinePrefix = "");
+
+std::string vertexSetFlatVisualization(GraphIF* const graph,
+		Visibility const visibility, const char* newLinePrefix = "");
+
+std::string vertexSetFlatVisualization(GraphIF* const graph,
+		const char* newLinePrefix = "");
+
+std::string vertexSetFlatVisualization(VertexSetIF* const vertexSet,
+		Visibility const visibility, const char* newLinePrefix = "");
+
+std::string vertexSetFlatVisualization(VertexSetIF* const vertexSet,
 		const char* newLinePrefix = "");
 
 std::string edgeVisualization(EdgeIF* const edge,

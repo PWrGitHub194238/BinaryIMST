@@ -10,6 +10,16 @@
 
 enum LogBundleKey {
 
+	//*********************************** LP_MSTSolverIF.cpp ***********************************//
+	//**************** Trace ****************//
+	LPMSTIF_INIT,
+	//**************** Debug ****************//
+	//**************** Info *****************//
+
+	//**************** Warn *****************//
+	//**************** Error ****************//
+	//**************** Fatal ****************//
+
 	//*********************************** FibonacciHeap ***********************************//
 	//**************** Trace ****************//
 	VERTEX_PUSHED_INTO_FIB_HEAP,
@@ -76,11 +86,14 @@ enum LogBundleKey {
 	//**************** Info *****************//
 	IOU_IGNORING_COMMENT_LINE_WHILE_READING,
 	IOU_MST_PROBLEM_READ,
+	IOU_MST_PROBLEM_READ_GET_EDGES,
 	IOU_MST_PROBLEM_WRITE,
 	IOU_ARC_DEF_READ,
+	IOU_ARC_COST_READ,
 	IOU_ARC_DEF_WRITE,
 	IOU_VERTEX_DEF_WRITE,
 	IOU_END_OF_READ,
+	IOU_END_OF_READ_COSTS,
 	IOU_END_OF_WRITE,
 
 	//**************** Warn *****************//
@@ -143,13 +156,51 @@ enum LogBundleKey {
 	GU_CHECK_DISCOVERY_ARRAY,
 	GU_CHECK_VERTEX_NOT_VISITED,
 	GU_CHECK_GRAPH_CONNECTIVITY_POSITIVE,
+	GU_RND_MST_SEARCH_INIT,
+	GU_RND_MST_SEARCH_ROOT,
+	GU_RND_MST_SEARCH_BREAK,
+	GU_RND_MST_SEARCH_CONSTRUCT_PATH,
+	GU_RND_MST_SEARCH_NOT_DISCOVERED,
+	GU_RND_MST_SEARCH_BUILD_PATH,
+	GU_RND_MST_SEARCH_ADD_TO_PATH,
+	GU_RND_MST_SEARCH_ADD_EDGES_FROM_PATH,
+	GU_RND_MST_SEARCH_ADD_EDGE_FROM_PATH,
+	GU_RND_MST_SEARCH_CONSTRUCT_PATH_END,
+	GU_RND_MST_FOUND,
+	GU_EDGES_ON_SP_TREE_PATH_INIT,
+	GU_EDGES_ON_SP_TREE_PATH_SCAN_SRC,
+	GU_EDGES_ON_SP_TREE_PATH_SRC_PUSH_1,
+	GU_EDGES_ON_SP_TREE_PATH_SRC_PUSH_2,
+	GU_EDGES_ON_SP_TREE_PATH_SCAN_INIT,
+	GU_EDGES_ON_SP_TREE_PATH_POP,
+	GU_EDGES_ON_SP_TREE_PATH_SCAN,
+	GU_EDGES_ON_SP_TREE_PATH_VERTEX_PROCESS,
+	GU_EDGES_ON_SP_TREE_PATH_VERTEX_VISITED,
+	GU_EDGES_ON_SP_TREE_PATH_VERTEX_NOT_VISITED,
+	GU_EDGES_ON_SP_TREE_PATH_STORED,
+	GU_FIND_NEIGHBORHOOD_INIT,
+	GU_FIND_NEIGHBORHOOD_ADD_EDGE,
+	GU_FIND_NEIGHBORHOOD_PATH_INSTEAD_EDGE,
+	GU_FIND_NEIGHBORHOOD_STORE_SET,
+	GU_FIND_NEIGHBORHOOD_END,
 
 	//**************** Warn *****************//
 	GU_VERTEX_INPUT_DEGREE_ZERO,
 	GU_NO_VERTEX_GRAPH,
+	GU_RND_MST_GRAPH_DISCONNECTED,
 
 	//**************** Error ****************//
 	//**************** Fatal ****************//
+
+
+	//*********************************** TabuSearchUtils.cpp ***********************************//
+	//**************** Trace ****************//
+	//**************** Debug ****************//
+	//**************** Info *****************//
+	//**************** Warn *****************//
+	//**************** Error ****************//
+	//**************** Fatal ****************//
+
 
 	//*********************************** IMSTSolverIF.cpp ***********************************//
 	//**************** Trace ****************//
@@ -217,6 +268,55 @@ enum LogBundleKey {
 	BS_V1_MST_BIN_SEARCH_PART_SOLUTION,
 
 	//**************** Error ****************//
+	//**************** Fatal ****************//
+
+
+	//*********************************** RIMSTSolverIF.cpp ***********************************//
+	//**************** Trace ****************//
+	//**************** Debug ****************//
+	//**************** Info *****************//
+	RIMSTS_IF_GRAPH_COST_BACKUP,
+
+	//**************** Warn *****************//
+	RIMSTS_IF_NEW_GRAPH_COST_SIZE_MISMATCH,
+
+	//**************** Error ****************//
+	//**************** Fatal ****************//
+
+
+	//*********************************** TabuSearch.cpp ***********************************//
+	//**************** Trace ****************//
+	//**************** Debug ****************//
+	//**************** Info *****************//
+	TS_WORST_CASE_GEN,
+	TS_WORST_CASE_SEARCH_BEST_EDGE_COST,
+	TS_WORST_CASE_EDGE_SCENARIO_BEST_COST,
+	TS_WORST_CASE_EDGE_BEST_COST,
+	TS_WORST_CASE_EDGE_WORST_COST_GEN,
+	TS_WORST_CASE_SEARCH_WORST_EDGE_COST,
+	TS_WORST_CASE_EDGE_SCENARIO_WORST_COST,
+	TS_WORST_CASE_EDGE_WORST_COST,
+	TS_WORST_CASE_GENERATED,
+	TS_FIND_NEIGHBORHOOD_INIT,
+	TS_FIND_NEIGHBORHOOD_ADD_EDGE,
+	TS_FIND_NEIGHBORHOOD_PATH_INSTEAD_EDGE,
+	TS_FIND_NEIGHBORHOOD_GEN_SET,
+	TS_FIND_NEIGHBORHOOD_ASP_CRIT_TRUE,
+	TS_FIND_NEIGHBORHOOD_ASP_CRIT_FALSE,
+	TS_FIND_NEIGHBORHOOD_TABU_CRIT,
+	TS_FIND_NEIGHBORHOOD_TABU_CANNOT_DROP,
+	TS_FIND_NEIGHBORHOOD_TABU_CANNOT_ADD,
+	TS_FIND_NEIGHBORHOOD_TABU_CRIT_OK,
+	TS_FIND_NEIGHBORHOOD_BETTER_MOVE_FOUND,
+	TS_FIND_NEIGHBORHOOD_END,
+	TS_UPDATE_TABU,
+	TS_ADD_TABU_DROP,
+	TS_ADD_TABU_ADD,
+
+	//**************** Warn *****************//
+
+	//**************** Error ****************//
+
 	//**************** Fatal ****************//
 
 

@@ -92,6 +92,10 @@ public:
 	virtual bool hasPrevious(IteratorId const iteratorId,
 			Visibility const visibility) = 0;
 
+	/**
+	 *
+	 * @return element wskazany przez iterator, zwiększy iterator
+	 */
 	virtual VertexIF * next() = 0;
 
 	virtual VertexIF * next(IteratorId const iteratorId) = 0;

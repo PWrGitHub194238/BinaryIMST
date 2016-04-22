@@ -9,9 +9,8 @@
 
 #include <log4cxx/logger.h>
 #include <algorithm>
-#include <iostream>
+#include <cstdlib>
 #include <iterator>
-#include <set>
 #include <utility>
 
 #include "../../../include/exp/LogicExceptions.hpp"
@@ -147,7 +146,7 @@ void EdgeByVertexMap::addForwardEdge(EdgeIF * const edge) {
 					std::make_pair(edge->getSourceVertex()->getVertexIdx(),
 							edge));
 			/*std::cout << "ADD In[" << this->vertexIdx << "] = "
-					<< edge->getSourceVertex()->getVertexIdx() << std::endl;*/
+			 << edge->getSourceVertex()->getVertexIdx() << std::endl;*/
 		}
 		break;
 	case EdgeByVertexKey::OUTGOING_EDGES:
@@ -156,7 +155,7 @@ void EdgeByVertexMap::addForwardEdge(EdgeIF * const edge) {
 					std::make_pair(edge->getTargetVertex()->getVertexIdx(),
 							edge));
 			/*std::cout << "ADD Out[" << this->vertexIdx << "] = "
-					<< edge->getTargetVertex()->getVertexIdx() << std::endl;*/
+			 << edge->getTargetVertex()->getVertexIdx() << std::endl;*/
 
 		}
 		break;
@@ -213,6 +212,22 @@ void EdgeByVertexMap::removeEdge(VertexIF * const vertex) {
 
 EdgeCount EdgeByVertexMap::size() const {
 	return (EdgeCount) this->edgeMap.size();
+}
+
+EdgeIF* EdgeByVertexMap::getRandomEdge() {
+	EdgeByVertexIdxMap::const_iterator tmpIterator = this->edgeMap.begin();
+	std::advance(tmpIterator, std::rand() % this->edgeMap.size());
+	return (*tmpIterator).second;
+}
+
+EdgeIF* EdgeByVertexMap::getRandomEdge(std::set<VertexIdx> excludedList) {
+	EdgeByVertexIdxMap::const_iterator tmpIterator = this->edgeMap.begin();
+	VertexIdx idx = std::rand() % this->edgeMap.size();
+	while (excludedList.count(idx) > 0) {
+		idx = std::rand() % this->edgeMap.size();
+	}
+	std::advance(tmpIterator, idx);
+	return (*tmpIterator).second;
 }
 
 void EdgeByVertexMap::begin() {
@@ -302,19 +317,30 @@ EdgeByVertexIdxPair EdgeByVertexMap::peek(IteratorId const iteratorId,
 }
 
 IteratorId EdgeByVertexMap::getIterator() {
-	std::set<IteratorId> iteratorIdSet;
+	std::set<IteratorId> iteratorIdSet { };
 	IteratorId returnedId { 0 };
 	std::transform(this->iteratorMap.begin(), this->iteratorMap.end(),
 			std::inserter(iteratorIdSet, iteratorIdSet.begin()),
 			[](std::pair<IteratorId, EdgeByVertexIdxMap::const_iterator> pair) {return pair.first;});
 
+	if (iteratorMap.empty()) {
+		iteratorMap.insert(
+				std::make_pair(0, EdgeByVertexIdxMap::const_iterator { }));
+		return 0;
+	}
+
 	for (IteratorId id : iteratorIdSet) {
 		if (returnedId != id) {
+			iteratorMap.insert(
+					std::make_pair(returnedId,
+							EdgeByVertexIdxMap::const_iterator { }));
 			return returnedId;
 		}
 		returnedId += 1;
 	}
-	return *(iteratorIdSet.end()) + 1;
+	iteratorMap.insert(
+			std::make_pair(returnedId, EdgeByVertexIdxMap::const_iterator { }));
+	return returnedId;
 }
 
 void EdgeByVertexMap::removeIterator(IteratorId const iteratorId) {

@@ -17,6 +17,7 @@
 #include "../../include/structures/EdgeSetInclude.hpp"
 #include "../../include/structures/GraphIF.hpp"
 #include "../../include/structures/VertexIF.hpp"
+#include "../../include/typedefs/struct.hpp"
 #include "../../include/utils/GraphUtils.hpp"
 
 const static log4cxx::LoggerPtr logger(
@@ -56,6 +57,15 @@ EdgeSetIF * MSTSolverIF::getMST()
 	}
 }
 
+EdgeSetIF * MSTSolverIF::getMST(EdgeSetIF* visibleSet)
+		throw (GraphExceptions::DisconnectedGraphException) {
+	VisibilityList visibilityList = GraphUtils::shrinkVisibilityToSet(graph,
+			visibleSet);
+	EdgeSetIF* minimumSpanningTree = getMST();
+	graph->restoreVisibilityAllEdges(visibilityList);
+	return minimumSpanningTree;
+}
+
 EdgeSetIF * MSTSolverIF::getMST(VertexIF * const initialVertex)
 		throw (GraphExceptions::DisconnectedGraphException) {
 	if (initialVertex == nullptr) {
@@ -71,4 +81,14 @@ EdgeSetIF * MSTSolverIF::getMST(VertexIF * const initialVertex)
 				initialVertex->getVertexIdx());
 		return resolve(initialVertex);
 	}
+}
+
+EdgeSetIF * MSTSolverIF::getMST(VertexIF * const initialVertex,
+		EdgeSetIF* visibleSet)
+				throw (GraphExceptions::DisconnectedGraphException) {
+	VisibilityList visibilityList = GraphUtils::shrinkVisibilityToSet(graph,
+			visibleSet);
+	EdgeSetIF* minimumSpanningTree = getMST(initialVertex);
+	graph->restoreVisibilityAllEdges(visibilityList);
+	return minimumSpanningTree;
 }

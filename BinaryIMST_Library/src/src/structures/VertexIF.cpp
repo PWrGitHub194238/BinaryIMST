@@ -14,8 +14,7 @@
 #include "../../include/enums/EdgeByVertexKey.hpp"
 #include "../../include/exp/LogicExceptions.hpp"
 #include "../../include/structures/EdgeByVertexSetInclude.hpp"
-#include "../../include/structures/IterableIF.hpp"
-#include "../../include/structures/VisibleIterableIF.hpp"
+#include "../../include/structures/EdgeIF.hpp"
 #include "../../include/utils/JSONUtils.hpp"
 
 const static log4cxx::LoggerPtr logger(
@@ -71,16 +70,68 @@ void VertexIF::addOutputEdge(EdgeIF * outputEdge) {
 	this->outputEdges->addEdge(outputEdge);
 }
 
+EdgeIF * VertexIF::findInputEdge(VertexIdx const vertexId,
+		bool searchOutputIfNoResult) {
+	EdgeIF * edge { };
+	try {
+		edge = this->inputEdges->findEdge(vertexId);
+	} catch (std::out_of_range& e) {
+		if (searchOutputIfNoResult) {
+			edge = this->outputEdges->findEdge(vertexId);
+		}
+	}
+	return edge;
+}
+
 EdgeIF * VertexIF::findInputEdge(VertexIdx const vertexId) {
 	return this->inputEdges->findEdge(vertexId);
+}
+
+EdgeIF * VertexIF::findInputEdge(VertexIF * vertex,
+		bool searchOutputIfNoResult) {
+	EdgeIF * edge { };
+	try {
+		edge = this->inputEdges->findEdge(vertex);
+	} catch (std::out_of_range& e) {
+		if (searchOutputIfNoResult) {
+			edge = this->outputEdges->findEdge(vertex);
+		}
+	}
+	return edge;
 }
 
 EdgeIF * VertexIF::findInputEdge(VertexIF * vertex) {
 	return this->inputEdges->findEdge(vertex);
 }
 
+EdgeIF * VertexIF::findOutputEdge(VertexIdx const vertexId,
+		bool searchInputIfNoResult) {
+	EdgeIF * edge { };
+	try {
+		edge = this->outputEdges->findEdge(vertexId);
+	} catch (std::out_of_range& e) {
+		if (searchInputIfNoResult) {
+			edge = this->inputEdges->findEdge(vertexId);
+		}
+	}
+	return edge;
+}
+
 EdgeIF * VertexIF::findOutputEdge(VertexIdx const vertexId) {
 	return this->outputEdges->findEdge(vertexId);
+}
+
+EdgeIF * VertexIF::findOutputEdge(VertexIF * vertex,
+		bool searchInputIfNoResult) {
+	EdgeIF * edge { };
+	try {
+		edge = this->outputEdges->findEdge(vertex);
+	} catch (std::out_of_range& e) {
+		if (searchInputIfNoResult) {
+			edge = this->inputEdges->findEdge(vertex);
+		}
+	}
+	return edge;
 }
 
 EdgeIF * VertexIF::findOutputEdge(VertexIF * vertex) {
@@ -109,6 +160,11 @@ void VertexIF::removeOutputEdge(VertexIdx const vertexIdx) {
 
 void VertexIF::removeOutputEdge(VertexIF * const vertex) {
 	this->outputEdges->removeEdge(vertex);
+}
+
+VertexIF* VertexIF::getRandomSuccessor() {
+	EdgeIF* edge = this->outputEdges->getRandomEdge();
+	return edge->getOtherVertex(this->vertexIdx);
 }
 
 void VertexIF::beginInputEdges() {

@@ -22,6 +22,10 @@ typedef double LambdaValue;
 typedef unsigned int LambdaIdx;
 typedef unsigned int LambdaCount;
 
+typedef EdgeCost IncrementalParam;
+
 typedef unsigned int IteratorId;
+
+typedef unsigned int TabuIterationCount;
 
 #endif /* INCLUDE_TYPEDEFS_PRIMITIVE_HPP_ */

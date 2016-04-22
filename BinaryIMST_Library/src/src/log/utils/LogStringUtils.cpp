@@ -12,6 +12,7 @@
 #include <sstream>
 #include <string>
 
+#include "../../../include/enums/EdgeConnectionType.hpp"
 #include "../../../include/enums/Visibility.hpp"
 #include "../../../include/log/bundle/Bundle.hpp"
 #include "../../../include/log/utils/LogUtils.hpp"
@@ -21,7 +22,8 @@
 #include "../../../include/structures/GraphIF.hpp"
 #include "../../../include/structures/VertexIF.hpp"
 #include "../../../include/structures/VertexSetIF.hpp"
-#include "../../../include/structures/VisibleIterableIF.hpp"
+#include "../../../include/typedefs/primitive.hpp"
+#include "../../../include/typedefs/struct.hpp"
 #include "../../../include/utils/StringUtils.hpp"
 
 class EdgeIF;
@@ -82,14 +84,15 @@ std::string LogStringUtils::vertexOutputEdges(VertexIF* const vertex,
 std::string LogStringUtils::graphBasicDescription(GraphIF* const graph,
 		const char* newLinePrefix) {
 	std::ostringstream oss { };
-	oss << newLinePrefix << "Number of vertices\t\t:\t"
+	oss << newLinePrefix << "Number of vertices\t:\t"
 			<< graph->getNumberOfVertices();
 	oss
 			<< LogStringUtils::impl::visibleVertexCount(
 					graph->getNumberOfVertices(),
 					graph->getNumberOfVertices(Visibility::VISIBLE))
 			<< std::endl;
-	oss << newLinePrefix << "Number of edges\t:\t" << graph->getNumberOfEdges();
+	oss << newLinePrefix << "Number of edges\t\t:\t"
+			<< graph->getNumberOfEdges();
 	oss
 			<< LogStringUtils::impl::visibleEdgeCount(graph->getNumberOfEdges(),
 					graph->getNumberOfEdges(Visibility::VISIBLE)) << std::flush;
@@ -120,6 +123,17 @@ std::string LogStringUtils::graphDescription(GraphIF* const graph,
 			<< LogStringUtils::edgeSetVisualization(graph,
 					std::string(newLinePrefix).append("\t").c_str())
 			<< std::flush;
+	return oss.str();
+}
+
+std::string LogStringUtils::edgeCostSetDescription(
+		GraphEdgeCostsIF * const egeCostSet, const char* newLinePrefix) {
+	std::ostringstream oss { };
+	egeCostSet->begin();
+	while (egeCostSet->hasNext()) {
+		oss << newLinePrefix << egeCostSet->next() << std::flush;
+		oss << (egeCostSet->hasNext() ? ", " : "") << std::flush;
+	}
 	return oss.str();
 }
 
@@ -210,6 +224,67 @@ std::string LogStringUtils::vertexSetVisualization(VertexSetIF* const vertexSet,
 		const char* newLinePrefix) {
 	return LogStringUtils::vertexSetVisualization(vertexSet, Visibility::BOTH,
 			newLinePrefix);
+}
+
+std::string LogStringUtils::vertexSetFlatVisualization(GraphIF* const graph,
+		Visibility const visibility, const char* newLinePrefix) {
+	std::ostringstream oss { };
+
+	if (graph->hasAnyVertex(visibility)) {
+		while (graph->hasNextVertex(visibility)) {
+			oss << newLinePrefix
+					<< LogStringUtils::vertexBasicVisualization(
+							graph->nextVertex());
+			if (graph->hasNextVertex(visibility)) {
+				oss << "\t" << std::flush;
+			}
+		}
+	} else {
+		oss << newLinePrefix
+				<< StringUtils::formatMessage(
+						LogUtils::impl::getBundle(
+								LogBundleKey::LSU_EMPTY_VERTEX_SET).get());
+	}
+
+	oss << std::flush;
+	return oss.str();
+}
+
+std::string LogStringUtils::vertexSetFlatVisualization(GraphIF* const graph,
+		const char* newLinePrefix) {
+	return LogStringUtils::vertexSetVisualization(graph, Visibility::BOTH,
+			newLinePrefix);
+}
+
+std::string LogStringUtils::vertexSetFlatVisualization(
+		VertexSetIF* const vertexSet, Visibility const visibility,
+		const char* newLinePrefix) {
+	std::ostringstream oss { };
+
+	if (vertexSet->hasAny(visibility)) {
+		while (vertexSet->hasNext(visibility)) {
+			oss << newLinePrefix
+					<< LogStringUtils::vertexBasicVisualization(
+							vertexSet->next());
+			if (vertexSet->hasNext(visibility)) {
+				oss << "\t" << std::flush;
+			}
+		}
+	} else {
+		oss << newLinePrefix
+				<< StringUtils::formatMessage(
+						LogUtils::impl::getBundle(
+								LogBundleKey::LSU_EMPTY_VERTEX_SET).get());
+	}
+
+	oss << std::flush;
+	return oss.str();
+}
+
+std::string LogStringUtils::vertexSetFlatVisualization(VertexSetIF* const vertexSet,
+		const char* newLinePrefix) {
+	return LogStringUtils::vertexSetFlatVisualization(vertexSet,
+			Visibility::BOTH, newLinePrefix);
 }
 
 std::string LogStringUtils::edgeVisualization(EdgeIF* const edge,
@@ -341,6 +416,10 @@ std::string LogStringUtils::edgeSetVisualization(EdgeSetIF* const edgeSet,
 std::string LogStringUtils::mstEdgeDifference(EdgeSetIF* const baseMSTSolution,
 		EdgeSetIF* const newMSTSolution, const char* newLinePrefix) {
 	std::ostringstream oss { };
+	VisibilityList newMSTSolutionVisibilityList =
+			newMSTSolution->storeVisibility();
+	VisibilityList baseMSTSolutionVisibilityList =
+			baseMSTSolution->storeVisibility();
 
 	newMSTSolution->showAll();
 	baseMSTSolution->hideAll();
@@ -362,6 +441,8 @@ std::string LogStringUtils::mstEdgeDifference(EdgeSetIF* const baseMSTSolution,
 	}
 
 	oss << std::flush;
+	newMSTSolution->restoreVisibilityAll(newMSTSolutionVisibilityList);
+	baseMSTSolution->restoreVisibilityAll(baseMSTSolutionVisibilityList);
 	return oss.str();
 }
 
@@ -441,7 +522,7 @@ std::string LogStringUtils::edgeCostChanged(EdgeIF* edge, EdgeCost newCost,
 
 std::string LogStringUtils::edgeCostChanged(EdgeIF* edge, EdgeCost newCost,
 		const char* newLinePrefix) {
-	return LogStringUtils::edgeCostChanged(edge, false, newCost, newLinePrefix);
+	return LogStringUtils::edgeCostChanged(edge, newCost, false, newLinePrefix);
 }
 
 std::string LogStringUtils::edgeSetCostChanged(GraphIF* graph,

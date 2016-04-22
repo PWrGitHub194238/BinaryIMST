@@ -9,7 +9,6 @@
 #define SRC_INCLUDE_MSTSOLVER_MSTSOLVERIF_HPP_
 
 class VertexIF;
-
 class EdgeSetIF;
 class GraphIF;
 
@@ -60,7 +59,13 @@ public:
 
 	EdgeSetIF * getMST() throw (GraphExceptions::DisconnectedGraphException);
 
+	EdgeSetIF * getMST(EdgeSetIF* visibleSet)
+			throw (GraphExceptions::DisconnectedGraphException);
+
 	EdgeSetIF * getMST(VertexIF * const initialVertex)
+			throw (GraphExceptions::DisconnectedGraphException);
+
+	EdgeSetIF * getMST(VertexIF * const initialVertex, EdgeSetIF* visibleSet)
 			throw (GraphExceptions::DisconnectedGraphException);
 
 	//*************************************** GETTERS & SETTERS ****************************************//

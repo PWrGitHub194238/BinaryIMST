@@ -59,21 +59,37 @@ void BinarySearch_v1::shrinkEdgeSet(EdgeSetIF* unboundedMSTSolution) {
 }
 
 void BinarySearch_v1::edgeCostsPreConfiguration() {
+	EdgeIdx edgeIdx { };
 	EdgeIF* edge { };
 	graph->beginEdge();
-	INFO(logger, LogBundleKey::BS_V1_EDGE_COST_PREPROCESSING, "c'_[e} = c_{e}");
+	INFO(logger, LogBundleKey::BS_V1_EDGE_COST_PREPROCESSING,
+			"c'_[e} = c_{e_{i}} + (mi^2 + i)/(m + 1)^3");
+	edgeIdx = 1;
 	while (graph->hasNextEdge(Visibility::VISIBLE)) {
 		edge = graph->nextEdge();
 		INFO(logger, LogBundleKey::BS_V1_EDGE_COST_TEMP_CHANGE,
-				LogStringUtils::edgeCostChanged(edge, edge->getEdgeCost(), "\t").c_str());
-		edge->setEdgeCost(edge->getEdgeCost());
+				LogStringUtils::edgeCostChanged(edge,
+						edgeCostPerturbFunction(graph->getNumberOfEdges(),
+								edgeIdx, edge->getEdgeCost()), "\t").c_str());
+		edge->setEdgeCost(
+				edgeCostPerturbFunction(graph->getNumberOfEdges(), edgeIdx,
+						edge->getEdgeCost()));
+		edgeIdx += 1;
 	}
 }
 
+EdgeCost BinarySearch_v1::edgeCostPerturbFunction(EdgeCount const numberOfEdges,
+		EdgeIdx const edgeIdx, EdgeCost const edgeCost) {
+	return edgeCost
+			+ (EdgeCost) (numberOfEdges * (edgeIdx * edgeIdx) + edgeIdx)
+					/ ((numberOfEdges + 1) * (numberOfEdges + 1)
+							* (numberOfEdges + 1));
+}
+
 void BinarySearch_v1::generateLambdaSet(EdgeSetIF* const unboundedMSTSolution) {
-	GraphEdgeCostsImpl baseMSTEdgeCostTmp(*baseMSTEdgeCosts);
+	GraphEdgeCostsImpl baseMSTEdgeCostTmp(baseMSTSolution);
 	GraphEdgeCostsImpl unboundedMSTEdgeCostTmp(unboundedMSTSolution);
-	EdgeIdx i, j;
+	EdgeIdx i { }, j { };
 	EdgeIdx n = graph->getNumberOfVertices() - 1;
 	baseMSTEdgeCostTmp.sortInc();
 	unboundedMSTEdgeCostTmp.sortDec();
@@ -101,8 +117,8 @@ void BinarySearch_v1::generateLambdaSet(EdgeSetIF* const unboundedMSTSolution) {
 }
 
 void BinarySearch_v1::checkLambdaBounds(EdgeCount k) {
-	EdgeSetIF* lowerBoundMST;
-	EdgeSetIF* upperBoundMST;
+	EdgeSetIF*lowerBoundMST { };
+	EdgeSetIF*upperBoundMST { };
 	INFO_NOARG(logger, LogBundleKey::BS_V1_LAMBDA_BOUNDS_CHECK);
 	if (upperBound != lowerBound) {
 		INFO(logger, LogBundleKey::BS_V1_LAMBDA_BOUNDS_NOT_DEFAULT_CHECK,
@@ -116,14 +132,18 @@ void BinarySearch_v1::checkLambdaBounds(EdgeCount k) {
 	if ((upperBound == lowerBound)
 			|| ((getMSTDiff(lowerBoundMST) >= k)
 					!= (getMSTDiff(upperBoundMST) <= k))) {
-		lowerBound = lambdaSet.at(0).at(0);
-		upperBound = lambdaSet.at(this->maxLambdaSetKey).at(
-				this->maxLambdaSetKey);
 		INFO(logger,
 				((upperBound == lowerBound) ?
 						LogBundleKey::BS_V1_LAMBDA_DEFAULT_BOUNDS :
-						LogBundleKey::BS_V1_LAMBDA_WRONG_BOUNDS), lowerBound,
-				upperBound, k);
+						LogBundleKey::BS_V1_LAMBDA_WRONG_BOUNDS),
+				(upperBound == lowerBound) ? lambdaSet.at(0).at(0) : lowerBound,
+				(upperBound == lowerBound) ?
+						lambdaSet.at(this->maxLambdaSetKey).at(
+								this->maxLambdaSetKey) :
+						upperBound, k);
+		lowerBound = lambdaSet.at(0).at(0);
+		upperBound = lambdaSet.at(this->maxLambdaSetKey).at(
+				this->maxLambdaSetKey);
 	}
 }
 
@@ -179,7 +199,7 @@ EdgeSetIF* BinarySearch_v1::binarySearchForSolution(EdgeCount k,
 		LambdaParamArray lambdaFeasibleParameterSet) {
 	LambdaIdx lambdaIdxLow = 0;
 	LambdaIdx lambdaIdxHight = lambdaFeasibleParameterSet.size() - 1;
-	LambdaIdx lambdaIdx;
+	LambdaIdx lambdaIdx { };
 	EdgeSetIF* mstSolution { };
 	EdgeCount differentEdges { };
 
@@ -219,8 +239,9 @@ EdgeSetIF* BinarySearch_v1::binarySearchForSolution(EdgeCount k,
 					lambdaFeasibleParameterSet.at(lambdaIdx),
 					mstSolution->getTotalEdgeCost(),
 					LogStringUtils::edgeSetVisualization(mstSolution, "\t").c_str(),
+					differentEdges,
 					LogStringUtils::mstEdgeDifference(this->baseMSTSolution,
-							mstSolution, "\t").c_str(), k);
+							mstSolution, "\t").c_str());
 			return mstSolution;
 		}
 	}
@@ -241,8 +262,8 @@ LambdaValue BinarySearch_v1::findMedianValue(
 }
 
 EdgeSetIF* BinarySearch_v1::resolve(EdgeCount k, VertexIF* initialVertex) {
-	EdgeSetIF* kboundedMSTSolution;
-	EdgeSetIF* unboundedMSTSolution;
+	EdgeSetIF* kboundedMSTSolution { };
+	EdgeSetIF* unboundedMSTSolution { };
 	if (this->isCostChanged && k > 0) {
 		this->isCostChanged = false;
 		INFO(logger, LogBundleKey::BS_V1_UNBOUNDED_SOLVE, k);
@@ -286,11 +307,11 @@ EdgeSetIF * BinarySearch_v1::resolve(EdgeCount k) {
 	EdgeIdx j { };
 	EdgeIdx l { };
 	LambdaCount totalLambdaParameterCounter { 0 };
-	LambdaParamArray minJEdgeIdxArray;
-	LambdaParamArray maxJEdgeIdxArray;
+	LambdaParamArray minJEdgeIdxArray { };
+	LambdaParamArray maxJEdgeIdxArray { };
 	LambdaParamArray countArray; //TODO można to usunąć
 
-	LambdaParamArray lambdaFeasibleParameterArray;
+	LambdaParamArray lambdaFeasibleParameterArray { };
 
 	LambdaValue lambdaCurrentValue { };
 
@@ -425,30 +446,57 @@ EdgeSetIF * BinarySearch_v1::resolve(EdgeCount k) {
 //************************************ CONSTRUCTOR & DESTRUCTOR ************************************//
 
 BinarySearch_v1::BinarySearch_v1(MSTSolverIF* const mstSolver,
-		GraphIF* const graph, VertexIF* initialVertex, LambdaValue lowerBound,
-		LambdaValue upperBound) :
-		IMSTSolverIF(mstSolver, graph, initialVertex, lowerBound, upperBound) {
+		GraphIF* const graph, EdgeSetIF* baseSolution, VertexIF* initialVertex,
+		LambdaValue lowerBound, LambdaValue upperBound) :
+		IMSTSolverIF(mstSolver, graph, baseSolution, initialVertex, lowerBound,
+				upperBound) {
+	// Nie zachowujemy kosztóœ bazowego rozwiązania, bo może się okazać, że nie potrzeba ich modyfikować.
 	this->baseMSTEdgeCosts = nullptr;
 	this->lambdaSet = LambdaParamPairMap { };
 	this->maxLambdaSetKey = graph->getNumberOfVertices() - 2;
 }
 
 BinarySearch_v1::BinarySearch_v1(MSTSolverIF* const mstSolver,
-		GraphIF* const graph, LambdaValue lowerBound, LambdaValue upperBound) :
-		BinarySearch_v1(mstSolver, graph, nullptr, lowerBound, upperBound) {
+		GraphIF* const graph, VertexIF* initialVertex, LambdaValue lowerBound,
+		LambdaValue upperBound) :
+		BinarySearch_v1(mstSolver, graph, nullptr, initialVertex, lowerBound,
+				upperBound) {
+}
 
+BinarySearch_v1::BinarySearch_v1(GraphIF* const graph, EdgeSetIF* baseSolution,
+		VertexIF* initialVertex, LambdaValue lowerBound, LambdaValue upperBound) :
+		BinarySearch_v1(nullptr, graph, baseSolution, initialVertex, lowerBound,
+				upperBound) {
+}
+
+BinarySearch_v1::BinarySearch_v1(GraphIF* const graph, VertexIF* initialVertex,
+		LambdaValue lowerBound, LambdaValue upperBound) :
+		BinarySearch_v1(nullptr, graph, nullptr, initialVertex, lowerBound,
+				upperBound) {
 }
 
 BinarySearch_v1::BinarySearch_v1(MSTSolverIF* const mstSolver,
 		GraphIF* const graph, VertexIF* initialVertex) :
-		BinarySearch_v1(mstSolver, graph, initialVertex, 0, 0) {
+		BinarySearch_v1(mstSolver, graph, nullptr, initialVertex, 0, 0) {
+}
 
+BinarySearch_v1::BinarySearch_v1(MSTSolverIF* const mstSolver,
+		GraphIF* const graph, LambdaValue lowerBound, LambdaValue upperBound) :
+		BinarySearch_v1(mstSolver, graph, nullptr, nullptr, lowerBound,
+				upperBound) {
 }
 
 BinarySearch_v1::BinarySearch_v1(MSTSolverIF* const mstSolver,
 		GraphIF* const graph) :
-		BinarySearch_v1(mstSolver, graph, nullptr, 0, 0) {
+		BinarySearch_v1(mstSolver, graph, nullptr, nullptr, 0, 0) {
+}
 
+BinarySearch_v1::BinarySearch_v1(GraphIF* const graph, EdgeSetIF* baseSolution) :
+		BinarySearch_v1(nullptr, graph, baseSolution, nullptr, 0, 0) {
+}
+
+BinarySearch_v1::BinarySearch_v1(GraphIF* const graph) :
+		BinarySearch_v1(nullptr, graph, nullptr, nullptr, 0, 0) {
 }
 
 //*************************************** PUBLIC FUNCTIONS *****************************************//

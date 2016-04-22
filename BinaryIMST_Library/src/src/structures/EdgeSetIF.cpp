@@ -35,8 +35,8 @@ const static log4cxx::LoggerPtr logger(
 
 //************************************ CONSTRUCTOR & DESTRUCTOR ************************************//
 
-EdgeSetIF::EdgeSetIF(EdgeSetIF * edgeSetIF) {
-	this->numberOfEdges = edgeSetIF->size();
+EdgeSetIF::EdgeSetIF(EdgeSetIF * edgeSetIF) :
+		numberOfEdges { edgeSetIF->size() } {
 }
 
 EdgeSetIF::EdgeSetIF() :
@@ -72,6 +72,22 @@ EdgeCount EdgeSetIF::size(IteratorId const iteratorId,
 		next(iteratorId);
 	}
 	return setSize;
+}
+
+EdgeIF* EdgeSetIF::getEdgeByIdx(EdgeIdx const edgeIdx)
+		throw (LogicExceptions::EdgeNotFoundException) {
+	EdgeIF * returnedEdge { };
+	IteratorId edgeSetIterator = getIterator();
+	begin(edgeSetIterator);
+	while (hasNext(edgeSetIterator)) {
+		returnedEdge = next(edgeSetIterator);
+		if (returnedEdge->getEdgeIdx() == edgeIdx) {
+			removeIterator(edgeSetIterator);
+			return returnedEdge;
+		}
+	}
+	removeIterator(edgeSetIterator);
+	throw LogicExceptions::EdgeNotFoundException();
 }
 
 EdgeCost EdgeSetIF::getTotalEdgeCost(Visibility const visibility) {

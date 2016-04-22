@@ -132,6 +132,11 @@ VertexList::VertexList(VertexSetIF const & vertexList) :
 	this->vertices = std::list<VertexIF*>(((VertexList) vertexList).vertices);
 }
 
+VertexList::VertexList() :
+		VertexSetIF() {
+
+}
+
 VertexList::VertexList(VertexCount numberOfVertices) :
 		VertexSetIF(numberOfVertices) {
 	this->vertices = std::list<VertexIF*> { };
@@ -243,19 +248,31 @@ VertexIF * VertexList::peek(IteratorId const iteratorId, int moveIndex)
 }
 
 IteratorId VertexList::getIterator() {
-	std::set<IteratorId> iteratorIdSet;
+	std::set<IteratorId> iteratorIdSet { };
 	IteratorId returnedId { 0 };
 	std::transform(this->iteratorMap.begin(), this->iteratorMap.end(),
 			std::inserter(iteratorIdSet, iteratorIdSet.begin()),
 			[](std::pair<IteratorId, std::list<VertexIF*>::const_iterator> pair) {return pair.first;});
 
+	if (iteratorMap.empty()) {
+		iteratorMap.insert(
+				std::make_pair(0, std::list<VertexIF*>::const_iterator { }));
+		return 0;
+	}
+
 	for (IteratorId id : iteratorIdSet) {
 		if (returnedId != id) {
+			iteratorMap.insert(
+					std::make_pair(returnedId,
+							std::list<VertexIF*>::const_iterator { }));
 			return returnedId;
 		}
 		returnedId += 1;
 	}
-	return *(iteratorIdSet.end()) + 1;
+	iteratorMap.insert(
+			std::make_pair(returnedId,
+					std::list<VertexIF*>::const_iterator { }));
+	return returnedId;
 }
 
 void VertexList::removeIterator(IteratorId const iteratorId) {

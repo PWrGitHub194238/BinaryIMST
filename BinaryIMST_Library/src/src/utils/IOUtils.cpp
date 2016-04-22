@@ -17,6 +17,7 @@
 #include <rapidjson/document.h>
 #include <rapidjson/filereadstream.h>
 #include <rapidjson/filewritestream.h>
+#include <rapidjson/rapidjson.h>
 #include <rapidjson/writer.h>
 #include <cstddef>
 #include <cstdio>
@@ -27,23 +28,31 @@
 #include <memory>
 #include <sstream>
 #include <string>
+#include <utility>
 #include <vector>
 
+#include "../../include/bundle/Bundle.hpp"
 #include "../../include/enums/GraphConstructMode.hpp"
 #include "../../include/exp/IOExceptions.hpp"
 #include "../../include/log/bundle/Bundle.hpp"
 #include "../../include/log/utils/LogStringUtils.hpp"
 #include "../../include/log/utils/LogUtils.hpp"
 #include "../../include/structures/EdgeIF.hpp"
+#include "../../include/structures/GraphEdgeCostsInclude.hpp"
 #include "../../include/structures/GraphInclude.hpp"
 #include "../../include/structures/VertexInclude.hpp"
 #include "../../include/typedefs/primitive.hpp"
+#include "../../include/utils/BundleUtils.hpp"
 #include "../../include/utils/enums/GraphVizEngine.hpp"
 #include "../../include/utils/enums/InputFormat.hpp"
 #include "../../include/utils/enums/InputMode.hpp"
 #include "../../include/utils/enums/OutputFormat.hpp"
 #include "../../include/utils/GraphVizUtils.hpp"
 #include "../../include/utils/StringUtils.hpp"
+
+namespace IOExceptions {
+class InvalidArcWrite;
+} /* namespace IOExceptions */
 
 class EdgeSetIF;
 class VertexSetIF;
@@ -106,6 +115,45 @@ GraphIF * InputUtils::readGraph(char const * filename, InputFormat inputFormat,
 	return nullptr;
 }
 
+GraphEdgeCostsIF * InputUtils::readCosts(char const * filename,
+		InputFormat inputFormat, InputMode inputMode, std::string scenarioName)
+				throw (IOExceptions::FileNotFountException) {
+	switch (inputMode) {
+	case InputMode::RAM:
+		return InputUtils::impl::RAM::readCosts(filename, inputFormat,
+				scenarioName);
+	default:
+		return InputUtils::impl::HDD::readCosts(filename, inputFormat,
+				scenarioName);
+	}
+	return nullptr;
+}
+
+GraphEdgeCostsIF * InputUtils::readCosts(char const * filename,
+		InputFormat inputFormat, InputMode inputMode)
+				throw (IOExceptions::FileNotFountException) {
+	return InputUtils::readCosts(filename, inputFormat, inputMode,
+			BundleUtils::getString(AppBundleKey::DEFAULT_SCENARIO_NAME));
+}
+
+VertexIdx InputUtils::impl::VA::getVertexIdxFromValue(
+		const rapidjson::Value& vertexIdx) {
+	if (vertexIdx.IsString()) {
+		return (VertexIdx) std::atoll(vertexIdx.GetString());
+	} else {
+		return vertexIdx.GetDouble();
+	}
+}
+
+EdgeCost InputUtils::impl::VA::getEdgeCostFromValue(
+		const rapidjson::Value& edgeCost) {
+	if (edgeCost.IsString()) {
+		return std::atoll(edgeCost.GetString());
+	} else {
+		return edgeCost.GetDouble();
+	}
+}
+
 GraphIF * InputUtils::impl::RAM::readGraph(char const * const filename,
 		InputFormat inputFormat) throw (IOExceptions::FileNotFountException) {
 	switch (inputFormat) {
@@ -116,9 +164,195 @@ GraphIF * InputUtils::impl::RAM::readGraph(char const * const filename,
 	}
 }
 
+GraphEdgeCostsIF * InputUtils::impl::RAM::readCosts(char const * const filename,
+		InputFormat inputFormat, std::string const & scenarioName)
+				throw (IOExceptions::FileNotFountException) {
+	switch (inputFormat) {
+	case InputFormat::VA:
+		return InputUtils::impl::RAM::VA::readCosts(filename, scenarioName);
+	default:
+		return InputUtils::impl::RAM::GR::readCosts(filename, scenarioName);
+	}
+}
+
+GraphIF * InputUtils::impl::RAM::GR::readGraph(char const * const filename)
+		throw (IOExceptions::FileNotFountException) {
+	GraphIF * graph { };
+	EdgeCount idxEdgeCounter { };
+
+	std::size_t fileSize { };
+
+	char buffer[IOUtils::impl::BUFFER_SIZE] { };
+
+	try {
+		boost::interprocess::file_mapping mappedFile(filename,
+				boost::interprocess::read_only);
+
+		boost::interprocess::mapped_region mappedRegionOfFile(mappedFile,
+				boost::interprocess::read_only);
+
+		fileSize = mappedRegionOfFile.get_size();
+
+		boost::interprocess::bufferstream input_stream(
+				static_cast<char*>(mappedRegionOfFile.get_address()), fileSize);
+
+		while (!input_stream.eof()) {
+			switch (input_stream.get()) {
+			case IOUtils::impl::GR::COMMENT_LINE_NUMERIC:
+				INFO_NOARG(logger,
+						LogBundleKey::IOU_IGNORING_COMMENT_LINE_WHILE_READING)
+				;
+				input_stream.ignore(IOUtils::impl::MAX_STREAM_SIZE, '\n');
+				break;
+			case IOUtils::impl::GR::PROBLEM_DEF_LINE_NUMERIC:
+				input_stream.getline(buffer, IOUtils::impl::MAX_CHARS_IN_LINE);
+				graph = InputUtils::impl::RAM::GR::createGraph(buffer);
+				idxEdgeCounter = 0;
+				break;
+			case IOUtils::impl::GR::ARC_DEF_LINE_NUMERIC:
+				input_stream.getline(buffer, IOUtils::impl::MAX_CHARS_IN_LINE);
+				InputUtils::impl::RAM::GR::addEdge(idxEdgeCounter, buffer,
+						graph);
+				idxEdgeCounter += 1;
+				break;
+			default:
+				WARN_NOARG(logger,
+						LogBundleKey::IOU_IGNORING_UNRECOGNISED_LINE_WHILE_READING)
+				;
+				break;
+			}
+		}
+
+		INFO(logger, LogBundleKey::IOU_END_OF_READ, filename,
+				LogStringUtils::graphDescription(graph, "\t").c_str());
+
+		return graph;
+	} catch (boost::interprocess::interprocess_exception& e) {
+		throw IOExceptions::FileNotFountException(filename);
+	}
+}
+
+GraphEdgeCostsIF * InputUtils::impl::RAM::GR::readCosts(
+		char const * const filename, std::string const & scenarioName)
+				throw (IOExceptions::FileNotFountException) {
+	GraphEdgeCostsIF * graphCosts { };
+	EdgeCount numberOfEdgeCosts { };
+
+	std::size_t fileSize { };
+
+	char buffer[IOUtils::impl::BUFFER_SIZE] { };
+
+	try {
+		boost::interprocess::file_mapping mappedFile(filename,
+				boost::interprocess::read_only);
+
+		boost::interprocess::mapped_region mappedRegionOfFile(mappedFile,
+				boost::interprocess::read_only);
+
+		fileSize = mappedRegionOfFile.get_size();
+
+		boost::interprocess::bufferstream input_stream(
+				static_cast<char*>(mappedRegionOfFile.get_address()), fileSize);
+
+		while (!input_stream.eof()) {
+			switch (input_stream.get()) {
+			case IOUtils::impl::GR::COMMENT_LINE_NUMERIC:
+				INFO_NOARG(logger,
+						LogBundleKey::IOU_IGNORING_COMMENT_LINE_WHILE_READING)
+				;
+				input_stream.ignore(IOUtils::impl::MAX_STREAM_SIZE, '\n');
+				break;
+			case IOUtils::impl::GR::PROBLEM_DEF_LINE_NUMERIC:
+				input_stream.getline(buffer, IOUtils::impl::MAX_CHARS_IN_LINE);
+				numberOfEdgeCosts =
+						InputUtils::impl::RAM::GR::getNumberOfEdgeCosts(buffer);
+				graphCosts = new GraphEdgeCostsImpl { numberOfEdgeCosts,
+						scenarioName, false };
+				break;
+			case IOUtils::impl::GR::ARC_DEF_LINE_NUMERIC:
+				input_stream.getline(buffer, IOUtils::impl::MAX_CHARS_IN_LINE);
+				graphCosts->push_back(
+						InputUtils::impl::RAM::GR::getCost(buffer));
+				break;
+			default:
+				WARN_NOARG(logger,
+						LogBundleKey::IOU_IGNORING_UNRECOGNISED_LINE_WHILE_READING)
+				;
+				break;
+			}
+		}
+
+		INFO(logger, LogBundleKey::IOU_END_OF_READ_COSTS, filename,
+				LogStringUtils::edgeCostSetDescription(graphCosts, "\t").c_str());
+
+		return graphCosts;
+	} catch (boost::interprocess::interprocess_exception& e) {
+		throw IOExceptions::FileNotFountException(filename);
+	}
+}
+
+GraphIF * InputUtils::impl::RAM::GR::createGraph(char * const buffer)
+		throw (IOExceptions::InvalidProblemRead) {
+	VertexCount vCount { };
+	EdgeCount eCount { };
+	if (sscanf(buffer, IOUtils::impl::GR::PROBLEM_DEF_LINE_PATTERN.get(),
+			&vCount, &eCount)
+			!= IOUtils::impl::GR::PROBLEM_DEF_LINE_PATTERN_ARGS) {
+		FATAL_NOARG(logger, LogBundleKey::IOU_INVALID_PROBLEM_LINE_READ);
+		throw IOExceptions::InvalidProblemRead();
+	}
+	INFO(logger, LogBundleKey::IOU_MST_PROBLEM_READ, vCount, eCount);
+	return new GraphImpl { vCount, eCount,
+			GraphConstructMode::AUTO_CONSTRUCT_VERTEX };
+}
+
+EdgeCount InputUtils::impl::RAM::GR::getNumberOfEdgeCosts(char * const buffer)
+		throw (IOExceptions::InvalidProblemRead) {
+	VertexCount vCount { };
+	EdgeCount eCount { };
+	if (sscanf(buffer, IOUtils::impl::GR::PROBLEM_DEF_LINE_PATTERN.get(),
+			&vCount, &eCount)
+			!= IOUtils::impl::GR::PROBLEM_DEF_LINE_PATTERN_ARGS) {
+		FATAL_NOARG(logger, LogBundleKey::IOU_INVALID_PROBLEM_LINE_READ);
+		throw IOExceptions::InvalidProblemRead();
+	}
+	INFO(logger, LogBundleKey::IOU_MST_PROBLEM_READ_GET_EDGES, vCount, eCount);
+	return eCount;
+}
+
+void InputUtils::impl::RAM::GR::addEdge(EdgeIdx const edgeIdx,
+		char * const buffer, GraphIF * const graph)
+				throw (IOExceptions::InvalidArcRead) {
+	VertexIdx vertexU { };
+	VertexIdx vertexV { };
+	EdgeCost eCost { };
+	if (sscanf(buffer, IOUtils::impl::GR::ARC_DEF_LINE_PATTERN.get(), &vertexU,
+			&vertexV, &eCost) != IOUtils::impl::GR::ARC_DEF_LINE_PATTERN_ARGS) {
+		FATAL_NOARG(logger, LogBundleKey::IOU_INVALID_ARC_LINE_READ);
+		throw IOExceptions::InvalidArcRead();
+	}
+	INFO(logger, LogBundleKey::IOU_ARC_DEF_READ, eCost, vertexU, vertexV);
+	graph->addEdge(edgeIdx, vertexU, vertexV, eCost);
+}
+
+EdgeCost InputUtils::impl::RAM::GR::getCost(char * const buffer)
+		throw (IOExceptions::InvalidArcRead) {
+	VertexIdx vertexU { };
+	VertexIdx vertexV { };
+	EdgeCost eCost { };
+	if (sscanf(buffer, IOUtils::impl::GR::ARC_DEF_LINE_PATTERN.get(), &vertexU,
+			&vertexV, &eCost) != IOUtils::impl::GR::ARC_DEF_LINE_PATTERN_ARGS) {
+		FATAL_NOARG(logger, LogBundleKey::IOU_INVALID_ARC_LINE_READ);
+		throw IOExceptions::InvalidArcRead();
+	}
+	INFO(logger, LogBundleKey::IOU_ARC_COST_READ, vertexU, vertexV, eCost);
+	return eCost;
+}
+
 GraphIF * InputUtils::impl::RAM::VA::readGraph(char const * const filename)
 		throw (IOExceptions::FileNotFountException) {
 	GraphIF * graph { };
+	EdgeCount idxEdgeCounter { };
 
 	std::size_t fileSize { };
 
@@ -151,11 +385,14 @@ GraphIF * InputUtils::impl::RAM::VA::readGraph(char const * const filename)
 			if (edgeList != endValue) {
 				graph = InputUtils::impl::RAM::VA::createGraph(
 						vertexList->value, edgeList->value.MemberCount());
+				idxEdgeCounter = 0;
 				it = edgeList->value.MemberEnd();
 				for (rapidjson::Value::ConstMemberIterator itBegin =
 						edgeList->value.MemberBegin(); itBegin != it;
 						++itBegin) {
-					InputUtils::impl::RAM::VA::addEdge(itBegin, graph);
+					InputUtils::impl::RAM::VA::addEdge(idxEdgeCounter, itBegin,
+							graph);
+					idxEdgeCounter += 1;
 				}
 			}
 		}
@@ -169,25 +406,19 @@ GraphIF * InputUtils::impl::RAM::VA::readGraph(char const * const filename)
 	}
 }
 
-GraphIF * InputUtils::impl::RAM::VA::createGraph(rapidjson::Value & vertexList,
-		rapidjson::SizeType const numberOfEdges)
-				throw (IOExceptions::InvalidProblemRead) {
-	return InputUtils::impl::HDD::VA::createGraph(vertexList, numberOfEdges);
-}
-
-void InputUtils::impl::RAM::VA::addEdge(
-		rapidjson::Value::ConstMemberIterator& edge, GraphIF * const graph)
-				throw (IOExceptions::InvalidArcRead) {
-	return InputUtils::impl::HDD::VA::addEdge(edge, graph);
-}
-
-GraphIF * InputUtils::impl::RAM::GR::readGraph(char const * const filename)
-		throw (IOExceptions::FileNotFountException) {
-	GraphIF * graph { };
+GraphEdgeCostsIF * InputUtils::impl::RAM::VA::readCosts(
+		char const * const filename, std::string const & scenarioName)
+				throw (IOExceptions::FileNotFountException) {
+	GraphEdgeCostsIF * graphCosts { };
 
 	std::size_t fileSize { };
 
-	char buffer[IOUtils::impl::BUFFER_SIZE] { };
+	char* buffer { };
+
+	rapidjson::Document jsonDoc { };
+	rapidjson::Value::MemberIterator edgeList { };
+	rapidjson::Value::MemberIterator endValue { };
+	rapidjson::Value::ConstMemberIterator it { };
 
 	try {
 		boost::interprocess::file_mapping mappedFile(filename,
@@ -201,66 +432,46 @@ GraphIF * InputUtils::impl::RAM::GR::readGraph(char const * const filename)
 		boost::interprocess::bufferstream input_stream(
 				static_cast<char*>(mappedRegionOfFile.get_address()), fileSize);
 
-		while (!input_stream.eof()) {
-			switch (input_stream.get()) {
-			case IOUtils::impl::GR::COMMENT_LINE_NUMERIC:
-				INFO_NOARG(logger,
-						LogBundleKey::IOU_IGNORING_COMMENT_LINE_WHILE_READING)
-				;
-				input_stream.ignore(IOUtils::impl::MAX_STREAM_SIZE, '\n');
-				break;
-			case IOUtils::impl::GR::PROBLEM_DEF_LINE_NUMERIC:
-				input_stream.getline(buffer, IOUtils::impl::MAX_CHARS_IN_LINE);
-				graph = InputUtils::impl::RAM::GR::createGraph(buffer);
-				break;
-			case IOUtils::impl::GR::ARC_DEF_LINE_NUMERIC:
-				input_stream.getline(buffer, IOUtils::impl::MAX_CHARS_IN_LINE);
-				InputUtils::impl::RAM::GR::addEdge(buffer, graph);
-				break;
-			default:
-				WARN_NOARG(logger,
-						LogBundleKey::IOU_IGNORING_UNRECOGNISED_LINE_WHILE_READING)
-				;
-				break;
+		jsonDoc.Parse(input_stream.buffer().first);
+
+		edgeList = jsonDoc.FindMember(IOUtils::impl::VA::EDGE_LIST_KEY);
+		if (edgeList != endValue) {
+			graphCosts = new GraphEdgeCostsImpl {
+					(EdgeCount) edgeList->value.MemberCount(), scenarioName,
+					false };
+			it = edgeList->value.MemberEnd();
+			for (rapidjson::Value::ConstMemberIterator itBegin =
+					edgeList->value.MemberBegin(); itBegin != it; ++itBegin) {
+				graphCosts->push_back(
+						InputUtils::impl::RAM::VA::getCost(itBegin));
 			}
 		}
 
-		INFO(logger, LogBundleKey::IOU_END_OF_READ, filename,
-				LogStringUtils::graphDescription(graph, "\t").c_str());
+		INFO(logger, LogBundleKey::IOU_END_OF_READ_COSTS, filename,
+				LogStringUtils::edgeCostSetDescription(graphCosts, "\t").c_str());
 
-		return graph;
+		return graphCosts;
 	} catch (boost::interprocess::interprocess_exception& e) {
 		throw IOExceptions::FileNotFountException(filename);
 	}
 }
 
-GraphIF * InputUtils::impl::RAM::GR::createGraph(char * const buffer)
-		throw (IOExceptions::InvalidProblemRead) {
-	VertexCount vCount { };
-	EdgeCount eCount { };
-	if (sscanf(buffer, IOUtils::impl::GR::PROBLEM_DEF_LINE_PATTERN.get(),
-			&vCount, &eCount)
-			!= IOUtils::impl::GR::PROBLEM_DEF_LINE_PATTERN_ARGS) {
-		FATAL_NOARG(logger, LogBundleKey::IOU_INVALID_PROBLEM_LINE_READ);
-		throw IOExceptions::InvalidProblemRead();
-	}
-	INFO(logger, LogBundleKey::IOU_MST_PROBLEM_READ, vCount, eCount);
-	return new GraphImpl { vCount, eCount,
-			GraphConstructMode::AUTO_CONSTRUCT_VERTEX };
+GraphIF * InputUtils::impl::RAM::VA::createGraph(rapidjson::Value & vertexList,
+		rapidjson::SizeType const numberOfEdges)
+				throw (IOExceptions::InvalidProblemRead) {
+	return InputUtils::impl::HDD::VA::createGraph(vertexList, numberOfEdges);
 }
 
-void InputUtils::impl::RAM::GR::addEdge(char * const buffer,
-		GraphIF * const graph) throw (IOExceptions::InvalidArcRead) {
-	VertexIdx vertexU { };
-	VertexIdx vertexV { };
-	EdgeCost eCost { };
-	if (sscanf(buffer, IOUtils::impl::GR::ARC_DEF_LINE_PATTERN.get(), &vertexU,
-			&vertexV, &eCost) != IOUtils::impl::GR::ARC_DEF_LINE_PATTERN_ARGS) {
-		FATAL_NOARG(logger, LogBundleKey::IOU_INVALID_ARC_LINE_READ);
-		throw IOExceptions::InvalidArcRead();
-	}
-	INFO(logger, LogBundleKey::IOU_ARC_DEF_READ, vertexU, vertexV, eCost);
-	graph->addEdge(vertexU, vertexV, eCost);
+void InputUtils::impl::RAM::VA::addEdge(EdgeIdx const edgeIdx,
+		rapidjson::Value::ConstMemberIterator& edge, GraphIF * const graph)
+				throw (IOExceptions::InvalidArcRead) {
+	return InputUtils::impl::HDD::VA::addEdge(edgeIdx, edge, graph);
+}
+
+EdgeCost InputUtils::impl::RAM::VA::getCost(
+		rapidjson::Value::ConstMemberIterator& edge)
+				throw (IOExceptions::InvalidArcRead) {
+	return InputUtils::impl::HDD::VA::getCost(edge);
 }
 
 GraphIF * InputUtils::impl::HDD::readGraph(char const * const filename,
@@ -273,9 +484,21 @@ GraphIF * InputUtils::impl::HDD::readGraph(char const * const filename,
 	}
 }
 
+GraphEdgeCostsIF * InputUtils::impl::HDD::readCosts(char const * const filename,
+		InputFormat inputFormat, std::string const & scenarioName)
+				throw (IOExceptions::FileNotFountException) {
+	switch (inputFormat) {
+	case InputFormat::VA:
+		return InputUtils::impl::HDD::VA::readCosts(filename, scenarioName);
+	default:
+		return InputUtils::impl::HDD::GR::readCosts(filename, scenarioName);
+	}
+}
+
 GraphIF * InputUtils::impl::HDD::VA::readGraph(char const * const filename)
 		throw (IOExceptions::FileNotFountException) {
 	GraphIF * graph { };
+	EdgeCount idxEdgeCounter { 0 };
 	FILE * dataFile = std::fopen(filename, "r");
 	rapidjson::Document jsonDoc { };
 	rapidjson::Value::MemberIterator vertexList { };
@@ -301,7 +524,9 @@ GraphIF * InputUtils::impl::HDD::VA::readGraph(char const * const filename)
 				for (rapidjson::Value::ConstMemberIterator itBegin =
 						edgeList->value.MemberBegin(); itBegin != it;
 						++itBegin) {
-					InputUtils::impl::HDD::VA::addEdge(itBegin, graph);
+					InputUtils::impl::HDD::VA::addEdge(idxEdgeCounter, itBegin,
+							graph);
+					idxEdgeCounter += 1;
 				}
 			}
 		}
@@ -310,6 +535,45 @@ GraphIF * InputUtils::impl::HDD::VA::readGraph(char const * const filename)
 				LogStringUtils::graphDescription(graph, "\t").c_str());
 	}
 	return graph;
+}
+
+GraphEdgeCostsIF * InputUtils::impl::HDD::VA::readCosts(
+		char const * const filename, std::string const & scenarioName)
+				throw (IOExceptions::FileNotFountException) {
+	GraphEdgeCostsIF * graphCosts { };
+	FILE * dataFile = std::fopen(filename, "r");
+	rapidjson::Document jsonDoc { };
+	rapidjson::Value::MemberIterator vertexList { };
+	rapidjson::Value::MemberIterator edgeList { };
+	rapidjson::Value::MemberIterator endValue { };
+	rapidjson::Value::ConstMemberIterator it { };
+	char readBuffer[IOUtils::impl::BUFFER_SIZE] { };
+	if (dataFile == NULL) {
+		ERROR(logger, LogBundleKey::IOU_CANNOT_OPEN_FILE, filename);
+		throw IOExceptions::FileNotFountException(filename);
+	} else {
+		TRACE(logger, LogBundleKey::IOU_START_READ_FILE_DATA, filename);
+		rapidjson::FileReadStream is(dataFile, readBuffer, sizeof(readBuffer));
+		jsonDoc.ParseStream(is);
+		endValue = jsonDoc.MemberEnd();
+
+		edgeList = jsonDoc.FindMember(IOUtils::impl::VA::EDGE_LIST_KEY);
+		if (edgeList != endValue) {
+			graphCosts = new GraphEdgeCostsImpl {
+					(EdgeCount) edgeList->value.MemberCount(), scenarioName,
+					false };
+			it = edgeList->value.MemberEnd();
+			for (rapidjson::Value::ConstMemberIterator itBegin =
+					edgeList->value.MemberBegin(); itBegin != it; ++itBegin) {
+				graphCosts->push_back(
+						InputUtils::impl::HDD::VA::getCost(itBegin));
+			}
+		}
+		fclose(dataFile);
+		INFO(logger, LogBundleKey::IOU_END_OF_READ_COSTS, filename,
+				LogStringUtils::edgeCostSetDescription(graphCosts, "\t").c_str());
+	}
+	return graphCosts;
 }
 
 GraphIF * InputUtils::impl::HDD::VA::createGraph(rapidjson::Value & vertexList,
@@ -327,7 +591,7 @@ GraphIF * InputUtils::impl::HDD::VA::createGraph(rapidjson::Value & vertexList,
 	return graph;
 }
 
-void InputUtils::impl::HDD::VA::addEdge(
+void InputUtils::impl::HDD::VA::addEdge(EdgeIdx const edgeIdx,
 		rapidjson::Value::ConstMemberIterator& edge, GraphIF * const graph)
 				throw (IOExceptions::InvalidArcRead) {
 	const rapidjson::Value& endValue = edge->value.MemberEnd()->value;
@@ -341,18 +605,41 @@ void InputUtils::impl::HDD::VA::addEdge(
 		throw IOExceptions::InvalidArcRead();
 	} else {
 		INFO(logger, LogBundleKey::IOU_ARC_DEF_READ,
-				(VertexIdx ) vertexU.GetDouble(),
-				(VertexIdx ) vertexV.GetDouble(),
-				(EdgeCost ) edgeCost.GetUint());
-		graph->addEdge((VertexIdx) vertexU.GetDouble(),
-				(VertexIdx) vertexV.GetDouble(),
-				(EdgeCost) edgeCost.GetDouble());
+				InputUtils::impl::VA::getVertexIdxFromValue(vertexU),
+				InputUtils::impl::VA::getVertexIdxFromValue(vertexV),
+				InputUtils::impl::VA::getEdgeCostFromValue(edgeCost));
+		graph->addEdge(edgeIdx,
+				InputUtils::impl::VA::getVertexIdxFromValue(vertexU),
+				InputUtils::impl::VA::getVertexIdxFromValue(vertexV),
+				InputUtils::impl::VA::getEdgeCostFromValue(edgeCost));
 	}
+}
+
+EdgeCost InputUtils::impl::HDD::VA::getCost(
+		rapidjson::Value::ConstMemberIterator& edge)
+				throw (IOExceptions::InvalidArcRead) {
+	const rapidjson::Value& endValue = edge->value.MemberEnd()->value;
+	const rapidjson::Value& vertexU = edge->value.FindMember(
+			IOUtils::impl::VA::EDGE_VERTEX_A_KEY)->value;
+	const rapidjson::Value& vertexV = edge->value.FindMember(
+			IOUtils::impl::VA::EDGE_VERTEX_B_KEY)->value;
+	const rapidjson::Value& edgeCost = edge->value.FindMember(
+			IOUtils::impl::VA::EDGE_COST_KEY)->value;
+	if (vertexU == endValue || vertexV == endValue || edgeCost == endValue) {
+		throw IOExceptions::InvalidArcRead();
+	} else {
+		INFO(logger, LogBundleKey::IOU_ARC_COST_READ,
+				InputUtils::impl::VA::getEdgeCostFromValue(edgeCost),
+				InputUtils::impl::VA::getVertexIdxFromValue(vertexU),
+				InputUtils::impl::VA::getVertexIdxFromValue(vertexV));
+	}
+	return InputUtils::impl::VA::getEdgeCostFromValue(edgeCost);
 }
 
 GraphIF * InputUtils::impl::HDD::GR::readGraph(char const * const filename)
 		throw (IOExceptions::FileNotFountException) {
 	GraphIF * graph { };
+	EdgeCount idxEdgeCounter { };
 	FILE * dataFile = std::fopen(filename, "r");
 	if (dataFile == NULL) {
 		ERROR(logger, LogBundleKey::IOU_CANNOT_OPEN_FILE, filename);
@@ -373,9 +660,12 @@ GraphIF * InputUtils::impl::HDD::GR::readGraph(char const * const filename)
 				break;
 			case IOUtils::impl::GR::PROBLEM_DEF_LINE_NUMERIC:
 				graph = InputUtils::impl::HDD::GR::createGraph(dataFile);
+				idxEdgeCounter = 0;
 				break;
 			case IOUtils::impl::GR::ARC_DEF_LINE_NUMERIC:
-				InputUtils::impl::HDD::GR::addEdge(dataFile, graph);
+				InputUtils::impl::HDD::GR::addEdge(idxEdgeCounter, dataFile,
+						graph);
+				idxEdgeCounter += 1;
 				break;
 			}
 		}
@@ -384,6 +674,49 @@ GraphIF * InputUtils::impl::HDD::GR::readGraph(char const * const filename)
 		fclose(dataFile);
 	}
 	return graph;
+}
+
+GraphEdgeCostsIF * InputUtils::impl::HDD::GR::readCosts(
+		char const * const filename, std::string const & scenarioName)
+				throw (IOExceptions::FileNotFountException) {
+	GraphEdgeCostsIF * graphCosts { };
+	EdgeCount numberOfEdgeCosts { };
+	FILE * dataFile = std::fopen(filename, "r");
+	if (dataFile == NULL) {
+		ERROR(logger, LogBundleKey::IOU_CANNOT_OPEN_FILE, filename);
+		throw IOExceptions::FileNotFountException(filename);
+	} else {
+		TRACE(logger, LogBundleKey::IOU_START_READ_FILE_DATA, filename);
+		while (!feof(dataFile)) {
+			switch (fgetc(dataFile)) {
+			case IOUtils::impl::GR::COMMENT_LINE_NUMERIC:
+				INFO_NOARG(logger,
+						LogBundleKey::IOU_IGNORING_COMMENT_LINE_WHILE_READING)
+				;
+				if (fscanf(dataFile, IOUtils::impl::GR::COMMENT_LINE_PATTERN)
+						!= IOUtils::impl::GR::COMMENT_LINE_PATTERN_ARGS) {
+					WARN_NOARG(logger,
+							LogBundleKey::IOU_IGNORING_UNRECOGNISED_LINE_WHILE_READING);
+				}
+				break;
+			case IOUtils::impl::GR::PROBLEM_DEF_LINE_NUMERIC:
+				numberOfEdgeCosts =
+						InputUtils::impl::HDD::GR::getNumberOfEdgeCosts(
+								dataFile);
+				graphCosts = new GraphEdgeCostsImpl { numberOfEdgeCosts,
+						scenarioName, false };
+				break;
+			case IOUtils::impl::GR::ARC_DEF_LINE_NUMERIC:
+				graphCosts->push_back(
+						InputUtils::impl::HDD::GR::getCost(dataFile));
+				break;
+			}
+		}
+		INFO(logger, LogBundleKey::IOU_END_OF_READ_COSTS, filename,
+				LogStringUtils::edgeCostSetDescription(graphCosts, "\t").c_str());
+		fclose(dataFile);
+	}
+	return graphCosts;
 }
 
 GraphIF * InputUtils::impl::HDD::GR::createGraph(FILE * const dataFile)
@@ -401,8 +734,23 @@ GraphIF * InputUtils::impl::HDD::GR::createGraph(FILE * const dataFile)
 			GraphConstructMode::AUTO_CONSTRUCT_VERTEX };
 }
 
-void InputUtils::impl::HDD::GR::addEdge(FILE * const dataFile,
-		GraphIF * const graph) throw (IOExceptions::InvalidArcRead) {
+EdgeCount InputUtils::impl::HDD::GR::getNumberOfEdgeCosts(FILE * const dataFile)
+		throw (IOExceptions::InvalidProblemRead) {
+	VertexCount vCount { };
+	EdgeCount eCount { };
+	if (fscanf(dataFile, IOUtils::impl::GR::PROBLEM_DEF_LINE_PATTERN.get(),
+			&vCount, &eCount)
+			!= IOUtils::impl::GR::PROBLEM_DEF_LINE_PATTERN_ARGS) {
+		FATAL_NOARG(logger, LogBundleKey::IOU_INVALID_PROBLEM_LINE_READ);
+		throw IOExceptions::InvalidProblemRead();
+	}
+	INFO(logger, LogBundleKey::IOU_MST_PROBLEM_READ_GET_EDGES, vCount, eCount);
+	return eCount;
+}
+
+void InputUtils::impl::HDD::GR::addEdge(EdgeIdx const edgeIdx,
+		FILE * const dataFile, GraphIF * const graph)
+				throw (IOExceptions::InvalidArcRead) {
 	VertexIdx vertexU { };
 	VertexIdx vertexV { };
 	EdgeCost eCost { };
@@ -413,7 +761,22 @@ void InputUtils::impl::HDD::GR::addEdge(FILE * const dataFile,
 		throw IOExceptions::InvalidArcRead();
 	}
 	INFO(logger, LogBundleKey::IOU_ARC_DEF_READ, vertexU, vertexV, eCost);
-	graph->addEdge(vertexU, vertexV, eCost);
+	graph->addEdge(edgeIdx, vertexU, vertexV, eCost);
+}
+
+EdgeCost InputUtils::impl::HDD::GR::getCost(FILE * const dataFile)
+		throw (IOExceptions::InvalidArcRead) {
+	VertexIdx vertexU { };
+	VertexIdx vertexV { };
+	EdgeCost eCost { };
+	if (fscanf(dataFile, IOUtils::impl::GR::ARC_DEF_LINE_PATTERN.get(),
+			&vertexU, &vertexV, &eCost)
+			!= IOUtils::impl::GR::ARC_DEF_LINE_PATTERN_ARGS) {
+		FATAL_NOARG(logger, LogBundleKey::IOU_INVALID_ARC_LINE_READ);
+		throw IOExceptions::InvalidArcRead();
+	}
+	INFO(logger, LogBundleKey::IOU_ARC_COST_READ, eCost, vertexU, vertexV);
+	return eCost;
 }
 
 void OutputUtils::exportGraph(GraphIF* const graph, char const * exportPath,
@@ -530,9 +893,9 @@ void OutputUtils::impl::VA::exportGraph(GraphIF* const graph,
 
 	char buffer[IOUtils::impl::MAX_CHARS_IN_LINE] { };
 
-	rapidjson::Document jsonDoc;
-	rapidjson::Document vertexJsonDoc;
-	rapidjson::Document edgeJsonDoc;
+	rapidjson::Document jsonDoc { };
+	rapidjson::Document vertexJsonDoc { };
+	rapidjson::Document edgeJsonDoc { };
 
 	rapidjson::Document::AllocatorType& allocator = jsonDoc.GetAllocator();
 
@@ -571,7 +934,7 @@ void OutputUtils::impl::VA::exportGraph(GraphIF* const graph,
 rapidjson::Document OutputUtils::impl::VA::getVertexSetJson(
 		rapidjson::Document::AllocatorType& allocator, GraphIF * const graph,
 		GraphVizUtils::VerticesCoordinates verticesCoordinates) {
-	rapidjson::Document vertexJsonDoc;
+	rapidjson::Document vertexJsonDoc { };
 	VertexIF * vertex { };
 
 	vertexJsonDoc.SetObject();
@@ -596,7 +959,7 @@ rapidjson::Document OutputUtils::impl::VA::getVertexJson(
 		rapidjson::Document& vertexJsonDoc,
 		rapidjson::Document::AllocatorType& allocator, VertexIF * const vertex,
 		GraphVizUtils::VertexCoordinates vertexCoordinates) {
-	rapidjson::Document jsonDoc;
+	rapidjson::Document jsonDoc { };
 	rapidjson::Value text(std::to_string(vertex->getVertexIdx()).c_str(),
 			allocator);
 	jsonDoc.SetObject();
@@ -613,9 +976,9 @@ void OutputUtils::impl::VA::exportGraph(GraphIF* const graph,
 
 	char buffer[IOUtils::impl::MAX_CHARS_IN_LINE] { };
 
-	rapidjson::Document jsonDoc;
-	rapidjson::Document vertexJsonDoc;
-	rapidjson::Document edgeJsonDoc;
+	rapidjson::Document jsonDoc { };
+	rapidjson::Document vertexJsonDoc { };
+	rapidjson::Document edgeJsonDoc { };
 
 	rapidjson::Document::AllocatorType& allocator = jsonDoc.GetAllocator();
 
@@ -651,7 +1014,7 @@ void OutputUtils::impl::VA::exportGraph(GraphIF* const graph,
 
 rapidjson::Document OutputUtils::impl::VA::getVertexSetJson(
 		rapidjson::Document::AllocatorType& allocator, GraphIF * const graph) {
-	rapidjson::Document vertexJsonDoc;
+	rapidjson::Document vertexJsonDoc { };
 	VertexIF * vertex { };
 
 	vertexJsonDoc.SetObject();
@@ -673,7 +1036,7 @@ rapidjson::Document OutputUtils::impl::VA::getVertexSetJson(
 
 rapidjson::Document OutputUtils::impl::VA::getEdgeSetJson(
 		rapidjson::Document::AllocatorType& allocator, GraphIF * const graph) {
-	rapidjson::Document edgeJsonDoc;
+	rapidjson::Document edgeJsonDoc { };
 	EdgeIF * edge { };
 	EdgeCount edgeCounter { 0 };
 
@@ -697,7 +1060,7 @@ rapidjson::Document OutputUtils::impl::VA::getVertexJson(
 		rapidjson::Document& vertexJsonDoc,
 		rapidjson::Document::AllocatorType& allocator,
 		VertexIF * const vertex) {
-	rapidjson::Document jsonDoc;
+	rapidjson::Document jsonDoc { };
 	rapidjson::Value text(std::to_string(vertex->getVertexIdx()).c_str(),
 			allocator);
 	jsonDoc.SetObject();
@@ -711,7 +1074,7 @@ rapidjson::Document OutputUtils::impl::VA::getVertexJson(
 rapidjson::Document OutputUtils::impl::VA::getEdgeJson(
 		rapidjson::Document& vertexJsonDoc,
 		rapidjson::Document::AllocatorType& allocator, EdgeIF * const edge) {
-	rapidjson::Document jsonDoc;
+	rapidjson::Document jsonDoc { };
 	jsonDoc.SetObject();
 	jsonDoc.AddMember("vertexA", edge->getSourceVertex()->getVertexIdx(),
 			allocator);

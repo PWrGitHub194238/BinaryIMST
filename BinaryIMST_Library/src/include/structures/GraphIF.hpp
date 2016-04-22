@@ -11,16 +11,15 @@
 #include <rapidjson/document.h>
 #include <string>
 
-#include "../utils/MemoryUtils.hpp"
-
 #include "../enums/EdgeConnectionType.hpp"
 #include "../enums/GraphConstructMode.hpp"
 #include "../enums/Visibility.hpp"
+#include "../typedefs/struct.hpp"
 #include "JSONIF.hpp"
 
-namespace LogicExceptions {
-class EmptyIteratorException;
-} /* namespace LogicExceptions */
+#include "../utils/MemoryUtils.hpp"
+
+#include "../exp/LogicExceptions.hpp"
 
 class EdgeIF;
 class VertexIF;
@@ -92,12 +91,13 @@ public:
 
 	void addVertex(VertexIF* const vertex);
 
-	void addEdge(VertexIdx const vertexIdxU, VertexIdx const vertexIdxV,
-			EdgeCost const edgeCost, EdgeConnectionType connectionType,
-			Visibility visibility);
+	void addEdge(EdgeIdx const edgeIdx, VertexIdx const vertexIdxU,
+			VertexIdx const vertexIdxV, EdgeCost const edgeCost,
+			EdgeConnectionType connectionType, Visibility visibility);
 
-	void addEdge(VertexIdx const vertexIdxU, VertexIdx const vertexIdxV,
-			EdgeCost const edgeCost, EdgeConnectionType connectionType);
+	void addEdge(EdgeIdx const edgeIdx, VertexIdx const vertexIdxU,
+			VertexIdx const vertexIdxV, EdgeCost const edgeCost,
+			EdgeConnectionType connectionType);
 
 	/** Czy dodajemy do grafu skierowanego czy nie, dlatego pure virtual
 	 *
@@ -105,14 +105,26 @@ public:
 	 * @param vertexIdxV
 	 * @param edgeCost
 	 */
-	virtual void addEdge(VertexIdx const vertexIdxU, VertexIdx const vertexIdxV,
-			EdgeCost const edgeCost) = 0;
+	virtual void addEdge(EdgeIdx const edgeIdx, VertexIdx const vertexIdxU,
+			VertexIdx const vertexIdxV, EdgeCost const edgeCost) = 0;
 
 	VertexIF * getVertexByIdx(VertexIdx const vertexIdx);
+
+	EdgeIF * findEdge(VertexIF * const sourceVertex,
+			VertexIF * const targetVertex)
+					throw (LogicExceptions::VertexNotFoundException,
+					LogicExceptions::EdgeNotFoundException);
+
+	EdgeIF * findEdge(VertexIdx const sourceVertexIdx,
+			VertexIdx const targetVertexIdx)
+					throw (LogicExceptions::VertexNotFoundException,
+					LogicExceptions::EdgeNotFoundException);
 
 	EdgeCost getTotalEdgeCost();
 
 	void beginVertex();
+
+	void beginVertex(IteratorId const iteratorId);
 
 	bool hasNextVertex();
 
@@ -131,19 +143,52 @@ public:
 	VertexIF * peekPreviousVertex()
 			throw (LogicExceptions::EmptyIteratorException);
 
+	IteratorId getVertexIteratorId();
+
+	void removeVertexIterator(IteratorId const iteratorId);
+
 	void beginEdge();
+
+	void beginEdge(IteratorId const iteratorId);
+
+	bool hasNextEdge(IteratorId const iteratorId);
 
 	bool hasNextEdge();
 
 	bool hasNextEdge(Visibility const visibility);
 
+	bool hasNextEdge(IteratorId const iteratorId, Visibility const visibility);
+
 	bool hasAnyEdge();
+
+	bool hasAnyEdge(IteratorId const iteratorId);
 
 	bool hasAnyEdge(Visibility const visibility);
 
+	bool hasAnyEdge(IteratorId const iteratorId, Visibility const visibility);
+
 	EdgeIF * nextEdge();
 
+	EdgeIF * nextEdge(IteratorId const iteratorId);
+
+	EdgeIF * currentEdge();
+
+	IteratorId getEdgeIteratorId();
+
+	void removeEdgeIterator(IteratorId const iteratorId);
+
 	void hideAllEdges();
+
+	void hideAllEdges(IteratorId const iteratorId);
+
+	VisibilityList storeEdgeVisibility();
+
+	VisibilityList storeEdgeVisibility(IteratorId const iteratorId);
+
+	void restoreVisibilityAllEdges(VisibilityList visibilityList);
+
+	void restoreVisibilityAllEdges(VisibilityList visibilityList,
+			IteratorId const iteratorId);
 
 	virtual void fillJSON(rapidjson::Document& jsonDoc,
 			rapidjson::Document::AllocatorType& allocator,
@@ -155,7 +200,7 @@ public:
 
 	virtual std::string edgeSetToString(Visibility edgeVisibility);
 
-	//*************************************** GETTERS & SETTERS ****************************************//
+//*************************************** GETTERS & SETTERS ****************************************//
 
 	EdgeCount getNumberOfEdges() const;
 

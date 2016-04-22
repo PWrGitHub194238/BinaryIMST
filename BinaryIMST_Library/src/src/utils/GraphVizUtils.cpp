@@ -13,6 +13,7 @@
 #include <log4cxx/logger.h>
 #include <cmath>
 #include <string>
+#include <sstream>
 
 #include "../../include/structures/GraphIF.hpp"
 #include "../../include/utils/EnumUtils.hpp"
@@ -24,14 +25,14 @@ const static log4cxx::LoggerPtr logger(
 GraphVizUtils::VerticesCoordinates GraphVizUtils::getVerticesCoordinates(
 		GraphIF * graph, GraphVizEngine layoutEngine,
 		GraphDimmention graphMaxWidth, GraphDimmention graphMaxHeight) {
-	GVC_t * gvc;
-	Agraph_t * g;
+	GVC_t *gvc { };
+	Agraph_t *g { };
 	std::string dotFormatedGraph { };
 	char * graphRenderedData { };
 	unsigned int length { };
-	VerticesCoordinates verticesCoordinates;
+	VerticesCoordinates verticesCoordinates { };
 
-	std::stringstream ss;
+	std::stringstream ss { };
 
 	gvc = gvContext();
 
@@ -67,7 +68,7 @@ GraphVizUtils::VerticesCoordinates GraphVizUtils::getVerticesCoordinates(
 GraphVizUtils::VerticesCoordinates GraphVizUtils::impl::getVerticesCoordinatesAsNeato(
 		std::stringstream& dataStream, VertexCount const numberOfVertices,
 		GraphDimmention graphMaxWidth, GraphDimmention graphMaxHeight) {
-	VerticesCoordinates verticesCoordinates;
+	VerticesCoordinates verticesCoordinates { };
 	std::string controlString { };
 
 	unsigned int i { };

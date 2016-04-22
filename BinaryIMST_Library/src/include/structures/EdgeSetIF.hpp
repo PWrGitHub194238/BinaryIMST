@@ -16,6 +16,8 @@
 #include "EdgeIF.hpp"
 #include "VisibleIterableIF.hpp"
 
+#include "../exp/LogicExceptions.hpp"
+
 class EdgeIF;
 
 class EdgeSetIF: public VisibleIterable<EdgeIF*>, public JSONIF {
@@ -57,11 +59,18 @@ public:
 
 	virtual void push_back(EdgeIF * const & edge) = 0;
 
+	virtual void pop_back() = 0;
+
+	virtual void remove(EdgeIF * const & edge) = 0;
+
 	virtual EdgeCount size() const = 0;
 
 	EdgeCount size(Visibility const visibility);
 
 	EdgeCount size(IteratorId const iteratorId, Visibility const visibility);
+
+	virtual EdgeIF* getEdgeByIdx(EdgeIdx const edgeIdx)
+			throw (LogicExceptions::EdgeNotFoundException);
 
 	virtual void begin() = 0;
 

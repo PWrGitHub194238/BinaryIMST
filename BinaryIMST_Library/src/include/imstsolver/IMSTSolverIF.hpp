@@ -8,9 +8,10 @@
 #ifndef SRC_INCLUDE_IMSTSOLVER_IMSTSOLVERIF_HPP_
 #define SRC_INCLUDE_IMSTSOLVER_IMSTSOLVERIF_HPP_
 
-#include "../exp/LogicExceptions.hpp"
 #include "../enums/EdgeConnectionType.hpp"
 #include "../typedefs/primitive.hpp"
+
+#include "../exp/LogicExceptions.hpp"
 
 class EdgeIF;
 class EdgeSetIF;
@@ -20,11 +21,17 @@ class MSTSolverIF;
 class VertexIF;
 
 class IMSTSolverIF {
+
 private:
 
 	//************************************ PRIVATE CONSTANT FIELDS *************************************//
 
 	//************************************** PRIVATE CLASS FIELDS **************************************//
+
+	/** Jeśli nie podano solvera mst, to tworzony jest nowy i trzeba go zwolnić
+	 *
+	 */
+	bool defaultSolverUsed;
 
 	//*************************************** PRIVATE FUNCTIONS ****************************************//
 
@@ -35,7 +42,8 @@ protected:
 	MSTSolverIF* mstSolver;
 	GraphIF* graph;
 
-	/** Trzyma koszty grafu (np. zmieniamy koszty, ale chcemy tylko zobaczyć co by było, a nie zmieniać koszty na stałe)
+	/** Trzyma koszty grafu (np. zmieniamy koszty, ale chcemy tylko zobaczyć co by było, a nie zmieniać koszty na stałe).
+	 * Po wykonaniu roboty zostaną przywrócone.
 	 *
 	 */
 	GraphEdgeCostsIF* baseGraphEdgeCosts;
@@ -90,17 +98,23 @@ public:
 
 	//************************************ CONSTRUCTOR & DESTRUCTOR ************************************//}
 
-	/** Znajduje na wstępie MST dla podanego grafu.
+	/**
 	 *
+	 * @param mstSolver jeśli null to stworzy domyślny i w destruktorze go usunie
+	 * @param graph
+	 * @param baseSolution jeśli null to weźmie mst jako bazowe rozwiązanie
+	 * @param initialVertex
+	 * @param lowerBound
+	 * @param upperBound
 	 */
 	IMSTSolverIF(MSTSolverIF* const mstSolver, GraphIF* const graph,
-			VertexIF* initialVertex, LambdaValue lowerBound,
-			LambdaValue upperBound);
+			EdgeSetIF * baseSolution, VertexIF* initialVertex,
+			LambdaValue lowerBound, LambdaValue upperBound);
 
-	// Empty virtual destructor for proper cleanup
+// Empty virtual destructor for proper cleanup
 	virtual ~IMSTSolverIF();
 
-	//*************************************** PUBLIC FUNCTIONS *****************************************//
+//*************************************** PUBLIC FUNCTIONS *****************************************//
 
 	void changeEdgeCost(VertexIF* const sourceVertex,
 			VertexIF* const targetvertex,
@@ -211,7 +225,7 @@ public:
 	 */
 	EdgeSetIF* getMST(EdgeCount k);
 
-	//*************************************** GETTERS & SETTERS ****************************************//
+//*************************************** GETTERS & SETTERS ****************************************//
 
 };
 

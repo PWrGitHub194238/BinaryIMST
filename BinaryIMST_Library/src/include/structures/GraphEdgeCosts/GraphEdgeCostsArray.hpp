@@ -9,6 +9,7 @@
 #define SRC_INCLUDE_STRUCTURES_GRAPHEDGECOSTS_GRAPHEDGECOSTSARRAY_HPP_
 
 #include <map>
+#include <string>
 #include <vector>
 
 #include "../../typedefs/primitive.hpp"
@@ -75,18 +76,37 @@ public:
 
 	//************************************ CONSTRUCTOR & DESTRUCTOR ************************************//
 
-	GraphEdgeCostsArray(GraphEdgeCostsIF& graphEdgeCosts);
+	GraphEdgeCostsArray();
+
+	GraphEdgeCostsArray(std::string scenarioName);
+
+	GraphEdgeCostsArray(GraphEdgeCostsIF * graphEdgeCosts);
+
+	GraphEdgeCostsArray(GraphEdgeCostsIF * graphEdgeCosts,
+			std::string scenarioName);
 
 	GraphEdgeCostsArray(GraphIF* const graph);
 
+	GraphEdgeCostsArray(GraphIF* const graph, std::string scenarioName);
+
 	GraphEdgeCostsArray(EdgeSetIF* const edgeSet);
+
+	GraphEdgeCostsArray(EdgeSetIF* const edgeSet, std::string scenarioName);
 
 	GraphEdgeCostsArray(EdgeCount numberOfEdges);
 
-	virtual ~GraphEdgeCostsArray() {
-	}
+	GraphEdgeCostsArray(EdgeCount numberOfEdges, std::string scenarioName);
+
+	GraphEdgeCostsArray(EdgeCount numberOfEdges, bool fillWithZeros);
+
+	GraphEdgeCostsArray(EdgeCount numberOfEdges, std::string scenarioName,
+			bool fillWithZeros);
+
+	virtual ~GraphEdgeCostsArray();
 
 	//*************************************** PUBLIC FUNCTIONS *****************************************//
+
+	virtual EdgeCost& operator[](EdgeIdx const edgeIdx);
 
 	void push_back(EdgeCost edgecost);
 

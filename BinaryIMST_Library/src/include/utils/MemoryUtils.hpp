@@ -9,6 +9,7 @@
 #define SRC_INCLUDE_UTILS_MEMORYUTILS_HPP_
 
 #include "../structures/VisibleIterableIF.hpp"
+#include "../typedefs/struct.hpp"
 
 class GraphIF;
 
@@ -24,6 +25,8 @@ void removeCollection(VisibleIterable<Item>* const & collection);
 void removeGraph(GraphIF* const & graph, bool withVertices, bool withEdges);
 
 void removeGraph(GraphIF* const & graph);
+
+void removeScenarioSet(GraphEdgeCostsSet scenarioSet);
 
 }  // namespace MemoryUtils
 

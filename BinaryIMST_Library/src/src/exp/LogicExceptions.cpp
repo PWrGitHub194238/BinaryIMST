@@ -13,6 +13,10 @@ const char* LogicExceptions::EdgeNullPointerException::what() const throw () {
 	return "Cannot perform operation on null edge.";
 }
 
+const char* LogicExceptions::VertexNotFoundException::what() const throw () {
+	return "Cannot find vertex with given properties.";
+}
+
 const char* LogicExceptions::EdgeNotFoundException::what() const throw () {
 	return "Cannot find edge with given properties.";
 }

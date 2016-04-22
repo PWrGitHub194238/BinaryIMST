@@ -135,9 +135,15 @@ VertexArray::VertexArray(VertexSetIF const & vertexArray) :
 			((VertexArray) vertexArray).vertices);
 }
 
+VertexArray::VertexArray() :
+		VertexSetIF() {
+
+}
+
 VertexArray::VertexArray(VertexCount numberOfVertices) :
 		VertexSetIF(numberOfVertices) {
 	this->vertices = std::vector<VertexIF*> { };
+	this->vertices.reserve(numberOfVertices);
 }
 
 VertexArray::~VertexArray() {
@@ -252,13 +258,25 @@ IteratorId VertexArray::getIterator() {
 			std::inserter(iteratorIdSet, iteratorIdSet.begin()),
 			[](std::pair<IteratorId, std::vector<VertexIF*>::const_iterator> pair) {return pair.first;});
 
+	if (iteratorMap.empty()) {
+		iteratorMap.insert(
+				std::make_pair(0, std::vector<VertexIF*>::const_iterator { }));
+		return 0;
+	}
+
 	for (IteratorId id : iteratorIdSet) {
 		if (returnedId != id) {
+			iteratorMap.insert(
+					std::make_pair(returnedId,
+							std::vector<VertexIF*>::const_iterator { }));
 			return returnedId;
 		}
 		returnedId += 1;
 	}
-	return *(iteratorIdSet.end()) + 1;
+	iteratorMap.insert(
+			std::make_pair(returnedId,
+					std::vector<VertexIF*>::const_iterator { }));
+	return returnedId;
 }
 
 void VertexArray::removeIterator(IteratorId const iteratorId) {

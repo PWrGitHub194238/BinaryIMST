@@ -30,24 +30,26 @@ const static log4cxx::LoggerPtr logger(
 
 //************************************ CONSTRUCTOR & DESTRUCTOR ************************************//
 
-Edge::Edge(VertexPair const & edgeConnections, EdgeCost const edgeCost,
-		EdgeConnectionType connection, Visibility visibility) :
-		EdgeIF(edgeConnections, edgeCost, connection, visibility) {
-}
-
-Edge::Edge(VertexPair const & edgeConnections, EdgeCost const edgeCost,
-		EdgeConnectionType connection) :
-		EdgeIF(edgeConnections, edgeCost, connection) {
-}
-
-Edge::Edge(VertexPair const & edgeConnections, EdgeCost const edgeCost,
+Edge::Edge(EdgeIdx const edgeIdx, VertexPair const & edgeConnections,
+		EdgeCost const edgeCost, EdgeConnectionType connection,
 		Visibility visibility) :
-		EdgeIF(edgeConnections, edgeCost, visibility) {
+		EdgeIF(edgeIdx, edgeConnections, edgeCost, connection, visibility) {
+}
+
+Edge::Edge(EdgeIdx const edgeIdx, VertexPair const & edgeConnections,
+		EdgeCost const edgeCost, EdgeConnectionType connection) :
+		EdgeIF(edgeIdx, edgeConnections, edgeCost, connection) {
+}
+
+Edge::Edge(EdgeIdx const edgeIdx, VertexPair const & edgeConnections,
+		EdgeCost const edgeCost, Visibility visibility) :
+		EdgeIF(edgeIdx, edgeConnections, edgeCost, visibility) {
 	// TODO Auto-generated constructor stub
 }
 
-Edge::Edge(VertexPair const & edgeConnections, EdgeCost const edgeCost) :
-		EdgeIF(edgeConnections, edgeCost) {
+Edge::Edge(EdgeIdx const edgeIdx, VertexPair const & edgeConnections,
+		EdgeCost const edgeCost) :
+		EdgeIF(edgeIdx, edgeConnections, edgeCost) {
 	// TODO Auto-generated constructor stub
 }
 

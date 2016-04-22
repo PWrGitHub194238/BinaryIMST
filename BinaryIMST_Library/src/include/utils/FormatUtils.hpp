@@ -12,17 +12,19 @@ namespace FormatUtils {
 
 namespace Tokens {
 
-const char* VertexCountToken { "VertexCount" };
-const char* VertexKeytToken { "VertexKey" };
-const char* EdgeCountToken { "EdgeCount" };
-const char* VertexIdxToken { "VertexIdx" };
-const char* EdgeIdxToken { "EdgeIdx" };
-const char* EdgeCostToken { "EdgeCost" };
-const char* IOEdgeCostToken { "IOEdgeCost" };
-const char* LambdaValueToken { "LambdaValue" };
-const char* LambdaIdxToken { "LambdaIdx" };
-const char* LambdaCountToken { "LambdaCount" };
-const char* IteratorIdToken { "IteratorId" };
+const char * VertexCountToken { "VertexCount" };
+const char * VertexKeytToken { "VertexKey" };
+const char * EdgeCountToken { "EdgeCount" };
+const char * VertexIdxToken { "VertexIdx" };
+const char * EdgeIdxToken { "EdgeIdx" };
+const char * EdgeCostToken { "EdgeCost" };
+const char * IOEdgeCostToken { "IOEdgeCost" };
+const char * LambdaValueToken { "LambdaValue" };
+const char * LambdaIdxToken { "LambdaIdx" };
+const char * LambdaCountToken { "LambdaCount" };
+const char * IteratorIdToken { "IteratorId" };
+const char * TabuIterationCountToken { "TabuIterationCount" };
+const char * ScenarioCountToken { "ScenarioCount" };
 
 }  // namespace Tokens
 
@@ -39,6 +41,8 @@ const char * LambdaValueFormat { ".3f" };
 const char * LambdaIdxFormat { "u" };
 const char * LambdaCountFormat { "u" };
 const char * IteratorIdFormat { "u" };
+const char * TabuIterationCountFormat { "u" };
+const char * ScenarioCountFormat { "u" };
 
 namespace Lengths {
 
@@ -53,6 +57,8 @@ const unsigned short LambdaValueLength { 3 };
 const unsigned short LambdaIdxLength { 1 };
 const unsigned short LambdaCountLength { 1 };
 const unsigned short IteratorIdLength { 1 };
+const unsigned short TabuIterationCountLength { 1 };
+const unsigned short ScenarioCountLength { 1 };
 
 }  // namespace Lengths
 

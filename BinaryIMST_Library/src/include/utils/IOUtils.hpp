@@ -15,6 +15,7 @@
 #include <memory>
 #include <string>
 
+#include "../typedefs/primitive.hpp"
 #include "enums/GraphVizEngine.hpp"
 #include "enums/InputFormat.hpp"
 #include "enums/InputMode.hpp"
@@ -23,6 +24,7 @@
 
 #include "../exp/IOExceptions.hpp"
 
+class GraphEdgeCostsIF;
 class EdgeIF;
 class VertexIF;
 class GraphIF;
@@ -86,23 +88,51 @@ namespace InputUtils {
 GraphIF * readGraph(char const * filename, InputFormat inputFormat,
 		InputMode inputMode) throw (IOExceptions::FileNotFountException);
 
+GraphEdgeCostsIF * readCosts(char const * filename, InputFormat inputFormat,
+		InputMode inputMode, std::string scenarioName)
+				throw (IOExceptions::FileNotFountException);
+
+GraphEdgeCostsIF * readCosts(char const * filename, InputFormat inputFormat,
+		InputMode inputMode) throw (IOExceptions::FileNotFountException);
+
 namespace impl {
+
+namespace VA {
+
+VertexIdx getVertexIdxFromValue(const rapidjson::Value& vertexIdx);
+
+EdgeCost getEdgeCostFromValue(const rapidjson::Value& edgeCost);
+
+}  // namespace VA
 
 namespace RAM {
 
 GraphIF * readGraph(char const * const filename, InputFormat inputFormat)
 		throw (IOExceptions::FileNotFountException);
 
+GraphEdgeCostsIF * readCosts(char const * const filename,
+		InputFormat inputFormat, std::string const & scenarioName)
+				throw (IOExceptions::FileNotFountException);
+
 namespace GR {
 
 GraphIF * readGraph(char const * const filename)
 		throw (IOExceptions::FileNotFountException);
 
+GraphEdgeCostsIF * readCosts(char const * const filename,
+		std::string const & scenarioName)
+				throw (IOExceptions::FileNotFountException);
+
 GraphIF * createGraph(char * const buffer)
 		throw (IOExceptions::InvalidProblemRead);
 
-void addEdge(char * const buffer, GraphIF * const graph)
+EdgeCount getNumberOfEdgeCosts(char * const buffer)
+		throw (IOExceptions::InvalidProblemRead);
+
+void addEdge(EdgeIdx const edgeIdx, char * const buffer, GraphIF * const graph)
 		throw (IOExceptions::InvalidArcRead);
+
+EdgeCost getCost(char * const buffer) throw (IOExceptions::InvalidArcRead);
 
 }  // namespace GR
 
@@ -111,11 +141,18 @@ namespace VA {
 GraphIF * readGraph(char const * const filename)
 		throw (IOExceptions::FileNotFountException);
 
+GraphEdgeCostsIF * readCosts(char const * const filename,
+		std::string const & scenarioName)
+				throw (IOExceptions::FileNotFountException);
+
 GraphIF * createGraph(rapidjson::Value & vertexList,
 		rapidjson::SizeType const numberOfEdges)
 				throw (IOExceptions::InvalidProblemRead);
 
-void addEdge(rapidjson::Value::ConstMemberIterator& edge, GraphIF * const graph)
+void addEdge(EdgeIdx const edgeIdx, rapidjson::Value::ConstMemberIterator& edge,
+		GraphIF * const graph) throw (IOExceptions::InvalidArcRead);
+
+EdgeCost getCost(rapidjson::Value::ConstMemberIterator& edge)
 		throw (IOExceptions::InvalidArcRead);
 
 }  // namespace VA
@@ -127,16 +164,29 @@ namespace HDD {
 GraphIF * readGraph(char const * const filename, InputFormat inputFormat)
 		throw (IOExceptions::FileNotFountException);
 
+GraphEdgeCostsIF * readCosts(char const * const filename,
+		InputFormat inputFormat, std::string const & scenarioName)
+				throw (IOExceptions::FileNotFountException);
+
 namespace GR {
 
 GraphIF * readGraph(char const * const filename)
 		throw (IOExceptions::FileNotFountException);
 
+GraphEdgeCostsIF * readCosts(char const * const filename,
+		std::string const & scenarioName)
+				throw (IOExceptions::FileNotFountException);
+
 GraphIF * createGraph(FILE * const dataFile)
 		throw (IOExceptions::InvalidProblemRead);
 
-void addEdge(FILE * const dataFile, GraphIF * const graph)
-		throw (IOExceptions::InvalidArcRead);
+EdgeCount getNumberOfEdgeCosts(FILE * const dataFile)
+		throw (IOExceptions::InvalidProblemRead);
+
+void addEdge(EdgeIdx const edgeIdx, FILE * const dataFile,
+		GraphIF * const graph) throw (IOExceptions::InvalidArcRead);
+
+EdgeCost getCost(FILE * const dataFile) throw (IOExceptions::InvalidArcRead);
 
 }  // namespace GR
 
@@ -145,11 +195,18 @@ namespace VA {
 GraphIF * readGraph(char const * const filename)
 		throw (IOExceptions::FileNotFountException);
 
+GraphEdgeCostsIF * readCosts(char const * const filename,
+		std::string const & scenarioName)
+				throw (IOExceptions::FileNotFountException);
+
 GraphIF * createGraph(rapidjson::Value& vertexList,
 		rapidjson::SizeType const numberOfEdges)
 				throw (IOExceptions::InvalidProblemRead);
 
-void addEdge(rapidjson::Value::ConstMemberIterator& edge, GraphIF * const graph)
+void addEdge(EdgeIdx const edgeIdx, rapidjson::Value::ConstMemberIterator& edge,
+		GraphIF * const graph) throw (IOExceptions::InvalidArcRead);
+
+EdgeCost getCost(rapidjson::Value::ConstMemberIterator& edge)
 		throw (IOExceptions::InvalidArcRead);
 
 }  // namespace VA

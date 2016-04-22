@@ -10,6 +10,7 @@
 
 #include <list>
 #include <map>
+#include <string>
 
 #include "../../typedefs/primitive.hpp"
 #include "../GraphEdgeCostsIF.hpp"
@@ -75,17 +76,37 @@ public:
 
 	//************************************ CONSTRUCTOR & DESTRUCTOR ************************************//
 
-	GraphEdgeCostsList(GraphEdgeCostsIF& graphEdgeCosts);
+	GraphEdgeCostsList();
+
+	GraphEdgeCostsList(std::string scenarioName);
+
+	GraphEdgeCostsList(GraphEdgeCostsIF * graphEdgeCosts);
+
+	GraphEdgeCostsList(GraphEdgeCostsIF * graphEdgeCosts,
+			std::string scenarioName);
 
 	GraphEdgeCostsList(GraphIF* const graph);
 
+	GraphEdgeCostsList(GraphIF* const graph, std::string scenarioName);
+
 	GraphEdgeCostsList(EdgeSetIF* const edgeSet);
 
+	GraphEdgeCostsList(EdgeSetIF* const edgeSet, std::string scenarioName);
+
 	GraphEdgeCostsList(EdgeCount numberOfEdges);
+
+	GraphEdgeCostsList(EdgeCount numberOfEdges, std::string scenarioName);
+
+	GraphEdgeCostsList(EdgeCount numberOfEdges, bool fillWithZeros);
+
+	GraphEdgeCostsList(EdgeCount numberOfEdges, std::string scenarioName,
+			bool fillWithZeros);
 
 	virtual ~GraphEdgeCostsList();
 
 	//*************************************** PUBLIC FUNCTIONS *****************************************//
+
+	EdgeCost& operator[](EdgeIdx const edgeIdx);
 
 	void push_back(EdgeCost edgecost);
 
