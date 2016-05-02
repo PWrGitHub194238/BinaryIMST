@@ -14,10 +14,8 @@
 
 #ifdef CPLEX_LP_MSTSolverIF_CPLEX_LP_MSTSolver_v3
 #include "CPLEX_LP_MSTSolver_v3.hpp"
-/*
- #elif defined(EdgeSetIF_EdgeList)
- #include "EdgeSet/EdgeList.hpp"
- */
+#elif defined(CPLEX_LP_MSTSolverIF_CPLEX_LP_MSTSolver_v2)
+#include "CPLEX_LP_MSTSolver_v2.hpp"
 #endif
 
 typedef CPLEX_LP_MSTSolver_v3 CPLEX_LP_MSTSolverImpl;

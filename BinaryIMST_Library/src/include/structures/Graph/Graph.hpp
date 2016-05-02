@@ -37,6 +37,8 @@ public:
 
 	//************************************ CONSTRUCTOR & DESTRUCTOR ************************************//
 
+	Graph(GraphIF * const graph);
+
 	Graph(VertexCount const vertexCount, EdgeCount const edgeCount,
 			GraphConstructMode constructorMode);
 

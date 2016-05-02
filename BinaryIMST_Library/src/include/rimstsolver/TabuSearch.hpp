@@ -8,11 +8,9 @@
 #ifndef SRC_INCLUDE_RIMSTSOLVER_TABUSEARCH_HPP_
 #define SRC_INCLUDE_RIMSTSOLVER_TABUSEARCH_HPP_
 
-#include <tuple>
-
+#include "../enums/AIMSTSolverEnum.hpp"
 #include "../enums/IMSTSolverEnum.hpp"
 #include "../enums/MSTSolverEnum.hpp"
-#include "../mstsolver/MSTSolverIF.hpp"
 #include "../typedefs/primitive.hpp"
 #include "../typedefs/struct.hpp"
 #include "../utils/enums/TabuMapEnum.hpp"
@@ -31,8 +29,9 @@ private:
 	//************************************** PRIVATE CLASS FIELDS **************************************//
 
 	TabuMap tabuMap;
+	TabuIterationCount tabuPeriod;
 	TabuIterationCount numberOfIterations;
-	MSTSolverIF* mstSolver;
+	TabuIterationCount numberOfPathIterations;
 
 	//*************************************** PRIVATE FUNCTIONS ****************************************//
 
@@ -60,7 +59,12 @@ private:
 
 	bool isMoveAllowed(EdgeIdx const dropEdgeIdx, EdgeIdx const addEdgeIdx);
 
-	EdgeSetIF* getSolutionForNeighbor(EdgeSetIF* initialSolution);
+	/**
+	 *
+	 * @param initialSolution sąsiednie drzewo pierwotnego drzewa
+	 * @return
+	 */
+	AIMSTSolution getSolutionForTree(EdgeSetIF* initialSolution);
 
 	/** Już w czasie przeliczania kolejnych sąsiadów, wybiera tego najlepszego,
 	 * zamiast policzyć wszystkich sąsiadów i wybrać minimum
@@ -68,8 +72,8 @@ private:
 	 * @param spanningTree
 	 * @return
 	 */
-	std::tuple<SpanningTreeNeighbor, EdgeCost> findMinimumInNeighborhood(
-			EdgeSetIF* const spanningTree, EdgeCost const tmpSolutionCost);
+	NeighborSolution findMinimumInNeighborhood(EdgeSetIF* const spanningTree,
+			EdgeCost const tmpSolutionCost);
 
 	void insertIntoTabu(TabuMapEnum const tabuListType, EdgeIdx const edgeIdx);
 
@@ -98,19 +102,78 @@ public:
 
 	//************************************ CONSTRUCTOR & DESTRUCTOR ************************************//
 
+	TabuSearch(AIMSTSolverEnum aimstSolverType, IMSTSolverEnum imstSolverType,
+			MSTSolverEnum mstSolverType, MSTSolverEnum innerMstSolverType,
+			GraphIF * const graph, GraphEdgeCostsSet adversarialScenarioSet,
+			IncrementalParam k, TabuIterationCount tabuPeriod,
+			TabuIterationCount numberOfPathIterations,
+			TabuIterationCount numberOfIterations);
+
+	TabuSearch(AIMSTSolverEnum aimstSolverType, IMSTSolverEnum imstSolverType,
+			MSTSolverEnum mstSolverType, MSTSolverEnum innerMstSolverType,
+			GraphIF * const graph, GraphEdgeCostsSet adversarialScenarioSet,
+			IncrementalParam k);
+
+	TabuSearch(AIMSTSolverEnum aimstSolverType, IMSTSolverEnum imstSolverType,
+			MSTSolverEnum mstSolverType, GraphIF * const graph,
+			GraphEdgeCostsSet adversarialScenarioSet, IncrementalParam k,
+			TabuIterationCount tabuPeriod,
+			TabuIterationCount numberOfPathIterations,
+			TabuIterationCount numberOfIterations);
+
+	TabuSearch(AIMSTSolverEnum aimstSolverType, IMSTSolverEnum imstSolverType,
+			MSTSolverEnum mstSolverType, GraphIF * const graph,
+			GraphEdgeCostsSet adversarialScenarioSet, IncrementalParam k);
+
+	TabuSearch(IMSTSolverEnum imstSolverType, MSTSolverEnum mstSolverType,
+			MSTSolverEnum innerMstSolverType, GraphIF * const graph,
+			GraphEdgeCostsSet adversarialScenarioSet, IncrementalParam k,
+			TabuIterationCount tabuPeriod,
+			TabuIterationCount numberOfPathIterations,
+			TabuIterationCount numberOfIterations);
+
+	TabuSearch(IMSTSolverEnum imstSolverType, MSTSolverEnum mstSolverType,
+			MSTSolverEnum innerMstSolverType, GraphIF * const graph,
+			GraphEdgeCostsSet adversarialScenarioSet, IncrementalParam k);
+
 	TabuSearch(IMSTSolverEnum imstSolverType, MSTSolverEnum mstSolverType,
 			GraphIF * const graph, GraphEdgeCostsSet adversarialScenarioSet,
-			IncrementalParam k, TabuIterationCount numberOfIterations);
+			IncrementalParam k, TabuIterationCount tabuPeriod,
+			TabuIterationCount numberOfPathIterations,
+			TabuIterationCount numberOfIterations);
 
-	TabuSearch(IMSTSolverEnum imstSolverType, GraphIF * const graph,
+	TabuSearch(IMSTSolverEnum imstSolverType, MSTSolverEnum mstSolverType,
+			GraphIF * const graph, GraphEdgeCostsSet adversarialScenarioSet,
+			IncrementalParam k);
+
+	TabuSearch(MSTSolverEnum mstSolverType, MSTSolverEnum innerMstSolverType,
+			GraphIF * const graph, GraphEdgeCostsSet adversarialScenarioSet,
+			IncrementalParam k, TabuIterationCount tabuPeriod,
+			TabuIterationCount numberOfPathIterations,
+			TabuIterationCount numberOfIterations);
+
+	TabuSearch(MSTSolverEnum mstSolverType, MSTSolverEnum innerMstSolverType,
+			GraphIF * const graph, GraphEdgeCostsSet adversarialScenarioSet,
+			IncrementalParam k);
+
+	TabuSearch(MSTSolverEnum mstSolverType, GraphIF * const graph,
 			GraphEdgeCostsSet adversarialScenarioSet, IncrementalParam k,
+			TabuIterationCount tabuPeriod,
+			TabuIterationCount numberOfPathIterations,
+			TabuIterationCount numberOfIterations);
+
+	TabuSearch(MSTSolverEnum mstSolverType, GraphIF * const graph,
+			GraphEdgeCostsSet adversarialScenarioSet, IncrementalParam k);
+
+	TabuSearch(GraphIF * const graph, GraphEdgeCostsSet adversarialScenarioSet,
+			IncrementalParam k, TabuIterationCount tabuPeriod,
+			TabuIterationCount numberOfPathIterations,
 			TabuIterationCount numberOfIterations);
 
 	TabuSearch(GraphIF * const graph, GraphEdgeCostsSet adversarialScenarioSet,
-			IncrementalParam k, TabuIterationCount numberOfIterations);
+			IncrementalParam k);
 
 	virtual ~TabuSearch() {
-		delete mstSolver;
 	}
 
 	//*************************************** PUBLIC FUNCTIONS *****************************************//

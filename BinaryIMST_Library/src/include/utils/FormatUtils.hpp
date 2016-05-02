@@ -24,6 +24,10 @@ const char * LambdaIdxToken { "LambdaIdx" };
 const char * LambdaCountToken { "LambdaCount" };
 const char * IteratorIdToken { "IteratorId" };
 const char * TabuIterationCountToken { "TabuIterationCount" };
+const char * LPUIntValueToken { "LPUIntValue" };
+const char * LPFloatValueToken { "LPFloatValue" };
+const char * ThreadIdToken { "ThreadId" };
+const char * ScenarioIdxToken { "ScenarioIdx" };
 const char * ScenarioCountToken { "ScenarioCount" };
 
 }  // namespace Tokens
@@ -31,33 +35,41 @@ const char * ScenarioCountToken { "ScenarioCount" };
 namespace Formats {
 
 const char * VertexCountFormat { "u" };
-const char * VertexKeyFormat { ".3f" };
+const char * VertexKeyFormat { ".3lf" };
 const char * EdgeCountFormat { "u" };
 const char * VertexIdxFormat { "u" };
 const char * EdgeIdxFormat { "u" };
-const char * EdgeCostFormat { ".3f" };
-const char * IOEdgeCostFormat { "lf" };
-const char * LambdaValueFormat { ".3f" };
+const char * EdgeCostFormat { ".3lf" };
+const char * IOEdgeCostFormat { ".3lf" };
+const char * LambdaValueFormat { ".3lf" };
 const char * LambdaIdxFormat { "u" };
 const char * LambdaCountFormat { "u" };
 const char * IteratorIdFormat { "u" };
 const char * TabuIterationCountFormat { "u" };
+const char * LPUIntValueFormat { "u" };
+const char * LPFloatValueFormat { ".3lf" };
+const char * ThreadIdFormat { "u" };
+const char * ScenarioIdxFormat { "u" };
 const char * ScenarioCountFormat { "u" };
 
 namespace Lengths {
 
 const unsigned short VertexCountLength { 1 };
-const unsigned short VertexKeyLength { 3 };
+const unsigned short VertexKeyLength { 4 };
 const unsigned short EdgeCountLength { 1 };
 const unsigned short VertexIdxLength { 1 };
 const unsigned short EdgeIdxLength { 1 };
-const unsigned short EdgeCostLength { 3 };
-const unsigned short IOEdgeCostLength { 2 };
-const unsigned short LambdaValueLength { 3 };
+const unsigned short EdgeCostLength { 4 };
+const unsigned short IOEdgeCostLength { 4 };
+const unsigned short LambdaValueLength { 4 };
 const unsigned short LambdaIdxLength { 1 };
 const unsigned short LambdaCountLength { 1 };
 const unsigned short IteratorIdLength { 1 };
 const unsigned short TabuIterationCountLength { 1 };
+const unsigned short LPUIntValueLength { 1 };
+const unsigned short LPFloatValueLength { 4 };
+const unsigned short ThreadIdLength { 1 };
+const unsigned short ScenarioIdxLength { 1 };
 const unsigned short ScenarioCountLength { 1 };
 
 }  // namespace Lengths

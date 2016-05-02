@@ -13,9 +13,11 @@
 #include <set>
 #include <string>
 
+#include "../../include/aimstsolver/AIMSTSolverIF.hpp"
 #include "../../include/log/bundle/Bundle.hpp"
 #include "../../include/log/utils/LogStringUtils.hpp"
 #include "../../include/log/utils/LogUtils.hpp"
+#include "../../include/mstsolver/MSTSolverIF.hpp"
 #include "../../include/structures/EdgeIF.hpp"
 #include "../../include/structures/GraphEdgeCostsInclude.hpp"
 #include "../../include/structures/GraphIF.hpp"
@@ -64,33 +66,76 @@ void RIMSTSolverIF::backupGraphCosts(GraphEdgeCostsIF* newGraphCosts) {
 
 //************************************ CONSTRUCTOR & DESTRUCTOR ************************************//
 
-RIMSTSolverIF::RIMSTSolverIF(IMSTSolverEnum imstSolverType,
-		MSTSolverEnum mstSolverType, GraphIF * const graph,
+RIMSTSolverIF::RIMSTSolverIF(AIMSTSolverEnum aimstSolverType,
+		IMSTSolverEnum imstSolverType, MSTSolverEnum mstSolverType,
+		MSTSolverEnum innerMstSolverType, GraphIF * const graph,
 		GraphEdgeCostsSet adversarialScenarioSet, IncrementalParam k) {
+	this->aimstSolverType = aimstSolverType;
 	this->imstSolverType = imstSolverType;
 	this->mstSolverType = mstSolverType;
-	this->mstSolver = SolverFactory::getMSTSolver(mstSolverType, graph);
+	this->innerMstSolverType = innerMstSolverType;
+	this->aimstSolver = SolverFactory::getAIMSTSolver(aimstSolverType,
+			imstSolverType, mstSolverType, graph, adversarialScenarioSet, k);
+	this->mstSolver = SolverFactory::getMSTSolver(innerMstSolverType, graph);
 	this->graph = graph;
 	this->graphCostBackup = nullptr;
 	this->adversarialScenarioSet = adversarialScenarioSet;
 	this->k = k;
 }
 
-RIMSTSolverIF::RIMSTSolverIF(IMSTSolverEnum imstSolverType,
+RIMSTSolverIF::RIMSTSolverIF(AIMSTSolverEnum aimstSolverType,
+		IMSTSolverEnum imstSolverType, MSTSolverEnum mstSolverType,
 		GraphIF * const graph, GraphEdgeCostsSet adversarialScenarioSet,
 		IncrementalParam k) :
-		RIMSTSolverIF(imstSolverType, MSTSolverEnum::DEFAULT, graph,
+		RIMSTSolverIF(aimstSolverType, imstSolverType, mstSolverType,
+				MSTSolverEnum::DEFAULT, graph, adversarialScenarioSet, k) {
+
+}
+
+RIMSTSolverIF::RIMSTSolverIF(IMSTSolverEnum imstSolverType,
+		MSTSolverEnum mstSolverType, MSTSolverEnum innerMstSolverType,
+		GraphIF * const graph, GraphEdgeCostsSet adversarialScenarioSet,
+		IncrementalParam k) :
+		RIMSTSolverIF(AIMSTSolverEnum::DEFAULT, imstSolverType, mstSolverType,
+				innerMstSolverType, graph, adversarialScenarioSet, k) {
+
+}
+
+RIMSTSolverIF::RIMSTSolverIF(IMSTSolverEnum imstSolverType,
+		MSTSolverEnum mstSolverType, GraphIF * const graph,
+		GraphEdgeCostsSet adversarialScenarioSet, IncrementalParam k) :
+		RIMSTSolverIF(AIMSTSolverEnum::DEFAULT, imstSolverType, mstSolverType,
+				MSTSolverEnum::DEFAULT, graph, adversarialScenarioSet, k) {
+
+}
+
+RIMSTSolverIF::RIMSTSolverIF(MSTSolverEnum mstSolverType,
+		MSTSolverEnum innerMstSolverType, GraphIF * const graph,
+		GraphEdgeCostsSet adversarialScenarioSet, IncrementalParam k) :
+		RIMSTSolverIF(AIMSTSolverEnum::DEFAULT, IMSTSolverEnum::DEFAULT,
+				mstSolverType, innerMstSolverType, graph,
 				adversarialScenarioSet, k) {
+
+}
+
+RIMSTSolverIF::RIMSTSolverIF(MSTSolverEnum mstSolverType, GraphIF * const graph,
+		GraphEdgeCostsSet adversarialScenarioSet, IncrementalParam k) :
+		RIMSTSolverIF(AIMSTSolverEnum::DEFAULT, IMSTSolverEnum::DEFAULT,
+				mstSolverType, MSTSolverEnum::DEFAULT, graph,
+				adversarialScenarioSet, k) {
+
 }
 
 RIMSTSolverIF::RIMSTSolverIF(GraphIF * const graph,
 		GraphEdgeCostsSet adversarialScenarioSet, IncrementalParam k) :
-		RIMSTSolverIF(IMSTSolverEnum::DEFAULT, MSTSolverEnum::DEFAULT, graph,
+		RIMSTSolverIF(AIMSTSolverEnum::DEFAULT, IMSTSolverEnum::DEFAULT,
+				MSTSolverEnum::DEFAULT, MSTSolverEnum::DEFAULT, graph,
 				adversarialScenarioSet, k) {
 
 }
 
 RIMSTSolverIF::~RIMSTSolverIF() {
+	delete this->aimstSolver;
 	delete this->mstSolver;
 }
 

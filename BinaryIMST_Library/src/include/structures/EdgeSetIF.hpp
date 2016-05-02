@@ -11,8 +11,11 @@
 #include <rapidjson/document.h>
 #include <string>
 
+#include "../enums/Connectivity.hpp"
+#include "../enums/EdgeConnectionType.hpp"
 #include "../enums/Visibility.hpp"
 #include "../typedefs/primitive.hpp"
+#include "../typedefs/struct.hpp"
 #include "EdgeIF.hpp"
 #include "VisibleIterableIF.hpp"
 
@@ -39,6 +42,38 @@ protected:
 
 	//************************************** PROTECTED FUNCTIONS ***************************************//
 
+	virtual EdgeIF* findUnconnected(VertexIdx const sourceVertexIdx,
+			VertexIdx const targetVertexIdx)
+					throw (LogicExceptions::EdgeNotFoundException);
+
+	virtual EdgeIF* findUnconnected(VertexIF * const sourceVertexIdx,
+			VertexIF * const targetVertexIdx)
+					throw (LogicExceptions::EdgeNotFoundException);
+
+	virtual EdgeIF* findUndirected(VertexIdx const sourceVertexIdx,
+			VertexIdx const targetVertexIdx)
+					throw (LogicExceptions::EdgeNotFoundException);
+
+	virtual EdgeIF* findUndirected(VertexIF * const sourceVertexIdx,
+			VertexIF * const targetVertexIdx)
+					throw (LogicExceptions::EdgeNotFoundException);
+
+	virtual EdgeIF* findForward(VertexIdx const sourceVertexIdx,
+			VertexIdx const targetVertexIdx)
+					throw (LogicExceptions::EdgeNotFoundException);
+
+	virtual EdgeIF* findForward(VertexIF * const sourceVertexIdx,
+			VertexIF * const targetVertexIdx)
+					throw (LogicExceptions::EdgeNotFoundException);
+
+	virtual EdgeIF* findBackward(VertexIdx const sourceVertexIdx,
+			VertexIdx const targetVertexIdx)
+					throw (LogicExceptions::EdgeNotFoundException);
+
+	virtual EdgeIF* findBackward(VertexIF * const sourceVertexIdx,
+			VertexIF * const targetVertexIdx)
+					throw (LogicExceptions::EdgeNotFoundException);
+
 public:
 
 	//************************************* PUBLIC CONSTANT FIELDS *************************************//
@@ -47,9 +82,9 @@ public:
 
 	//************************************ CONSTRUCTOR & DESTRUCTOR ************************************//
 
-	EdgeSetIF(EdgeSetIF * edgeSetIF);
-
 	EdgeSetIF();
+
+	EdgeSetIF(EdgeSetIF * edgeSetIF);
 
 	EdgeSetIF(EdgeCount numberOfEdges);
 
@@ -63,11 +98,32 @@ public:
 
 	virtual void remove(EdgeIF * const & edge) = 0;
 
+	virtual EdgeIF* find(VertexIdx const sourceVertexIdx,
+			VertexIdx const targetVertexIdx, EdgeConnectionType connectionType)
+					throw (LogicExceptions::EdgeNotFoundException);
+
+	virtual EdgeIF* find(VertexIdx const sourceVertexIdx,
+			VertexIdx const targetVertexIdx)
+					throw (LogicExceptions::EdgeNotFoundException);
+
+	virtual EdgeIF* find(VertexIF* const sourceVertex,
+			VertexIF* const targetVertex, EdgeConnectionType connectionType)
+					throw (LogicExceptions::EdgeNotFoundException);
+
+	virtual EdgeIF* find(VertexIF* const sourceVertex,
+			VertexIF* const targetVertex)
+					throw (LogicExceptions::EdgeNotFoundException);
+
 	virtual EdgeCount size() const = 0;
 
 	EdgeCount size(Visibility const visibility);
 
 	EdgeCount size(IteratorId const iteratorId, Visibility const visibility);
+
+	EdgeCount size(Connectivity const connectivity);
+
+	EdgeCount size(IteratorId const iteratorId,
+			Connectivity const connectivity);
 
 	virtual EdgeIF* getEdgeByIdx(EdgeIdx const edgeIdx)
 			throw (LogicExceptions::EdgeNotFoundException);
@@ -89,6 +145,17 @@ public:
 	virtual bool hasNext(IteratorId const iteratorId,
 			Visibility const visibility) = 0;
 
+	virtual bool hasNext(Connectivity const connectivity) = 0;
+
+	virtual bool hasNext(IteratorId const iteratorId,
+			Connectivity const connectivity) = 0;
+
+	virtual bool hasNext(Connectivity const connectivity,
+			Visibility const visibility) = 0;
+
+	virtual bool hasNext(IteratorId const iteratorId,
+			Connectivity const connectivity, Visibility const visibility) = 0;
+
 	virtual bool hasPrevious() = 0;
 
 	virtual bool hasPrevious(IteratorId const iteratorId) = 0;
@@ -97,6 +164,17 @@ public:
 
 	virtual bool hasPrevious(IteratorId const iteratorId,
 			Visibility const visibility) = 0;
+
+	virtual bool hasPrevious(Connectivity const connectivity) = 0;
+
+	virtual bool hasPrevious(IteratorId const iteratorId,
+			Connectivity const connectivity) = 0;
+
+	virtual bool hasPrevious(Connectivity const connectivity,
+			Visibility const visibility) = 0;
+
+	virtual bool hasPrevious(IteratorId const iteratorId,
+			Connectivity const connectivity, Visibility const visibility) = 0;
 
 	virtual EdgeIF * next() = 0;
 
@@ -119,6 +197,19 @@ public:
 	virtual IteratorId getIterator() = 0;
 
 	virtual void removeIterator(IteratorId const iteratorId) = 0;
+
+	ConnectivityList storeConnectivity();
+
+	ConnectivityList storeConnectivity(IteratorId const iteratorId);
+
+	void restoreConnectivityAll(ConnectivityList const & connectivityList);
+
+	void restoreConnectivityAll(ConnectivityList const & connectivityList,
+			IteratorId const iteratorId);
+
+	void disconnectAll();
+
+	void disconnectAll(IteratorId const iteratorId);
 
 	EdgeCost getTotalEdgeCost();
 

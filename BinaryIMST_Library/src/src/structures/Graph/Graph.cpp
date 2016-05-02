@@ -36,6 +36,10 @@ const static log4cxx::LoggerPtr logger(
 
 //************************************ CONSTRUCTOR & DESTRUCTOR ************************************//
 
+Graph::Graph(GraphIF * const graph) : GraphIF(graph) {
+
+}
+
 Graph::Graph(VertexCount const vertexCount, EdgeCount const edgeCount,
 		GraphConstructMode constructorMode) :
 		GraphIF(vertexCount, edgeCount, constructorMode) {

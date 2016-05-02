@@ -82,6 +82,14 @@ void EdgeIF::disconnectBackward() {
 
 //************************************ CONSTRUCTOR & DESTRUCTOR ************************************//
 
+EdgeIF::EdgeIF(EdgeIF * edge) :
+		EdgeIF(edge->getEdgeIdx(),
+				VertexPair(edge->getSourceVertex(), edge->getTargetVertex()),
+				edge->getEdgeCost(), edge->getConnectionType(),
+				edge->getVisibility()) {
+
+}
+
 EdgeIF::EdgeIF(EdgeIdx const edgeIdx, VertexPair const & edgeConnections,
 		EdgeCost const edgeCost) :
 		EdgeIF(edgeIdx, edgeConnections, edgeCost,
@@ -146,6 +154,22 @@ void EdgeIF::disconnect() {
 		break;
 	default:
 		break;
+	}
+	this->connectionType = EdgeConnectionType::UNCONNECTED;
+}
+
+bool EdgeIF::isInState(Connectivity connectivity) const {
+	switch (connectivity) {
+	case Connectivity::BOTH:
+		return true;
+	case Connectivity::CONNECTED:
+		return connectionType == EdgeConnectionType::BACKWARD
+				|| connectionType == EdgeConnectionType::FORWARD
+				|| connectionType == EdgeConnectionType::UNDIRECTED;
+	case Connectivity::DISCONNECTED:
+		return connectionType == EdgeConnectionType::UNCONNECTED;
+	default:
+		return false;
 	}
 }
 

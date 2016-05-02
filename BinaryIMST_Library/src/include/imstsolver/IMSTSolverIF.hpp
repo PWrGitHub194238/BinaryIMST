@@ -77,7 +77,7 @@ protected:
 	 */
 	void restoreBaseEdgeCosts();
 
-	/** Zwraca liczbę kraœeszi, które są w podanym zbiorze krawędzi a nie ma ich w baseMSTSolution
+	/** Zwraca liczbę krawędzi, które są w podanym zbiorze krawędzi a nie ma ich w baseMSTSolution
 	 *
 	 */
 	EdgeCount getMSTDiff(EdgeSetIF* const currentMSTSolution);
@@ -88,7 +88,7 @@ protected:
 	 * @param initialVertex
 	 * @return
 	 */
-	virtual EdgeSetIF* resolve(EdgeCount k, VertexIF* initialVertex) = 0;
+	virtual EdgeSetIF* resolve(IncrementalParam k, VertexIF* initialVertex) = 0;
 
 public:
 
@@ -111,7 +111,6 @@ public:
 			EdgeSetIF * baseSolution, VertexIF* initialVertex,
 			LambdaValue lowerBound, LambdaValue upperBound);
 
-// Empty virtual destructor for proper cleanup
 	virtual ~IMSTSolverIF();
 
 //*************************************** PUBLIC FUNCTIONS *****************************************//

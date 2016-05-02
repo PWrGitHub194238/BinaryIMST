@@ -31,6 +31,8 @@ const char* edgeVisibility[] = { "hidden", "visible", "all" };
 const char* graphVizEngine[] = { "circo", "dot", "fdp", "neato", "osage",
 		"sfdp", "twopi" };
 
+const char* lpVariableType[] = { "boolean", "integer", "float" };
+
 }  // namespace impl
 
 }  // namespace EnumUtils
@@ -50,3 +52,8 @@ const char* EnumUtils::getVisibilityString(Visibility key) {
 const char* EnumUtils::getGraphVizEngineString(GraphVizEngine key) {
 	return EnumUtils::impl::graphVizEngine[static_cast<unsigned int>(key)];
 }
+
+const char* EnumUtils::getLPVariableTypeString(unsigned int key) {
+	return EnumUtils::impl::lpVariableType[key];
+}
+

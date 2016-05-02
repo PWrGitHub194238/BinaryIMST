@@ -11,13 +11,13 @@
 #include <rapidjson/document.h>
 #include <string>
 
+#include "../enums/Connectivity.hpp"
 #include "../enums/EdgeConnectionType.hpp"
 #include "../enums/GraphConstructMode.hpp"
 #include "../enums/Visibility.hpp"
 #include "../typedefs/struct.hpp"
-#include "JSONIF.hpp"
-
 #include "../utils/MemoryUtils.hpp"
+#include "JSONIF.hpp"
 
 #include "../exp/LogicExceptions.hpp"
 
@@ -60,6 +60,8 @@ public:
 	//************************************** PUBLIC CLASS FIELDS ***************************************//
 
 	//************************************ CONSTRUCTOR & DESTRUCTOR ************************************//
+
+	GraphIF(GraphIF * graph);
 
 	/** Jeśli AUTO_CONSTRUCT_VERTEX to tworzy vertexCount węzłów od 0 do vertexCount-1 i rezerwuje miejsce na edgeCount krawędzi
 	 * Jeśli RESERVE_SPACE_ONLY to tylko rezerwuje miejsce
@@ -112,10 +114,28 @@ public:
 
 	EdgeIF * findEdge(VertexIF * const sourceVertex,
 			VertexIF * const targetVertex)
+					throw (LogicExceptions::EdgeNotFoundException);
+
+	EdgeIF * findEdge(VertexIdx const sourceVertexIdx,
+			VertexIdx const targetVertexIdx)
+					throw (LogicExceptions::EdgeNotFoundException);
+
+	EdgeIF * findInputEdge(VertexIF * const sourceVertex,
+			VertexIF * const targetVertex)
 					throw (LogicExceptions::VertexNotFoundException,
 					LogicExceptions::EdgeNotFoundException);
 
-	EdgeIF * findEdge(VertexIdx const sourceVertexIdx,
+	EdgeIF * findInputEdge(VertexIdx const sourceVertexIdx,
+			VertexIdx const targetVertexIdx)
+					throw (LogicExceptions::VertexNotFoundException,
+					LogicExceptions::EdgeNotFoundException);
+
+	EdgeIF * findOutputEdge(VertexIF * const sourceVertex,
+			VertexIF * const targetVertex)
+					throw (LogicExceptions::VertexNotFoundException,
+					LogicExceptions::EdgeNotFoundException);
+
+	EdgeIF * findOutputEdge(VertexIdx const sourceVertexIdx,
 			VertexIdx const targetVertexIdx)
 					throw (LogicExceptions::VertexNotFoundException,
 					LogicExceptions::EdgeNotFoundException);
@@ -128,15 +148,29 @@ public:
 
 	bool hasNextVertex();
 
+	bool hasNextVertex(IteratorId const iteratorId);
+
 	bool hasNextVertex(Visibility const visibility);
+
+	bool hasNextVertex(IteratorId const iteratorId,
+			Visibility const visibility);
 
 	bool hasAnyVertex();
 
+	bool hasAnyVertex(IteratorId const iteratorId);
+
 	bool hasAnyVertex(Visibility const visibility);
+
+	bool hasAnyVertex(IteratorId const iteratorId, Visibility const visibility);
 
 	VertexIF * nextVertex();
 
+	VertexIF * nextVertex(IteratorId const iteratorId);
+
 	VertexIF * nextVertex(Visibility const visibility);
+
+	VertexIF * nextVertex(IteratorId const iteratorId,
+			Visibility const visibility);
 
 	VertexIF * currentVertex();
 
@@ -151,13 +185,24 @@ public:
 
 	void beginEdge(IteratorId const iteratorId);
 
-	bool hasNextEdge(IteratorId const iteratorId);
-
 	bool hasNextEdge();
+
+	bool hasNextEdge(IteratorId const iteratorId);
 
 	bool hasNextEdge(Visibility const visibility);
 
 	bool hasNextEdge(IteratorId const iteratorId, Visibility const visibility);
+
+	bool hasNextEdge(Connectivity const connectivity);
+
+	bool hasNextEdge(IteratorId const iteratorId,
+			Connectivity const connectivity);
+
+	bool hasNextEdge(Connectivity const connectivity,
+			Visibility const visibility);
+
+	bool hasNextEdge(IteratorId const iteratorId,
+			Connectivity const connectivity, Visibility const visibility);
 
 	bool hasAnyEdge();
 
@@ -166,6 +211,17 @@ public:
 	bool hasAnyEdge(Visibility const visibility);
 
 	bool hasAnyEdge(IteratorId const iteratorId, Visibility const visibility);
+
+	bool hasAnyEdge(Connectivity const connectivity);
+
+	bool hasAnyEdge(IteratorId const iteratorId,
+			Connectivity const connectivity);
+
+	bool hasAnyEdge(Connectivity const connectivity,
+			Visibility const visibility);
+
+	bool hasAnyEdge(IteratorId const iteratorId,
+			Connectivity const connectivity, Visibility const visibility);
 
 	EdgeIF * nextEdge();
 
@@ -177,17 +233,34 @@ public:
 
 	void removeEdgeIterator(IteratorId const iteratorId);
 
+	void showAllEdges();
+
+	void showAllEdges(IteratorId const iteratorId);
+
 	void hideAllEdges();
 
 	void hideAllEdges(IteratorId const iteratorId);
+
+	void disconnectAllEdges();
+
+	void disconnectAllEdges(IteratorId const iteratorId);
+
+	ConnectivityList storeEdgeConnectivity();
+
+	ConnectivityList storeEdgeConnectivity(IteratorId const iteratorId);
 
 	VisibilityList storeEdgeVisibility();
 
 	VisibilityList storeEdgeVisibility(IteratorId const iteratorId);
 
-	void restoreVisibilityAllEdges(VisibilityList visibilityList);
+	void restoreConnectivityAllEdges(ConnectivityList const & connectivityList);
 
-	void restoreVisibilityAllEdges(VisibilityList visibilityList,
+	void restoreConnectivityAllEdges(ConnectivityList const & connectivityList,
+			IteratorId const iteratorId);
+
+	void restoreVisibilityAllEdges(VisibilityList const & visibilityList);
+
+	void restoreVisibilityAllEdges(VisibilityList const & visibilityList,
 			IteratorId const iteratorId);
 
 	virtual void fillJSON(rapidjson::Document& jsonDoc,
@@ -203,6 +276,8 @@ public:
 //*************************************** GETTERS & SETTERS ****************************************//
 
 	EdgeCount getNumberOfEdges() const;
+
+	EdgeCount getNumberOfEdges(Connectivity const connectivity) const;
 
 	EdgeCount getNumberOfEdges(Visibility const visibility) const;
 

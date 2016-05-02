@@ -10,7 +10,6 @@
 #include <log4cxx/logger.h>
 #include <tuple>
 
-#include "../../include/structures/EdgeSetIF.hpp"
 #include "../../include/typedefs/primitive.hpp"
 #include "../../include/typedefs/struct.hpp"
 
@@ -19,7 +18,10 @@ class EdgeSetIF;
 const static log4cxx::LoggerPtr logger(
 		log4cxx::Logger::getLogger("utils.TabuSearchUtils"));
 
-const TabuIterationCount TabuSearchUtils::TABU_ELEMENT_PERIOD { 0 };
+const TabuIterationCount TabuSearchUtils::ITER_NUM_DEFAULT { 30 };
+const TabuIterationCount TabuSearchUtils::PATH_ITER_NUM_DEFAULT { 5 };
+
+const TabuIterationCount TabuSearchUtils::TABU_ELEMENT_DEFAULT_PERIOD { 4 };
 
 SpanningTreeNeighbor TabuSearchUtils::createSpanningTreeNeighbor(
 		EdgeIdx const removedEdgeIdx, EdgeIdx const insertedEdgeIdx,
@@ -43,16 +45,16 @@ EdgeSetIF* TabuSearchUtils::getEdgeSet(
 }
 
 SpanningTreeNeighbor TabuSearchUtils::getMove(
-		std::tuple<SpanningTreeNeighbor, EdgeCost> const & spanningTreeNeighborWithCost) {
+		NeighborSolution const & spanningTreeNeighborWithCost) {
 	return std::get<0>(spanningTreeNeighborWithCost);
 }
 
 EdgeSetIF* TabuSearchUtils::getEdgeSet(
-		std::tuple<SpanningTreeNeighbor, EdgeCost> const & spanningTreeNeighborWithCost) {
+		NeighborSolution const & spanningTreeNeighborWithCost) {
 	return getEdgeSet(getMove(spanningTreeNeighborWithCost));
 }
 
 EdgeCost TabuSearchUtils::getEdgeSetCost(
-		std::tuple<SpanningTreeNeighbor, EdgeCost> const & spanningTreeNeighborWithCost) {
+		NeighborSolution const & spanningTreeNeighborWithCost) {
 	return std::get<1>(spanningTreeNeighborWithCost);
 }

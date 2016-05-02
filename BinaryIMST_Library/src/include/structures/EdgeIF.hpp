@@ -11,6 +11,7 @@
 #include <rapidjson/document.h>
 #include <string>
 
+#include "../enums/Connectivity.hpp"
 #include "../enums/EdgeConnectionType.hpp"
 #include "../enums/Visibility.hpp"
 #include "../typedefs/primitive.hpp"
@@ -65,6 +66,8 @@ public:
 
 	//************************************ CONSTRUCTOR & DESTRUCTOR ************************************//
 
+	EdgeIF(EdgeIF * edge);
+
 	EdgeIF(EdgeIdx const edgeIdx, VertexPair const & edgeConnections,
 			EdgeCost const edgeCost, EdgeConnectionType isConnect,
 			Visibility const visibility);
@@ -85,6 +88,8 @@ public:
 	void connect(EdgeConnectionType connectionType);
 
 	void disconnect();
+
+	bool isInState(Connectivity connectivity) const;
 
 	virtual void fillJSON(rapidjson::Document& jsonDoc,
 			rapidjson::Document::AllocatorType& allocator,

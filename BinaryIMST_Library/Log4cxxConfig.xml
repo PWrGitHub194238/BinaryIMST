@@ -43,6 +43,54 @@
 		</layout>
 	</appender>
 	
+	<category name="aimstsolver.AIMSTSolver" additivity="false">
+		<priority value="all" />
+		<appender-ref ref="appxFileAppender" />
+		<appender-ref ref="appxConsoleAppender" />
+		<!-- 		<appender-ref ref="appxXMLAppender" /> -->
+		<!-- 		<appender-ref ref="appxChainsawXMLAppender" /> -->
+	</category>
+	
+	<category name="aimstsolver.AIMSTSolverIF" additivity="false">
+		<priority value="all" />
+		<appender-ref ref="appxFileAppender" />
+		<appender-ref ref="appxConsoleAppender" />
+		<!-- 		<appender-ref ref="appxXMLAppender" /> -->
+		<!-- 		<appender-ref ref="appxChainsawXMLAppender" /> -->
+	</category>
+	
+	<category name="cplex.LP_IMSTSolver_v2" additivity="false">
+		<priority value="all" />
+		<appender-ref ref="appxFileAppender" />
+		<appender-ref ref="appxConsoleAppender" />
+		<!-- 		<appender-ref ref="appxXMLAppender" /> -->
+		<!-- 		<appender-ref ref="appxChainsawXMLAppender" /> -->
+	</category>
+	
+	<category name="cplex.LP_IMSTSolver_v3" additivity="false">
+		<priority value="all" />
+		<appender-ref ref="appxFileAppender" />
+		<appender-ref ref="appxConsoleAppender" />
+		<!-- 		<appender-ref ref="appxXMLAppender" /> -->
+		<!-- 		<appender-ref ref="appxChainsawXMLAppender" /> -->
+	</category>
+	
+	<category name="cplex.LP_IMSTSolverIF" additivity="false">
+		<priority value="all" />
+		<appender-ref ref="appxFileAppender" />
+		<appender-ref ref="appxConsoleAppender" />
+		<!-- 		<appender-ref ref="appxXMLAppender" /> -->
+		<!-- 		<appender-ref ref="appxChainsawXMLAppender" /> -->
+	</category>
+	
+	<category name="cplex.LP_MSTSolver_v2" additivity="false">
+		<priority value="all" />
+		<appender-ref ref="appxFileAppender" />
+		<appender-ref ref="appxConsoleAppender" />
+		<!-- 		<appender-ref ref="appxXMLAppender" /> -->
+		<!-- 		<appender-ref ref="appxChainsawXMLAppender" /> -->
+	</category>
+	
 	<category name="cplex.LP_MSTSolver_v3" additivity="false">
 		<priority value="all" />
 		<appender-ref ref="appxFileAppender" />
@@ -52,6 +100,14 @@
 	</category>
 	
 	<category name="cplex.LP_MSTSolverIF" additivity="false">
+		<priority value="all" />
+		<appender-ref ref="appxFileAppender" />
+		<appender-ref ref="appxConsoleAppender" />
+		<!-- 		<appender-ref ref="appxXMLAppender" /> -->
+		<!-- 		<appender-ref ref="appxChainsawXMLAppender" /> -->
+	</category>
+	
+	<category name="cplex.CPLEXUtils" additivity="false">
 		<priority value="all" />
 		<appender-ref ref="appxFileAppender" />
 		<appender-ref ref="appxConsoleAppender" />

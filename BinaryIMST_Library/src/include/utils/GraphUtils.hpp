@@ -10,6 +10,7 @@
 
 #include "../typedefs/primitive.hpp"
 #include "../typedefs/struct.hpp"
+
 #include "../exp/GraphExceptions.hpp"
 
 class EdgeSetIF;
@@ -35,6 +36,9 @@ void changeGraphCosts(GraphIF* graph, GraphEdgeCostsIF* const newGraphCosts);
 
 bool changeGraphCostsWithCheck(GraphIF* graph,
 		GraphEdgeCostsIF* const newGraphCosts);
+
+ConnectivityList shrinkConnectivityToSet(GraphIF* const graph,
+		EdgeSetIF* const visibleSet);
 
 VisibilityList shrinkVisibilityToSet(GraphIF* const graph,
 		EdgeSetIF* const visibleSet);

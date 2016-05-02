@@ -11,6 +11,7 @@
 #include <log4cxx/logger.h>
 #include <memory>
 #include <sstream>
+#include <utility>
 
 #include "../../include/log/bundle/Bundle.hpp"
 #include "../../include/log/utils/LogUtils.hpp"
@@ -40,6 +41,38 @@ const static log4cxx::LoggerPtr logger(
 //************************************** PUBLIC CLASS FIELDS ***************************************//
 
 //************************************ CONSTRUCTOR & DESTRUCTOR ************************************//
+
+GraphIF::GraphIF(GraphIF * graph) {
+	EdgeIF* edge { };
+	EdgeCount edgeIdx { 0 };
+	IteratorId vertexIterator = graph->getVertexIteratorId();
+	IteratorId edgeIterator = graph->getEdgeIteratorId();
+
+	this->vertexSet = new VertexSetImpl { graph->getNumberOfVertices() };
+	graph->beginVertex(vertexIterator);
+	while (graph->hasNextVertex(vertexIterator)) {
+		this->vertexSet->push_back(
+				new VertexImpl { graph->nextVertex(vertexIterator) });
+	}
+
+	this->edgeSet = new EdgeSetImpl { graph->getNumberOfEdges() };
+
+	graph->beginEdge(edgeIterator);
+	while (graph->hasNextEdge(edgeIterator)) {
+		edge = graph->nextEdge(edgeIterator);
+		this->edgeSet->push_back(
+				new EdgeImpl { edgeIdx, VertexPair(
+						vertexSet->getElementAt(
+								edge->getSourceVertex()->getVertexIdx()),
+						vertexSet->getElementAt(
+								edge->getTargetVertex()->getVertexIdx())),
+						edge->getEdgeCost(), edge->getConnectionType(),
+						edge->getVisibility() });
+		edgeIdx += 1;
+	}
+	graph->removeVertexIterator(vertexIterator);
+	graph->removeEdgeIterator(edgeIterator);
+}
 
 GraphIF::GraphIF(VertexCount const vertexCount, EdgeCount const edgeCount,
 		GraphConstructMode constructMode) {
@@ -105,6 +138,64 @@ VertexIF * GraphIF::getVertexByIdx(VertexIdx const vertexIdx) {
 
 EdgeIF * GraphIF::findEdge(VertexIF * const sourceVertex,
 		VertexIF * const targetVertex)
+				throw (LogicExceptions::EdgeNotFoundException) {
+	EdgeIF * edge { };
+
+	if ((edge = edgeSet->find(sourceVertex, targetVertex,
+			EdgeConnectionType::UNDIRECTED)) != nullptr) {
+		return edge;
+	}
+
+	throw LogicExceptions::EdgeNotFoundException();
+}
+
+EdgeIF * GraphIF::findEdge(VertexIdx const sourceVertexIdx,
+		VertexIdx const targetVertexIdx)
+				throw (LogicExceptions::EdgeNotFoundException) {
+	EdgeIF * edge { };
+
+	if ((edge = edgeSet->find(sourceVertexIdx, targetVertexIdx,
+			EdgeConnectionType::UNDIRECTED)) != nullptr) {
+		return edge;
+	}
+	throw LogicExceptions::EdgeNotFoundException();
+}
+
+EdgeIF * GraphIF::findInputEdge(VertexIF * const sourceVertex,
+		VertexIF * const targetVertex)
+				throw (LogicExceptions::VertexNotFoundException,
+				LogicExceptions::EdgeNotFoundException) {
+	VertexIF * vertex { };
+	EdgeIF * edge { };
+
+	if ((vertex = this->getVertexByIdx(sourceVertex->getVertexIdx()))
+			!= nullptr) {
+		if ((edge = vertex->findInputEdge(targetVertex)) != nullptr) {
+			return edge;
+		}
+		throw LogicExceptions::EdgeNotFoundException();
+	}
+	throw LogicExceptions::VertexNotFoundException();
+}
+
+EdgeIF * GraphIF::findInputEdge(VertexIdx const sourceVertexIdx,
+		VertexIdx const targetVertexIdx)
+				throw (LogicExceptions::VertexNotFoundException,
+				LogicExceptions::EdgeNotFoundException) {
+	VertexIF * vertex { };
+	EdgeIF * edge { };
+
+	if ((vertex = this->getVertexByIdx(sourceVertexIdx)) != nullptr) {
+		if ((edge = vertex->findInputEdge(targetVertexIdx)) != nullptr) {
+			return edge;
+		}
+		throw LogicExceptions::EdgeNotFoundException();
+	}
+	throw LogicExceptions::VertexNotFoundException();
+}
+
+EdgeIF * GraphIF::findOutputEdge(VertexIF * const sourceVertex,
+		VertexIF * const targetVertex)
 				throw (LogicExceptions::VertexNotFoundException,
 				LogicExceptions::EdgeNotFoundException) {
 	VertexIF * vertex { };
@@ -120,7 +211,7 @@ EdgeIF * GraphIF::findEdge(VertexIF * const sourceVertex,
 	throw LogicExceptions::VertexNotFoundException();
 }
 
-EdgeIF * GraphIF::findEdge(VertexIdx const sourceVertexIdx,
+EdgeIF * GraphIF::findOutputEdge(VertexIdx const sourceVertexIdx,
 		VertexIdx const targetVertexIdx)
 				throw (LogicExceptions::VertexNotFoundException,
 				LogicExceptions::EdgeNotFoundException) {
@@ -152,24 +243,52 @@ bool GraphIF::hasNextVertex() {
 	return this->vertexSet->hasNext();
 }
 
+bool GraphIF::hasNextVertex(IteratorId const iteratorId) {
+	return this->vertexSet->hasNext(iteratorId);
+}
+
 bool GraphIF::hasNextVertex(Visibility const visibility) {
 	return this->vertexSet->hasNext(visibility);
+}
+
+bool GraphIF::hasNextVertex(IteratorId const iteratorId,
+		Visibility const visibility) {
+	return this->vertexSet->hasNext(iteratorId, visibility);
 }
 
 bool GraphIF::hasAnyVertex() {
 	return this->vertexSet->Iterable::hasAny();
 }
 
+bool GraphIF::hasAnyVertex(IteratorId const iteratorId) {
+	return this->vertexSet->Iterable::hasAny(iteratorId);
+}
+
 bool GraphIF::hasAnyVertex(Visibility const visibility) {
 	return this->vertexSet->hasAny(visibility);
+}
+
+bool GraphIF::hasAnyVertex(IteratorId const iteratorId,
+		Visibility const visibility) {
+	return this->vertexSet->hasAny(iteratorId, visibility);
 }
 
 VertexIF * GraphIF::nextVertex() {
 	return this->vertexSet->next();
 }
 
+VertexIF * GraphIF::nextVertex(IteratorId const iteratorId) {
+	return this->vertexSet->next(iteratorId);
+}
+
 VertexIF * GraphIF::nextVertex(Visibility visibility) {
 	return this->vertexSet->hasNext(visibility) ?
+			this->vertexSet->next() : nullptr;
+}
+
+VertexIF * GraphIF::nextVertex(IteratorId const iteratorId,
+		Visibility visibility) {
+	return this->vertexSet->hasNext(iteratorId, visibility) ?
 			this->vertexSet->next() : nullptr;
 }
 
@@ -198,12 +317,12 @@ void GraphIF::beginEdge(IteratorId const iteratorId) {
 	this->edgeSet->begin(iteratorId);
 }
 
-bool GraphIF::hasNextEdge(IteratorId const iteratorId) {
-	return this->edgeSet->hasNext(iteratorId);
-}
-
 bool GraphIF::hasNextEdge() {
 	return this->edgeSet->hasNext();
+}
+
+bool GraphIF::hasNextEdge(IteratorId const iteratorId) {
+	return this->edgeSet->hasNext(iteratorId);
 }
 
 bool GraphIF::hasNextEdge(Visibility const visibility) {
@@ -213,6 +332,25 @@ bool GraphIF::hasNextEdge(Visibility const visibility) {
 bool GraphIF::hasNextEdge(IteratorId const iteratorId,
 		Visibility const visibility) {
 	return this->edgeSet->hasNext(iteratorId, visibility);
+}
+
+bool GraphIF::hasNextEdge(Connectivity const connectivity) {
+	return this->edgeSet->hasNext(connectivity);
+}
+
+bool GraphIF::hasNextEdge(IteratorId const iteratorId,
+		Connectivity const connectivity) {
+	return this->edgeSet->hasNext(iteratorId, connectivity);
+}
+
+bool GraphIF::hasNextEdge(Connectivity const connectivity,
+		Visibility const visibility) {
+	return this->edgeSet->hasNext(connectivity, visibility);
+}
+
+bool GraphIF::hasNextEdge(IteratorId const iteratorId,
+		Connectivity const connectivity, Visibility const visibility) {
+	return this->edgeSet->hasNext(iteratorId, connectivity, visibility);
 }
 
 bool GraphIF::hasAnyEdge() {
@@ -230,6 +368,29 @@ bool GraphIF::hasAnyEdge(Visibility const visibility) {
 bool GraphIF::hasAnyEdge(IteratorId const iteratorId,
 		Visibility const visibility) {
 	return this->edgeSet->hasAny(iteratorId, visibility);
+}
+
+bool GraphIF::hasAnyEdge(Connectivity const connectivity) {
+	this->edgeSet->begin();
+	return this->edgeSet->hasNext(connectivity);
+}
+
+bool GraphIF::hasAnyEdge(IteratorId const iteratorId,
+		Connectivity const connectivity) {
+	this->edgeSet->begin();
+	return this->edgeSet->hasNext(iteratorId, connectivity);
+}
+
+bool GraphIF::hasAnyEdge(Connectivity const connectivity,
+		Visibility const visibility) {
+	this->edgeSet->begin();
+	return this->edgeSet->hasNext(connectivity, visibility);
+}
+
+bool GraphIF::hasAnyEdge(IteratorId const iteratorId,
+		Connectivity const connectivity, Visibility const visibility) {
+	this->edgeSet->begin();
+	return this->edgeSet->hasNext(iteratorId, connectivity, visibility);
 }
 
 EdgeIF * GraphIF::nextEdge() {
@@ -252,12 +413,36 @@ void GraphIF::removeEdgeIterator(IteratorId const iteratorId) {
 	return this->edgeSet->removeIterator(iteratorId);
 }
 
+void GraphIF::showAllEdges() {
+	this->edgeSet->showAll();
+}
+
+void GraphIF::showAllEdges(IteratorId const iteratorId) {
+	this->edgeSet->showAll(iteratorId);
+}
+
 void GraphIF::hideAllEdges() {
 	this->edgeSet->hideAll();
 }
 
 void GraphIF::hideAllEdges(IteratorId const iteratorId) {
 	this->edgeSet->hideAll(iteratorId);
+}
+
+void GraphIF::disconnectAllEdges() {
+	this->edgeSet->disconnectAll();
+}
+
+void GraphIF::disconnectAllEdges(IteratorId const iteratorId) {
+	this->edgeSet->disconnectAll(iteratorId);
+}
+
+ConnectivityList GraphIF::storeEdgeConnectivity() {
+	return this->edgeSet->storeConnectivity();
+}
+
+ConnectivityList GraphIF::storeEdgeConnectivity(IteratorId const iteratorId) {
+	return this->edgeSet->storeConnectivity(iteratorId);
 }
 
 VisibilityList GraphIF::storeEdgeVisibility() {
@@ -268,11 +453,22 @@ VisibilityList GraphIF::storeEdgeVisibility(IteratorId const iteratorId) {
 	return this->edgeSet->storeVisibility(iteratorId);
 }
 
-void GraphIF::restoreVisibilityAllEdges(VisibilityList visibilityList) {
+void GraphIF::restoreConnectivityAllEdges(
+		ConnectivityList const & connectivityList) {
+	this->edgeSet->restoreConnectivityAll(connectivityList);
+}
+
+void GraphIF::restoreConnectivityAllEdges(
+		ConnectivityList const & connectivityList,
+		IteratorId const iteratorId) {
+	this->edgeSet->restoreConnectivityAll(connectivityList, iteratorId);
+}
+
+void GraphIF::restoreVisibilityAllEdges(VisibilityList const & visibilityList) {
 	this->edgeSet->restoreVisibilityAll(visibilityList);
 }
 
-void GraphIF::restoreVisibilityAllEdges(VisibilityList visibilityList,
+void GraphIF::restoreVisibilityAllEdges(VisibilityList const & visibilityList,
 		IteratorId const iteratorId) {
 	this->edgeSet->restoreVisibilityAll(visibilityList, iteratorId);
 }
@@ -310,6 +506,10 @@ std::string GraphIF::edgeSetToString(Visibility edgeVisibility) {
 
 EdgeCount GraphIF::getNumberOfEdges() const {
 	return this->edgeSet->size();
+}
+
+EdgeCount GraphIF::getNumberOfEdges(Connectivity const connectivity) const {
+	return this->edgeSet->size(connectivity);
 }
 
 EdgeCount GraphIF::getNumberOfEdges(Visibility const visibility) const {

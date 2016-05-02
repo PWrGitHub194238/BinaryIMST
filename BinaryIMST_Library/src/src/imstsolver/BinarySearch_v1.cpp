@@ -11,12 +11,16 @@
 #include <log4cxx/logger.h>
 #include <algorithm>
 #include <cmath>
+#include <iostream>
+#include <list>
 #include <map>
 #include <memory>
 #include <string>
 #include <utility>
 #include <vector>
 
+#include "../../include/enums/Connectivity.hpp"
+#include "../../include/enums/EdgeConnectionType.hpp"
 #include "../../include/enums/Visibility.hpp"
 #include "../../include/log/bundle/Bundle.hpp"
 #include "../../include/log/utils/LogStringUtils.hpp"
@@ -39,23 +43,25 @@ const static log4cxx::LoggerPtr logger(
 //*************************************** PRIVATE FUNCTIONS ****************************************//
 
 void BinarySearch_v1::shrinkEdgeSet(EdgeSetIF* unboundedMSTSolution) {
-	graph->hideAllEdges();
+	connectivityList = graph->storeEdgeConnectivity();
 	INFO(logger, LogBundleKey::BS_V1_SHRINK_EDGE_SET, baseMSTSolution->size(),
 			LogStringUtils::edgeSetVisualization(baseMSTSolution, "\t").c_str(),
 			unboundedMSTSolution->size(),
 			LogStringUtils::edgeSetVisualization(unboundedMSTSolution, "\t").c_str());
+	graph->disconnectAllEdges();
+
 	baseMSTSolution->begin();
 	while (baseMSTSolution->hasNext()) {
-		baseMSTSolution->next()->show();
+		baseMSTSolution->next()->connect(EdgeConnectionType::UNDIRECTED);
 	}
 	unboundedMSTSolution->begin();
 	while (unboundedMSTSolution->hasNext()) {
-		unboundedMSTSolution->next()->show();
+		unboundedMSTSolution->next()->connect(EdgeConnectionType::UNDIRECTED);
 	}
 	INFO(logger, LogBundleKey::BS_V1_SHRUNKEN_EDGE_SET,
-			graph->getNumberOfEdges(Visibility::VISIBLE),
-			LogStringUtils::edgeSetVisualization(graph, Visibility::VISIBLE,
-					"\t").c_str());
+			graph->getNumberOfEdges(Connectivity::CONNECTED),
+			LogStringUtils::edgeSetVisualization(graph, Connectivity::CONNECTED,
+					Visibility::VISIBLE, "\t").c_str());
 }
 
 void BinarySearch_v1::edgeCostsPreConfiguration() {
@@ -63,9 +69,9 @@ void BinarySearch_v1::edgeCostsPreConfiguration() {
 	EdgeIF* edge { };
 	graph->beginEdge();
 	INFO(logger, LogBundleKey::BS_V1_EDGE_COST_PREPROCESSING,
-			"c'_[e} = c_{e_{i}} + (mi^2 + i)/(m + 1)^3");
+			"c'_{e_{i}} = c_{e_{i}} + (mi^2 + i)/(m + 1)^3");
 	edgeIdx = 1;
-	while (graph->hasNextEdge(Visibility::VISIBLE)) {
+	while (graph->hasNextEdge(Connectivity::CONNECTED, Visibility::VISIBLE)) {
 		edge = graph->nextEdge();
 		INFO(logger, LogBundleKey::BS_V1_EDGE_COST_TEMP_CHANGE,
 				LogStringUtils::edgeCostChanged(edge,
@@ -157,7 +163,7 @@ void BinarySearch_v1::updateGraphEdgeCosts(LambdaValue lamdaParameter) {
 	while (baseMSTSolution->hasNext()) {
 		INFO(logger, LogBundleKey::BS_V1_EDGE_COST_TEMP_CHANGE,
 				LogStringUtils::edgeCostChanged(baseMSTSolution->current(),
-						baseMSTEdgeCosts->current(), true).c_str());
+						baseMSTEdgeCosts->current() - lamdaParameter, true).c_str());
 		baseMSTSolution->next()->setEdgeCost(
 				baseMSTEdgeCosts->next() - lamdaParameter);
 	}
@@ -169,29 +175,39 @@ EdgeIdx BinarySearch_v1::findMinEdgeIdxForLambdaParam(
 	LambdaParamMap lambdaMap = lambdaSet.at(baseMSTEdgeIdx);
 	TRACE(logger, LogBundleKey::BS_V1_FIND_MIN_EDGE_IDX_LAMBDA, baseMSTEdgeIdx,
 			lowerBound);
-	while (lambdaMap.at(jEdgeIdx) < lowerBound) {
+	while (lambdaMap.at(jEdgeIdx) < lowerBound
+			&& this->maxLambdaSetKey != jEdgeIdx) {
 		TRACE(logger, LogBundleKey::BS_V1_SEARCHING_MIN_EDGE_IDX_LAMBDA,
 				lowerBound, baseMSTEdgeIdx, jEdgeIdx, lambdaMap.at(jEdgeIdx));
 		jEdgeIdx += 1;
 	}
-	TRACE(logger, LogBundleKey::BS_V1_FOUND_MIN_EDGE_IDX_LAMBDA, baseMSTEdgeIdx,
-			lowerBound, jEdgeIdx);
-	return jEdgeIdx;
+
+	TRACE(logger,
+			(lambdaMap.at(jEdgeIdx) < lowerBound) ?
+					LogBundleKey::BS_V1_NO_FOUND_MIN_EDGE_IDX_LAMBDA :
+					LogBundleKey::BS_V1_FOUND_MIN_EDGE_IDX_LAMBDA,
+			baseMSTEdgeIdx, lowerBound,
+			lambdaMap.at(jEdgeIdx) < lowerBound ? jEdgeIdx + 1 : jEdgeIdx);
+	return lambdaMap.at(jEdgeIdx) < lowerBound ? jEdgeIdx + 1 : jEdgeIdx;
 }
 
 EdgeIdx BinarySearch_v1::findMaxEdgeidxForLambdaParam(
 		EdgeIdx const baseMSTEdgeIdx) {
-	EdgeIdx jEdgeIdx { this->maxLambdaSetKey };
+	EdgeIdx jEdgeIdx { this->maxLambdaSetKey + 1 };
 	LambdaParamMap lambdaMap = lambdaSet.at(baseMSTEdgeIdx);
 	TRACE(logger, LogBundleKey::BS_V1_FIND_MAX_EDGE_IDX_LAMBDA, baseMSTEdgeIdx,
 			upperBound);
-	while (lambdaMap.at(jEdgeIdx) > upperBound) {
+	do {
+		jEdgeIdx -= 1;
 		TRACE(logger, LogBundleKey::BS_V1_SEARCHING_MAX_EDGE_IDX_LAMBDA,
 				lambdaMap.at(jEdgeIdx), baseMSTEdgeIdx, jEdgeIdx, upperBound);
-		jEdgeIdx -= 1;
-	}
-	TRACE(logger, LogBundleKey::BS_V1_FOUND_MAX_EDGE_IDX_LAMBDA, baseMSTEdgeIdx,
-			upperBound, jEdgeIdx);
+	} while (lambdaMap.at(jEdgeIdx) > upperBound && jEdgeIdx > 0);
+
+	TRACE(logger,
+			(lambdaMap.at(jEdgeIdx) > upperBound) ?
+					LogBundleKey::BS_V1_NO_FOUND_MAX_EDGE_IDX_LAMBDA :
+					LogBundleKey::BS_V1_FOUND_MAX_EDGE_IDX_LAMBDA,
+			baseMSTEdgeIdx, upperBound, jEdgeIdx);
 	return jEdgeIdx;
 }
 
@@ -227,7 +243,6 @@ EdgeSetIF* BinarySearch_v1::binarySearchForSolution(EdgeCount k,
 					lambdaIdx + 1);
 			lambdaIdxLow = lambdaIdx + 1;
 			MemoryUtils::removeCollection(mstSolution, false);
-
 		} else if (k > differentEdges) {
 			INFO(logger, LogBundleKey::BS_V1_MST_BIN_SEARCH_TO_BIGGER,
 					lambdaFeasibleParameterSet.at(lambdaIdx), differentEdges, k,
@@ -261,7 +276,8 @@ LambdaValue BinarySearch_v1::findMedianValue(
 			lambdaFeasibleSeededParameterArray.end());
 }
 
-EdgeSetIF* BinarySearch_v1::resolve(EdgeCount k, VertexIF* initialVertex) {
+EdgeSetIF* BinarySearch_v1::resolve(IncrementalParam k,
+		VertexIF* initialVertex) {
 	EdgeSetIF* kboundedMSTSolution { };
 	EdgeSetIF* unboundedMSTSolution { };
 	if (this->isCostChanged && k > 0) {
@@ -279,7 +295,7 @@ EdgeSetIF* BinarySearch_v1::resolve(EdgeCount k, VertexIF* initialVertex) {
 
 			MemoryUtils::removeCollection(baseMSTSolution, false);
 			this->baseMSTSolution = unboundedMSTSolution;
-			return new EdgeSetImpl(this->baseMSTSolution);
+			return new EdgeSetImpl { this->baseMSTSolution, false };
 		} else {
 			INFO(logger, LogBundleKey::BS_V1_UNBOUNDED_UNACCEPTABLE, k);
 
@@ -292,17 +308,18 @@ EdgeSetIF* BinarySearch_v1::resolve(EdgeCount k, VertexIF* initialVertex) {
 			kboundedMSTSolution = resolve(k);
 			delete this->baseMSTEdgeCosts;
 			restoreBaseEdgeCosts();
+			graph->restoreConnectivityAllEdges(connectivityList);
 
 			MemoryUtils::removeCollection(baseMSTSolution, false);
 			this->baseMSTSolution = kboundedMSTSolution;
-			return new EdgeSetImpl(this->baseMSTSolution);
+			return new EdgeSetImpl { this->baseMSTSolution, false };
 		}
 	}
 	INFO_NOARG(logger, LogBundleKey::BS_V1_NO_CHANGE);
-	return new EdgeSetImpl(this->baseMSTSolution);
+	return new EdgeSetImpl { this->baseMSTSolution, false };
 }
 
-EdgeSetIF * BinarySearch_v1::resolve(EdgeCount k) {
+EdgeSetIF * BinarySearch_v1::resolve(IncrementalParam k) {
 	EdgeIdx i { };
 	EdgeIdx j { };
 	EdgeIdx l { };
@@ -315,6 +332,7 @@ EdgeSetIF * BinarySearch_v1::resolve(EdgeCount k) {
 
 	LambdaValue lambdaCurrentValue { };
 
+	LambdaValue seedValue { };
 	LambdaCount lambdaSeedValue { };
 	LambdaParamPairMap lambdaSeedArray;	//TODO baaaardzo duży overkill, po co sumować oddzielnie H(i) jak potem i tak je zaraz sumujemy
 
@@ -334,6 +352,17 @@ EdgeSetIF * BinarySearch_v1::resolve(EdgeCount k) {
 		countArray[i] =
 				(minJEdgeIdxArray[i] <= maxJEdgeIdxArray[i]) ?
 						maxJEdgeIdxArray[i] - minJEdgeIdxArray[i] + 1 : 0;
+		int a = 0;
+		for (auto& l : lambdaSet.at(i)) {
+			lambdaCurrentValue = l.second;
+			if (lowerBound <= lambdaCurrentValue
+					&& lambdaCurrentValue <= upperBound) {
+				a += 1;
+			}
+		}
+		if (countArray[i] != a) {
+			std::cout << countArray[i] << " " << a << std::endl;
+		}
 	}
 
 	for (i = 0; i < this->maxLambdaSetKey + 1; i += 1) {
@@ -358,6 +387,11 @@ EdgeSetIF * BinarySearch_v1::resolve(EdgeCount k) {
 				if (lowerBound <= lambdaCurrentValue
 						&& lambdaCurrentValue <= upperBound) {
 					lambdaFeasibleParameterArray.push_back(lambdaCurrentValue);
+				} else {
+					std::cout << lowerBound << " <= (" << (itBegin->first)
+							<< ":" << (ittBegin->first) << ") = "
+							<< lambdaCurrentValue << " <= " << upperBound
+							<< std::endl;
 				}
 			}
 		}
@@ -371,11 +405,12 @@ EdgeSetIF * BinarySearch_v1::resolve(EdgeCount k) {
 
 	lambdaSeedValue = floor(
 			(double) totalLambdaParameterCounter
-					/ LAMBDA_PARAMETER_SEED_THRESHOLD_MULT * maxLambdaSetKey);
+					/ (LAMBDA_PARAMETER_SEED_THRESHOLD_MULT * maxLambdaSetKey));
 
 	for (i = 0; i < this->maxLambdaSetKey + 1; i += 1) {
-		k = maxJEdgeIdxArray[i];
-		for (j = minJEdgeIdxArray[i] + lambdaSeedValue - 1; j < k; j +=
+		seedValue = maxJEdgeIdxArray[i];
+		lambdaSeedArray.insert(std::make_pair(i, LambdaParamMap { }));
+		for (j = minJEdgeIdxArray[i] + lambdaSeedValue - 1; j < seedValue; j +=
 				lambdaSeedValue) {
 			lambdaCurrentValue = lambdaSet.at(i).at(j);
 			if (lowerBound <= lambdaCurrentValue
@@ -386,11 +421,9 @@ EdgeSetIF * BinarySearch_v1::resolve(EdgeCount k) {
 		}
 	}
 
-	for (i = 0; i < this->maxLambdaSetKey + 1; i += 1) {
-		LambdaParamMap::const_iterator itEnd = lambdaSeedArray.at(i).end();
-		for (LambdaParamMap::const_iterator itBegin =
-				lambdaSeedArray.at(i).begin(); itBegin != itEnd; ++itBegin) {
-			lambdaFeasibleParameterArray.push_back(itBegin->second);
+	for (auto& lambdaMap : lambdaSeedArray) {
+		for (auto& lambdaValue : lambdaMap.second) {
+			lambdaFeasibleParameterArray.push_back(lambdaValue.second);
 		}
 	}
 
@@ -411,8 +444,8 @@ EdgeSetIF * BinarySearch_v1::resolve(EdgeCount k) {
 				LogStringUtils::mstEdgeDifference(this->baseMSTSolution,
 						newMSTSolution, "\t").c_str());
 		return newMSTSolution;
-	} else if (k > differentEdges) {
-		INFO(logger, LogBundleKey::BS_V1_IMST_BIN_SEARCH_TO_BIGGER,
+	} else if (k < differentEdges) { // jeśli innych krawędzi jest za dużo to trzeba zwiększyć LP lambdy
+		INFO(logger, LogBundleKey::BS_V1_IMST_BIN_SEARCH_TO_BIGGER_LAMBDA,
 				lambdaCurrentValue, newMSTSolution->getTotalEdgeCost(),
 				LogStringUtils::edgeSetVisualization(newMSTSolution, "\t").c_str(),
 				differentEdges,
@@ -420,8 +453,9 @@ EdgeSetIF * BinarySearch_v1::resolve(EdgeCount k) {
 						newMSTSolution, "\t").c_str(), k, lowerBound,
 				lambdaCurrentValue);
 		lowerBound = lambdaCurrentValue;
-	} else {
-		INFO(logger, LogBundleKey::BS_V1_IMST_BIN_SEARCH_TO_LOWER,
+		MemoryUtils::removeCollection(newMSTSolution, false);
+	} else { // jeśli innych krawędzi jest za mało to trzeba zmniejszyć UP lambdy
+		INFO(logger, LogBundleKey::BS_V1_IMST_BIN_SEARCH_TO_LOWER_LAMBDA,
 				lambdaCurrentValue, newMSTSolution->getTotalEdgeCost(),
 				LogStringUtils::edgeSetVisualization(newMSTSolution, "\t").c_str(),
 				differentEdges,
@@ -429,6 +463,7 @@ EdgeSetIF * BinarySearch_v1::resolve(EdgeCount k) {
 						newMSTSolution, "\t").c_str(), k, upperBound,
 				lambdaCurrentValue);
 		upperBound = lambdaCurrentValue;
+		MemoryUtils::removeCollection(newMSTSolution, false);
 	}
 	return resolve(k);
 }
@@ -453,7 +488,7 @@ BinarySearch_v1::BinarySearch_v1(MSTSolverIF* const mstSolver,
 	// Nie zachowujemy kosztóœ bazowego rozwiązania, bo może się okazać, że nie potrzeba ich modyfikować.
 	this->baseMSTEdgeCosts = nullptr;
 	this->lambdaSet = LambdaParamPairMap { };
-	this->maxLambdaSetKey = graph->getNumberOfVertices() - 2;
+	this->maxLambdaSetKey = graph->getNumberOfVertices() - 1 - 1;
 }
 
 BinarySearch_v1::BinarySearch_v1(MSTSolverIF* const mstSolver,
@@ -484,6 +519,11 @@ BinarySearch_v1::BinarySearch_v1(MSTSolverIF* const mstSolver,
 		GraphIF* const graph, LambdaValue lowerBound, LambdaValue upperBound) :
 		BinarySearch_v1(mstSolver, graph, nullptr, nullptr, lowerBound,
 				upperBound) {
+}
+
+BinarySearch_v1::BinarySearch_v1(MSTSolverIF* const mstSolver,
+		GraphIF* const graph, EdgeSetIF* const baseSolution) :
+		BinarySearch_v1(mstSolver, graph, baseSolution, nullptr, 0, 0) {
 }
 
 BinarySearch_v1::BinarySearch_v1(MSTSolverIF* const mstSolver,

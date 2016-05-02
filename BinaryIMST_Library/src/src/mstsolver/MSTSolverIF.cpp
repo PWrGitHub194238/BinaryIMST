@@ -59,10 +59,10 @@ EdgeSetIF * MSTSolverIF::getMST()
 
 EdgeSetIF * MSTSolverIF::getMST(EdgeSetIF* visibleSet)
 		throw (GraphExceptions::DisconnectedGraphException) {
-	VisibilityList visibilityList = GraphUtils::shrinkVisibilityToSet(graph,
-			visibleSet);
+	ConnectivityList connectivityList = GraphUtils::shrinkConnectivityToSet(
+			graph, visibleSet);
 	EdgeSetIF* minimumSpanningTree = getMST();
-	graph->restoreVisibilityAllEdges(visibilityList);
+	graph->restoreConnectivityAllEdges(connectivityList);
 	return minimumSpanningTree;
 }
 

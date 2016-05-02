@@ -10,11 +10,176 @@
 
 enum LogBundleKey {
 
-	//*********************************** LP_MSTSolverIF.cpp ***********************************//
+	//*********************************** CPLEX_LP_AIMSTSolver.cpp ***********************************//
 	//**************** Trace ****************//
-	LPMSTIF_INIT,
 	//**************** Debug ****************//
 	//**************** Info *****************//
+	AIMST_THREAD_RUN,
+	AIMST_THREAD_END,
+	AIMST_RESOLVE_INIT,
+	AIMST_RESOLVE_RUN_THREAD,
+	AIMST_RESOLVE_JOIN,
+	AIMST_RESOLVE_JOINED,
+	AIMST_RESOLVE_THREAD_SOL,
+	AIMST_RESOLVE_THREAD_BETTER_SOL,
+	AIMST_RESOLVE_THREAD_SOLUTION,
+
+	//**************** Warn *****************//
+	AIMST_RESOLVE_NO_SCENARIO,
+
+	//**************** Error ****************//
+	//**************** Fatal ****************//
+
+	//*********************************** CPLEX_LP_IMSTSolverIF.cpp ***********************************//
+	//**************** Trace ****************//
+	CPLPIMSTIF_INIT,
+	//**************** Debug ****************//
+	//**************** Info *****************//
+	CPLPIMSTIF_IF_FORCE_NEW_BASE_MST,
+	CPLPIMSTIF_IF_BASE_MST_NOT_CHANGED,
+	CPLPIMSTIF_BUILD_EDGE_SET,
+	CPLPIMSTIF_BUILD_EDGE_SET_ADD,
+	CPLPIMSTIF_SOLUTION,
+	CPLPIMSTIF_IF_CHANGE_EDGE_COST,
+	CPLPIMSTIF_IF_CHANGE_EDGE_NOT_REQUIRED,
+
+	//**************** Warn *****************//
+	//**************** Error ****************//
+	CPLPIMSTIF_SOLVER_ERROR,
+
+	//**************** Fatal ****************//
+
+	//*********************************** CPLEX_LP_IMSTSolver_v2.cpp ***********************************//
+	//**************** Trace ****************//
+	//**************** Debug ****************//
+	//**************** Info *****************//
+	CPLPIMST2_BUILD_MODEL,
+	CPLPIMST2_BUILD_MODEL_FLOW_CONSTRAINTS,
+	CPLPIMST2_BUILD_MODEL_FLOW_SRC_CONSTRAINT,
+	CPLPIMST2_BUILD_MODEL_FLOW_CONSTRAINT,
+	CPLPIMST2_BUILD_MODEL_FLOW_CONSTRAINT_ADD_OUT,
+	CPLPIMST2_BUILD_MODEL_FLOW_CONSTRAINT_ADD_IN,
+	CPLPIMST2_BUILD_MODEL_FLOW_BOUNDS_CONSTRAINTS,
+	CPLPIMST2_BUILD_MODEL_FLOW_BOUNDS_CONSTRAINT,
+	CPLPIMST2_BUILD_MODEL_IMST_CONSTRAINT,
+	CPLPIMST2_BUILD_MODEL_INC_CONSTRTAINT,
+	CPLPIMST2_BUILD_MODEL_ADD_VAR_CONSTRAINT_1,
+	CPLPIMST2_BUILD_MODEL_ADD_VAR_CONSTRAINT_0,
+	CPLPIMST2_BUILD_MODEL_DROP_VAR_CONSTRAINT_1,
+	CPLPIMST2_BUILD_MODEL_DROP_VAR_CONSTRAINT_0,
+	CPLPIMST2_BUILD_MODEL_SOLUTION_VAR_CONSTRAINT,
+	CPLPIMST2_BUILD_MODEL_GOAL_CONSTRAINT,
+	CPLPIMST2_BUILD_MODEL_GOAL_ADD,
+	CPLPIMST2_BUILD_MODEL_GOAL_INCR_CONSTRAINT,
+	CPLPIMST2_BUILD_MODEL_GOAL_INCR_ADD,
+	CPLPIMST2_SOLVE_INIT,
+	CPLPIMST2_SOLUTION_FOUND,
+	CPLPIMST2_SOL_VAR_VALUE_OLD,
+	CPLPIMST2_SOL_VAR_VALUE_ADDED,
+	CPLPIMST2_SOL_VAR_VALUE_DROPPED,
+	CPLPIMST2_EDGE_VAR_GEN,
+	CPLPIMST2_EDGE_VAR_ADD,
+	CPLPIMST2_EDGE_ADD_DROP_VAR_GEN,
+	CPLPIMST2_EDGE_ADD_VAR_ADD,
+	CPLPIMST2_EDGE_DROP_VAR_ADD,
+	CPLPIMST2_FLOW_GEN,
+	CPLPIMST2_FLOW_GEN_INIT_NODE,
+	CPLPIMST2_FLOW_GEN_VAR,
+
+	//**************** Warn *****************//
+	CPLPIMST2_SOLVE_NO_SOLUTION,
+
+	//**************** Error ****************//
+	//**************** Fatal ****************//
+
+	//*********************************** CPLEX_LP_MSTSolverIF.cpp ***********************************//
+	//**************** Trace ****************//
+	CPLPMSTIF_INIT,
+	//**************** Debug ****************//
+	//**************** Info *****************//
+	CPLPMSTIF_BUILD_EDGE_SET,
+	CPLPMSTIF_BUILD_EDGE_SET_ADD,
+	CPLPMSTIF_BUILD_RAW_SET,
+	CPLPMSTIF_SOLUTION,
+
+	//**************** Warn *****************//
+	//**************** Error ****************//
+	CPLPMSTIF_SOLVER_ERROR,
+
+	//**************** Fatal ****************//
+
+	//*********************************** CPLEX_LP_MSTSolver_v2.cpp ***********************************//
+	//**************** Trace ****************//
+	//**************** Debug ****************//
+	//**************** Info *****************//
+	CPLPMST2_BUILD_MODEL,
+	CPLPMST2_BUILD_MODEL_FLOW_CONSTRAINTS,
+	CPLPMST2_BUILD_MODEL_FLOW_SRC_CONSTRAINT,
+	CPLPMST2_BUILD_MODEL_FLOW_CONSTRAINT,
+	CPLPMST2_BUILD_MODEL_FLOW_CONSTRAINT_ADD_OUT,
+	CPLPMST2_BUILD_MODEL_FLOW_CONSTRAINT_ADD_IN,
+	CPLPMST2_BUILD_MODEL_FLOW_BOUNDS_CONSTRAINTS,
+	CPLPMST2_BUILD_MODEL_FLOW_BOUNDS_CONSTRAINT,
+	CPLPMST2_BUILD_MODEL_MST_CONSTRAINT,
+	CPLPMST2_BUILD_MODEL_GOAL_CONSTRAINT,
+	CPLPMST2_BUILD_MODEL_GOAL_ADD,
+	CPLPMST2_SOLVE_INIT,
+	CPLPMST2_SOLUTION_FOUND,
+	CPLPMST2_EDGE_VAR_GEN,
+	CPLPMST2_EDGE_VAR_ADD,
+	CPLPMST2_FLOW_GEN,
+	CPLPMST2_FLOW_GEN_INIT_NODE,
+	CPLPMST2_FLOW_GEN_VAR,
+
+	//**************** Warn *****************//
+	CPLPMST2_SOLVE_NO_SOLUTION,
+
+	//**************** Error ****************//
+	//**************** Fatal ****************//
+
+	//*********************************** CPLEX_LP_MSTSolver_v3.cpp ***********************************//
+	//**************** Trace ****************//
+	//**************** Debug ****************//
+	//**************** Info *****************//
+	CPLPMST3_BUILD_MODEL,
+	CPLPMST3_BUILD_MODEL_MOVES_SRC,
+	CPLPMST3_BUILD_MODEL_MOVES_SRC1,
+	CPLPMST3_BUILD_MODEL_MOVES_OUT_TO_SRC,
+	CPLPMST3_BUILD_MODEL_MOVES_FROM_SRC_OUT,
+	CPLPMST3_BUILD_MODEL_PASS_MOVES,
+	CPLPMST3_BUILD_MODEL_PASS_MOVES1,
+	CPLPMST3_BUILD_MODEL_PASS_IN_NODE,
+	CPLPMST3_BUILD_MODEL_PASS_IN_TO_NODE,
+	CPLPMST3_BUILD_MODEL_PASS_FROM_NODE_OUT,
+	CPLPMST3_BUILD_MODEL_STORE,
+	CPLPMST3_BUILD_MODEL_STORE1,
+	CPLPMST3_BUILD_MODEL_STORE_TO_NODE,
+	CPLPMST3_BUILD_MODEL_STORE_FROM_NODE,
+	CPLPMST3_BUILD_MODEL_FLOW_CONSTRAINTS,
+	CPLPMST3_BUILD_MODEL_FLOW_CONSTRAINTS1,
+	CPLPMST3_BUILD_MODEL_MST_CONSTRAINT,
+	CPLPMST3_BUILD_MODEL_GOAL_CONSTRAINT,
+	CPLPMST3_BUILD_MODEL_GOAL_ADD,
+	CPLPMST3_SOLVE_INIT,
+	CPLPMST3_SOLUTION_FOUND,
+	CPLPMST3_EDGE_VAR_GEN,
+	CPLPMST3_EDGE_VAR_ADD,
+	CPLPMST3_FLOW_GEN,
+	CPLPMST3_FLOW_GEN_INIT_NODE,
+	CPLPMST3_FLOW_GEN_COMMODITY,
+	CPLPMST3_FLOW_GEN_COMMODITY_VAR,
+
+	//**************** Warn *****************//
+	CPLPMST3_SOLVE_NO_SOLUTION,
+
+	//**************** Error ****************//
+	//**************** Fatal ****************//
+
+	//*********************************** CPLEXUtils.cpp ***********************************//
+	//**************** Trace ****************//
+	//**************** Debug ****************//
+	//**************** Info *****************//
+	CPU_EDGESET_TO_RAW,
 
 	//**************** Warn *****************//
 	//**************** Error ****************//
@@ -229,9 +394,11 @@ enum LogBundleKey {
 	BS_V1_ADD_LAMBDA_PARAM_TO_SET,
 	BS_V1_FIND_MIN_EDGE_IDX_LAMBDA,
 	BS_V1_SEARCHING_MIN_EDGE_IDX_LAMBDA,
+	BS_V1_NO_FOUND_MIN_EDGE_IDX_LAMBDA,
 	BS_V1_FOUND_MIN_EDGE_IDX_LAMBDA,
 	BS_V1_FIND_MAX_EDGE_IDX_LAMBDA,
 	BS_V1_SEARCHING_MAX_EDGE_IDX_LAMBDA,
+	BS_V1_NO_FOUND_MAX_EDGE_IDX_LAMBDA,
 	BS_V1_FOUND_MAX_EDGE_IDX_LAMBDA,
 	BS_V1_IMST_BIN_SEARCH_GEN_LAMBDA_SET,
 
@@ -261,8 +428,8 @@ enum LogBundleKey {
 	BS_V1_IMST_BIN_SEARCH_LAMBDA_COUNT,
 	BS_V1_IMST_BIN_SEARCH_MEDIAN,
 	BS_V1_IMST_BIN_SEARCH_SOLUTION,
-	BS_V1_IMST_BIN_SEARCH_TO_BIGGER,
-	BS_V1_IMST_BIN_SEARCH_TO_LOWER,
+	BS_V1_IMST_BIN_SEARCH_TO_BIGGER_LAMBDA,
+	BS_V1_IMST_BIN_SEARCH_TO_LOWER_LAMBDA,
 
 	//**************** Warn *****************//
 	BS_V1_MST_BIN_SEARCH_PART_SOLUTION,
@@ -309,9 +476,18 @@ enum LogBundleKey {
 	TS_FIND_NEIGHBORHOOD_TABU_CRIT_OK,
 	TS_FIND_NEIGHBORHOOD_BETTER_MOVE_FOUND,
 	TS_FIND_NEIGHBORHOOD_END,
+	TS_FIND_NEIGHBORHOOD_ADD_TABU_DROP,
+	TS_FIND_NEIGHBORHOOD_ADD_TABU_ADD,
 	TS_UPDATE_TABU,
-	TS_ADD_TABU_DROP,
-	TS_ADD_TABU_ADD,
+	TS_RESOLVE_CHECK_STOP,
+	TS_RESOLVE_INIT,
+	TS_RESOLVE_INIT_RANDOM,
+	TS_RESOLVE_INIT_SOL,
+	TS_RESOLVE_NEIGHBOR_SOL,
+	TS_RESOLVE_STATE,
+	TS_RESOLVE_BETTER,
+	TS_RESOLVE_RESTART,
+	TS_RESOLVE_END,
 
 	//**************** Warn *****************//
 

@@ -7,19 +7,21 @@
 
 #include "../../include/cplex/CPLEX_LP_MSTSolverIF.hpp"
 
+#include <ilconcert/iloalg.h>
 #include <ilconcert/iloextractable.h>
 #include <ilconcert/ilosys.h>
 #include <log4cxx/helpers/messagebuffer.h>
 #include <log4cxx/logger.h>
-#include <iostream>
+#include <map>
 #include <memory>
-#include <string>
+#include <sstream>
+#include <utility>
 
-#include "../../include/cplex/CPLEX_LP_MSTSolverIF.hpp"
 #include "../../include/enums/Visibility.hpp"
 #include "../../include/log/bundle/Bundle.hpp"
 #include "../../include/log/utils/LogStringUtils.hpp"
 #include "../../include/log/utils/LogUtils.hpp"
+#include "../../include/structures/EdgeIF.hpp"
 #include "../../include/structures/EdgeSetInclude.hpp"
 #include "../../include/structures/GraphIF.hpp"
 #include "../../include/structures/VertexIF.hpp"
@@ -44,9 +46,14 @@ const static log4cxx::LoggerPtr logger(
 EdgeSetIF* CPLEX_LP_MSTSolverIF::transformSolutionToEdgeSet() {
 	EdgeSetIF* solution = new EdgeSetImpl { graph->getNumberOfVertices(
 			Visibility::VISIBLE) - 1 };
+	INFO_NOARG(logger, LogBundleKey::CPLPMSTIF_BUILD_EDGE_SET);
 	for (auto& sourceVertex : edgeVariableMap) {
 		for (auto& targetVertex : sourceVertex.second) {
 			if (cplex.getValue(targetVertex.second.first) == 1) {
+				INFO(logger, LogBundleKey::CPLPMSTIF_BUILD_EDGE_SET_ADD,
+						LogStringUtils::edgeVisualization(
+								graph->findEdge(sourceVertex.first,
+										targetVertex.first), "\t").c_str());;
 				solution->push_back(
 						getEdge(sourceVertex.first, targetVertex.first));
 			}
@@ -55,66 +62,20 @@ EdgeSetIF* CPLEX_LP_MSTSolverIF::transformSolutionToEdgeSet() {
 	return solution;
 }
 
-void CPLEX_LP_MSTSolverIF::createUndirectedEdgeVariables(
-		GraphIF * const graph) {
-	createUndirectedEdgeVariables(graph, EDGE_VAR_DEFAULT_TYPE);
-}
-
-void CPLEX_LP_MSTSolverIF::createUndirectedEdgeVariables(GraphIF * const graph,
-		IloNumVar::Type edgeVariablesType) {
-	EdgeIdx edgeId { };
-	VertexIdx sourceVertexIdx { };
-	VertexIdx targetVertexIdx { };
-	EdgeIF* edge { };
-	IteratorId edgeIterator = graph->getEdgeIteratorId();
-
-	edgeVariableArray = IloNumVarArray(env,
-			2 * graph->getNumberOfEdges(Visibility::VISIBLE), 0, 1,
-			edgeVariablesType);
-	model.add(edgeVariableArray);
-
-	graph->beginEdge(edgeIterator);
-
-	while (graph->hasNextEdge(edgeIterator, Visibility::VISIBLE)) {
-		edge = graph->nextEdge(edgeIterator);
-		sourceVertexIdx = edge->getSourceVertex()->getVertexIdx();
-		targetVertexIdx = edge->getTargetVertex()->getVertexIdx();
-
-		if (edgeVariableMap.count(sourceVertexIdx) == 0) {
-			edgeVariableMap.insert(
-					std::make_pair(sourceVertexIdx,
-							IloTargetVertexEdgeVarMap()));
-		}
-
-		edgeVariableMap.at(sourceVertexIdx).insert(
-				std::make_pair(targetVertexIdx,
-						std::make_pair(edgeVariableArray[edgeId], edge)));
-
-		edgeId += 1;
-
-		if (edgeVariableMap.count(targetVertexIdx) == 0) {
-			edgeVariableMap.insert(
-					std::make_pair(targetVertexIdx,
-							IloTargetVertexEdgeVarMap()));
-		}
-
-		edgeVariableMap.at(targetVertexIdx).insert(
-				std::make_pair(sourceVertexIdx,
-						std::make_pair(edgeVariableArray[edgeId], edge)));
-
-		edgeId += 1;
-	}
-
+IloEdgeValMap CPLEX_LP_MSTSolverIF::transformSolutionToRawMap() {
+	IloEdgeValMap solution { };
+	INFO_NOARG(logger, LogBundleKey::CPLPMSTIF_BUILD_RAW_SET);
 	for (auto& sourceVertex : edgeVariableMap) {
+		solution.insert(
+				std::make_pair(sourceVertex.first,
+						IloTargetVertexEdgeValMap { }));
 		for (auto& targetVertex : sourceVertex.second) {
-			std::cout << "y_{" << sourceVertex.first << ","
-					<< targetVertex.first << "} = " << targetVertex.second.first
-					<< "\n\t" << targetVertex.second.second->toString()
-					<< std::endl;
+			solution.at(sourceVertex.first).insert(
+					std::make_pair(targetVertex.first,
+							(cplex.getValue(targetVertex.second.first) == 1)));
 		}
 	}
-
-	graph->removeEdgeIterator(edgeIterator);
+	return solution;
 }
 
 EdgeIF* CPLEX_LP_MSTSolverIF::getEdge(const VertexIdx sourceVertexIdx,
@@ -127,21 +88,56 @@ IloNumVar CPLEX_LP_MSTSolverIF::getEdgeVariable(const VertexIdx sourceVertexIdx,
 	return edgeVariableMap.at(sourceVertexIdx).at(targetVertexIdx).first;
 }
 
+IloNumVar CPLEX_LP_MSTSolverIF::getEdgeVariable(VertexIF* const sourceVertex,
+		VertexIF* const targetVertex) {
+	return edgeVariableMap.at(sourceVertex->getVertexIdx()).at(
+			targetVertex->getVertexIdx()).first;
+}
+
 IloNumVar CPLEX_LP_MSTSolverIF::getEdgeVariable(const EdgeIF* edge) {
 	return edgeVariableMap.at(edge->getSourceVertex()->getVertexIdx()).at(
 			edge->getTargetVertex()->getVertexIdx()).first;
 }
 
-EdgeSetIF * CPLEX_LP_MSTSolverIF::resolve(VertexIF * const initialVertex) {
+std::string CPLEX_LP_MSTSolverIF::getVariableName(IloNumVar const & variable) {
+	std::ostringstream oss { };
+	oss << variable << std::flush;
+	return oss.str();
+}
+
+std::string CPLEX_LP_MSTSolverIF::getCPLEXStatus(IloCplex& cplex) {
+	std::ostringstream oss { };
+	oss << cplex.getStatus() << std::flush;
+	return oss.str();
+}
+
+EdgeSetIF * CPLEX_LP_MSTSolverIF::resolve(VertexIF * const initialVertex)
+		throw (ModelExceptions::GeneralConcertException) {
 	EdgeSetIF* solution { };
 	buildModel();
-	std::cout << "OK" << std::endl;
 
 	try {
 		solution = LP_Solve();
 	} catch (IloException& e) {
-		std::cerr << "Concert exception caught: " << e.getMessage()
-				<< std::endl;
+		ERROR(logger, LogBundleKey::CPLPMSTIF_SOLVER_ERROR, e.getMessage());
+		throw ModelExceptions::GeneralConcertException();
+	}
+	INFO(logger, LogBundleKey::CPLPMSTIF_SOLUTION,
+			LogStringUtils::edgeSetVisualization(solution, "\t").c_str(),
+			solution->getTotalEdgeCost());
+	return solution;
+}
+
+IloEdgeValMap CPLEX_LP_MSTSolverIF::resolveRAW()
+		throw (ModelExceptions::GeneralConcertException) {
+	IloEdgeValMap solution { };
+	buildModel();
+
+	try {
+		solution = LP_RAW_Solve();
+	} catch (IloException& e) {
+		ERROR(logger, LogBundleKey::CPLPMSTIF_SOLVER_ERROR, e.getMessage());
+		throw ModelExceptions::GeneralConcertException();
 	}
 	return solution;
 }
@@ -161,14 +157,14 @@ CPLEX_LP_MSTSolverIF::CPLEX_LP_MSTSolverIF(GraphIF * graph,
 	model = IloModel(env);
 	cplex = IloCplex(model);
 
-	TRACE(logger, LogBundleKey::LPMSTIF_INIT,
-			LogStringUtils::graphDescription(graph, "\t"));
+	TRACE(logger, LogBundleKey::CPLPMSTIF_INIT,
+			LogStringUtils::graphDescription(graph, "\t").c_str());
 
-	createUndirectedEdgeVariables(graph, edgeVariablesType);
+	solution = nullptr;
 }
 
 CPLEX_LP_MSTSolverIF::CPLEX_LP_MSTSolverIF(GraphIF * graph) :
-		CPLEX_LP_MSTSolverIF(graph, EDGE_VAR_DEFAULT_TYPE) {
+		CPLEX_LP_MSTSolverIF(graph, IloNumVar::Type::Float) {
 
 }
 

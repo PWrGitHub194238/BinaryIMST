@@ -10,24 +10,10 @@
 
 #include <ilconcert/iloenv.h>
 #include <ilconcert/iloexpression.h>
-#include <map>
-#include <utility>
 
-#include "../structures/EdgeIF.hpp"
 #include "../typedefs/primitive.hpp"
 #include "CPLEX_LP_MSTSolverIF.hpp"
-
-typedef std::pair<const VertexIdx,
-		std::map<VertexIdx, std::pair<IloNumVar, EdgeIF *>>>IloEdgeVarMapEntry;
-typedef std::pair<const VertexIdx, std::pair<IloNumVar, EdgeIF *>> IloEdgeVarEntry;
-
-typedef std::pair<const VertexIdx, IloNumVar> IloTargetVertexFlowVarEntry;
-typedef std::map<VertexIdx, IloNumVar> IloTargetVertexFlowVarMap;
-
-typedef std::pair<const VertexIdx, IloTargetVertexFlowVarMap> IloFlowVarMapEntry;
-typedef std::map<VertexIdx, IloTargetVertexFlowVarMap> IloFlowVarMap;
-
-typedef std::map<VertexIdx, IloFlowVarMap> IloCommodityFlowVarMap;
+#include "CPLEX_Typedefs.hpp"
 
 class CPLEX_LP_MSTSolver_v3: public CPLEX_LP_MSTSolverIF {
 private:
@@ -45,6 +31,9 @@ private:
 
 	void buildModel();
 
+	/** Z początkowego s dla każdego innego z s wychodzi o 1 więcej niż wchodzi, rozsyła pakiety
+	 *
+	 */
 	void generateMoveCommodityFromSourceConstraints();
 
 	void generateMoveCommodityFromSourceConstraint(
@@ -72,6 +61,13 @@ private:
 	void generateGoal();
 
 	EdgeSetIF* LP_Solve() throw (IloException);
+
+	IloEdgeValMap LP_RAW_Solve() throw (IloException);
+
+	void createUndirectedEdgeVariables(GraphIF * const graph);
+
+	void createUndirectedEdgeVariables(GraphIF * const graph,
+			IloNumVar::Type edgeVariablesType);
 
 	void generateFlowVariables();
 

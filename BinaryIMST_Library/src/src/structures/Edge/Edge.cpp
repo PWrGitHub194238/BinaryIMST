@@ -30,6 +30,11 @@ const static log4cxx::LoggerPtr logger(
 
 //************************************ CONSTRUCTOR & DESTRUCTOR ************************************//
 
+Edge::Edge(EdgeIF * edge) :
+		EdgeIF(edge) {
+
+}
+
 Edge::Edge(EdgeIdx const edgeIdx, VertexPair const & edgeConnections,
 		EdgeCost const edgeCost, EdgeConnectionType connection,
 		Visibility visibility) :

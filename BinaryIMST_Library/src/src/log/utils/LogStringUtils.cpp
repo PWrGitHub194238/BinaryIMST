@@ -12,6 +12,7 @@
 #include <sstream>
 #include <string>
 
+#include "../../../include/enums/Connectivity.hpp"
 #include "../../../include/enums/EdgeConnectionType.hpp"
 #include "../../../include/enums/Visibility.hpp"
 #include "../../../include/log/bundle/Bundle.hpp"
@@ -94,6 +95,11 @@ std::string LogStringUtils::graphBasicDescription(GraphIF* const graph,
 	oss << newLinePrefix << "Number of edges\t\t:\t"
 			<< graph->getNumberOfEdges();
 	oss
+			<< LogStringUtils::impl::connectedEdgeCount(
+					graph->getNumberOfEdges(),
+					graph->getNumberOfEdges(Connectivity::CONNECTED))
+			<< std::flush;
+	oss
 			<< LogStringUtils::impl::visibleEdgeCount(graph->getNumberOfEdges(),
 					graph->getNumberOfEdges(Visibility::VISIBLE)) << std::flush;
 	return oss.str();
@@ -115,6 +121,11 @@ std::string LogStringUtils::graphDescription(GraphIF* const graph,
 			<< std::endl;
 
 	oss << newLinePrefix << "Number of edges\t:\t" << graph->getNumberOfEdges();
+	oss
+			<< LogStringUtils::impl::connectedEdgeCount(
+					graph->getNumberOfEdges(),
+					graph->getNumberOfEdges(Connectivity::CONNECTED))
+			<< std::flush;
 	oss
 			<< LogStringUtils::impl::visibleEdgeCount(graph->getNumberOfEdges(),
 					graph->getNumberOfEdges(Visibility::VISIBLE)) << std::endl;
@@ -281,8 +292,8 @@ std::string LogStringUtils::vertexSetFlatVisualization(
 	return oss.str();
 }
 
-std::string LogStringUtils::vertexSetFlatVisualization(VertexSetIF* const vertexSet,
-		const char* newLinePrefix) {
+std::string LogStringUtils::vertexSetFlatVisualization(
+		VertexSetIF* const vertexSet, const char* newLinePrefix) {
 	return LogStringUtils::vertexSetFlatVisualization(vertexSet,
 			Visibility::BOTH, newLinePrefix);
 }
@@ -356,14 +367,15 @@ std::string LogStringUtils::edgeVisualization(EdgeIF* const edge,
 }
 
 std::string LogStringUtils::edgeSetVisualization(GraphIF* const graph,
-		Visibility const visibility, const char* newLinePrefix) {
+		Connectivity const connectivity, Visibility const visibility,
+		const char* newLinePrefix) {
 	std::ostringstream oss { };
 
-	if (graph->hasAnyEdge(visibility)) {
-		while (graph->hasNextEdge(visibility)) {
+	if (graph->hasAnyEdge(connectivity, visibility)) {
+		while (graph->hasNextEdge(connectivity, visibility)) {
 			oss << newLinePrefix
 					<< LogStringUtils::edgeVisualization(graph->nextEdge());
-			if (graph->hasNextEdge(visibility)) {
+			if (graph->hasNextEdge(connectivity, visibility)) {
 				oss << std::endl;
 			}
 		}
@@ -379,9 +391,21 @@ std::string LogStringUtils::edgeSetVisualization(GraphIF* const graph,
 }
 
 std::string LogStringUtils::edgeSetVisualization(GraphIF* const graph,
+		Connectivity const connectivity, const char* newLinePrefix) {
+	return LogStringUtils::edgeSetVisualization(graph, connectivity,
+			Visibility::BOTH, newLinePrefix);
+}
+
+std::string LogStringUtils::edgeSetVisualization(GraphIF* const graph,
+		Visibility const visibility, const char* newLinePrefix) {
+	return LogStringUtils::edgeSetVisualization(graph, Connectivity::CONNECTED,
+			visibility, newLinePrefix);
+}
+
+std::string LogStringUtils::edgeSetVisualization(GraphIF* const graph,
 		const char* newLinePrefix) {
-	return LogStringUtils::edgeSetVisualization(graph, Visibility::BOTH,
-			newLinePrefix);
+	return LogStringUtils::edgeSetVisualization(graph, Connectivity::CONNECTED,
+			Visibility::BOTH, newLinePrefix);
 }
 
 std::string LogStringUtils::edgeSetVisualization(EdgeSetIF* const edgeSet,
@@ -632,6 +656,15 @@ std::string LogStringUtils::impl::visibleVertexCount(VertexCount overallCount,
 	std::ostringstream oss { };
 	if (overallCount > visibleCount) {
 		oss << " (" << visibleCount << " visible)";
+	}
+	return oss.str();
+}
+
+std::string LogStringUtils::impl::connectedEdgeCount(EdgeCount overallCount,
+		EdgeCount connectedCount) {
+	std::ostringstream oss { };
+	if (overallCount > connectedCount) {
+		oss << " (" << connectedCount << " connected)";
 	}
 	return oss.str();
 }

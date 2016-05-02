@@ -32,7 +32,17 @@ private:
 
 	//************************************** PRIVATE CLASS FIELDS **************************************//
 
+	/** Shrinkujemy cały graf, nie chcemy w ogóle pewnych krawędzi, odłączamy je zatem, potem przywracamy.
+	 *
+	 */
+	ConnectivityList connectivityList;
+
+	/** Tymczasowo możemy nie chcieć brać pod uwagę pewnych krawędzi, możemy je wyłączyć na pewien czas,
+	 * bez zmiany struktury grafu.
+	 *
+	 */
 	VisibilityList visibilityList;
+
 	/** Przed zabawą z obniżaniem kosztów mst lambdami, chcemy zachować stare koszty mst. Potem je przywrócimy.
 	 *
 	 */
@@ -49,7 +59,7 @@ private:
 	 */
 	void shrinkEdgeSet(EdgeSetIF* unboundedMSTSolution);
 
-	/** NA RAZIE BEZ MODYFIKACJI KOSZTÓW
+	/**
 	 *
 	 * modyfikuje tylko te krawędzie, które pozostały widoczne po odpaleniu shrinkEdgeSet (reszta i tak nie należy do rozwiązania).
 	 *
@@ -78,9 +88,9 @@ private:
 	LambdaValue findMedianValue(
 			LambdaParamArray lambdaFeasibleSeededParameterArray);
 
-	EdgeSetIF* resolve(EdgeCount k, VertexIF* initialVertex);
+	EdgeSetIF* resolve(IncrementalParam k, VertexIF* initialVertex);
 
-	EdgeSetIF * resolve(EdgeCount k);
+	EdgeSetIF * resolve(IncrementalParam k);
 
 protected:
 
@@ -168,6 +178,14 @@ public:
 	 */
 	BinarySearch_v1(MSTSolverIF* const mstSolver, GraphIF* const graph,
 			LambdaValue lowerBound, LambdaValue upperBound);
+
+	/** Znajduje na wstępie MST dla podanego grafu. Korzysta z podanego mstSolvera.
+	 * Sam znajdzie lambdy.
+	 *
+	 * @param mstSolver
+	 * @param graph
+	 */
+	BinarySearch_v1(MSTSolverIF* const mstSolver, GraphIF* const graph, EdgeSetIF* baseSolution);
 
 	/** Znajduje na wstępie MST dla podanego grafu. Korzysta z podanego mstSolvera.
 	 * Sam znajdzie lambdy.

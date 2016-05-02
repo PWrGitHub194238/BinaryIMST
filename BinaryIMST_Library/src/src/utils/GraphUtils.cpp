@@ -18,6 +18,7 @@
 #include <utility>
 #include <vector>
 
+#include "../../include/enums/Connectivity.hpp"
 #include "../../include/enums/Visibility.hpp"
 #include "../../include/exp/GraphExceptions.hpp"
 #include "../../include/log/bundle/Bundle.hpp"
@@ -158,6 +159,23 @@ bool GraphUtils::changeGraphCostsWithCheck(GraphIF* graph,
 		graph->removeEdgeIterator(edgeIterator);
 	}
 	return isAnyCostChanged;
+}
+
+ConnectivityList GraphUtils::shrinkConnectivityToSet(GraphIF* const graph,
+		EdgeSetIF* const visibleSet) {
+	IteratorId edgeIterator = graph->getEdgeIteratorId();
+	ConnectivityList connectivityList = graph->storeEdgeConnectivity(edgeIterator);
+	ConnectivityList visibleSetConnectivityList = visibleSet->storeConnectivity(edgeIterator);
+	ConnectivityList::const_iterator itBegin = visibleSetConnectivityList.begin();
+
+	graph->disconnectAllEdges(edgeIterator);
+	visibleSet->begin(edgeIterator);
+	while (visibleSet->hasNext(edgeIterator)) {
+		visibleSet->next(edgeIterator)->connect(*itBegin);
+		++itBegin;
+	}
+	graph->removeEdgeIterator(edgeIterator);
+	return connectivityList;
 }
 
 VisibilityList GraphUtils::shrinkVisibilityToSet(GraphIF* const graph,
@@ -422,7 +440,8 @@ SpanningTreeNeighborhood GraphUtils::getEdgeSetNeighbourhood(GraphIF * graph,
 		originalSet->next(edgeIteratorId)->hide();
 	}
 	graph->beginEdge(edgeIteratorId);
-	while (graph->hasNextEdge(edgeIteratorId, Visibility::VISIBLE)) {
+	while (graph->hasNextEdge(edgeIteratorId, Connectivity::CONNECTED,
+			Visibility::VISIBLE)) {
 		noMSTedge = graph->nextEdge(edgeIteratorId);
 		INFO(logger, LogBundleKey::GU_FIND_NEIGHBORHOOD_ADD_EDGE,
 				LogStringUtils::edgeVisualization(noMSTedge, "\t").c_str());
@@ -442,7 +461,7 @@ SpanningTreeNeighborhood GraphUtils::getEdgeSetNeighbourhood(GraphIF * graph,
 					TabuSearchUtils::createSpanningTreeNeighbor(
 							noMSTedge->getSourceVertex()->getVertexIdx(),
 							pathEdge->getSourceVertex()->getVertexIdx(),
-							new EdgeSetImpl { originalSet }));
+							new EdgeSetImpl { originalSet, false }));
 			INFO(logger, LogBundleKey::GU_FIND_NEIGHBORHOOD_STORE_SET,
 					LogStringUtils::edgeSetVisualization(originalSet, "\t").c_str(),
 					LogStringUtils::edgeVisualization(noMSTedge, "\t").c_str(),

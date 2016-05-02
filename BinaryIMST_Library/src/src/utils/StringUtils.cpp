@@ -22,7 +22,7 @@ const static log4cxx::LoggerPtr logger(
 
 const char StringUtils::SPECIAL_SIGN { '%' };
 
-const int StringUtils::MESSAGE_BUFFER_SIZE { 1024 };
+const int StringUtils::MESSAGE_BUFFER_SIZE { 10240 };
 
 std::unique_ptr<char[]> StringUtils::parseStringFormatSpecifiers(
 		const char* const formatString) {
@@ -113,6 +113,22 @@ size_t StringUtils::impl::insertRightFormat(std::string& sourceFormat,
 				FormatUtils::Formats::TabuIterationCountFormat);
 		return beginIdx
 				+ FormatUtils::Formats::Lengths::TabuIterationCountLength;
+	} else if (subStr.compare(FormatUtils::Tokens::LPUIntValueToken) == 0) {
+		sourceFormat.replace(beginIdx, length + 1,
+				FormatUtils::Formats::LPUIntValueFormat);
+		return beginIdx + FormatUtils::Formats::Lengths::LPUIntValueLength;
+	} else if (subStr.compare(FormatUtils::Tokens::LPFloatValueToken) == 0) {
+		sourceFormat.replace(beginIdx, length + 1,
+				FormatUtils::Formats::LPFloatValueFormat);
+		return beginIdx + FormatUtils::Formats::Lengths::LPFloatValueLength;
+	} else if (subStr.compare(FormatUtils::Tokens::ThreadIdToken) == 0) {
+		sourceFormat.replace(beginIdx, length + 1,
+				FormatUtils::Formats::ThreadIdFormat);
+		return beginIdx + FormatUtils::Formats::Lengths::ThreadIdLength;
+	} else if (subStr.compare(FormatUtils::Tokens::ScenarioIdxToken) == 0) {
+		sourceFormat.replace(beginIdx, length + 1,
+				FormatUtils::Formats::ScenarioIdxFormat);
+		return beginIdx + FormatUtils::Formats::Lengths::ScenarioIdxLength;
 	} else if (subStr.compare(FormatUtils::Tokens::ScenarioCountToken) == 0) {
 		sourceFormat.replace(beginIdx, length + 1,
 				FormatUtils::Formats::ScenarioCountFormat);

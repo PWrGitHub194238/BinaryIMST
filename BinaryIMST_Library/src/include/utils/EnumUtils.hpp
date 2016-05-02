@@ -23,6 +23,8 @@ const char* getVisibilityString(Visibility key);
 
 const char* getGraphVizEngineString(GraphVizEngine key);
 
+const char* getLPVariableTypeString(unsigned int key);
+
 }  // namespace EnumUtils
 
 #endif /* SRC_INCLUDE_UTILS_ENUMUTILS_HPP_ */

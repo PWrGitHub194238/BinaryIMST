@@ -12,27 +12,24 @@
 #include <ilconcert/iloexpression.h>
 #include <ilconcert/ilomodel.h>
 #include <ilcplex/ilocplexi.h>
-#include <map>
-#include <utility>
+#include <string>
 
 #include "../mstsolver/MSTSolverIF.hpp"
-#include "../structures/EdgeIF.hpp"
 #include "../typedefs/primitive.hpp"
+#include "CPLEX_Typedefs.hpp"
+
+#include "../exp/ModelExceptions.hpp"
 
 class EdgeIF;
 
-/** Mapowanie zmiennej LP z właściwą jej krawędzią po danych indeksach wierzchołków, które łączy
- *
+/**
+ * Z uwagi na metodę konstrukcji modelu, nie da się odpalić kilka razy getMST() na tym samym obiekcie, musi być za każdym rzem tworzony od nowa.
  */
-typedef std::map<VertexIdx, std::pair<IloNumVar, EdgeIF*>> IloTargetVertexEdgeVarMap;
-typedef std::map<VertexIdx, IloTargetVertexEdgeVarMap> IloEdgeVarMap;
-
 class CPLEX_LP_MSTSolverIF: public MSTSolverIF {
+
 private:
 
 	//************************************ PRIVATE CONSTANT FIELDS *************************************//
-
-	static const IloNumVar::Type EDGE_VAR_DEFAULT_TYPE { IloNumVar::Type::Float };
 
 	//************************************** PRIVATE CLASS FIELDS **************************************//
 
@@ -43,6 +40,8 @@ private:
 	virtual void generateGoal() = 0;
 
 	virtual EdgeSetIF* LP_Solve() throw (IloException) = 0;
+
+	virtual IloEdgeValMap LP_RAW_Solve() throw (IloException) = 0;
 
 protected:
 
@@ -66,10 +65,7 @@ protected:
 
 	EdgeSetIF* transformSolutionToEdgeSet();
 
-	void createUndirectedEdgeVariables(GraphIF * const graph);
-
-	void createUndirectedEdgeVariables(GraphIF * const graph,
-			IloNumVar::Type edgeVariablesType);
+	IloEdgeValMap transformSolutionToRawMap();
 
 	EdgeIF* getEdge(const VertexIdx sourceVertexIdx,
 			const VertexIdx targetVertexIdx);
@@ -77,7 +73,14 @@ protected:
 	IloNumVar getEdgeVariable(const VertexIdx sourceVertexIdx,
 			const VertexIdx targetVertexIdx);
 
+	IloNumVar getEdgeVariable(VertexIF* const sourceVertex,
+			VertexIF* const targetVertex);
+
 	IloNumVar getEdgeVariable(const EdgeIF* edge);
+
+	std::string getVariableName(IloNumVar const & variable);
+
+	std::string getCPLEXStatus(IloCplex& cplex);
 
 	/** inital vertex może być nullem, LP i tak na to nie patrzy
 	 * W LP_* przeciążamy LP_Solve, a nie resolve.
@@ -85,7 +88,15 @@ protected:
 	 * @param initialVertex
 	 * @return
 	 */
-	EdgeSetIF * resolve(VertexIF * const initialVertex);
+	EdgeSetIF * resolve(VertexIF * const initialVertex)
+			throw (ModelExceptions::GeneralConcertException);
+
+	/** Zwraca mapę 0/1.
+	 *
+	 * @param initialVertex
+	 * @return
+	 */
+	IloEdgeValMap resolveRAW() throw (ModelExceptions::GeneralConcertException);
 
 public:
 
@@ -100,7 +111,7 @@ public:
 	CPLEX_LP_MSTSolverIF(GraphIF * graph);
 
 	virtual ~CPLEX_LP_MSTSolverIF() {
-
+		env.end();
 	}
 
 	//*************************************** PUBLIC FUNCTIONS *****************************************//

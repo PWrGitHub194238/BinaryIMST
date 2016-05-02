@@ -59,6 +59,11 @@ public:
 
 	EdgeSetIF * getMST() throw (GraphExceptions::DisconnectedGraphException);
 
+	/** Temporary disconnects every edge that is not in given visibleSet
+	 *
+	 * @param visibleSet
+	 * @return
+	 */
 	EdgeSetIF * getMST(EdgeSetIF* visibleSet)
 			throw (GraphExceptions::DisconnectedGraphException);
 

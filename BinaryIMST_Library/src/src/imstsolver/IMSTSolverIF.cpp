@@ -22,6 +22,7 @@
 #include "../../include/structures/GraphEdgeCostsInclude.hpp"
 #include "../../include/structures/GraphIF.hpp"
 #include "../../include/structures/VertexIF.hpp"
+#include "../../include/typedefs/struct.hpp"
 #include "../../include/utils/GraphUtils.hpp"
 #include "../../include/utils/MemoryUtils.hpp"
 
@@ -114,9 +115,9 @@ IMSTSolverIF::IMSTSolverIF(MSTSolverIF* const mstSolver, GraphIF* const graph,
 	this->mstSolver = (mstSolver ? mstSolver : new MSTSolverImpl { graph });
 	this->graph = graph;
 	this->baseGraphEdgeCosts = nullptr;
-	this->baseMSTSolution =
-			(baseSolution ?
-					new EdgeSetImpl { baseSolution } : this->mstSolver->getMST());
+	this->baseMSTSolution = (baseSolution ? new EdgeSetImpl { baseSolution,
+													false } :
+											this->mstSolver->getMST());
 	this->lowerBound = lowerBound;
 	this->upperBound = upperBound;
 	this->isCostChanged = false;

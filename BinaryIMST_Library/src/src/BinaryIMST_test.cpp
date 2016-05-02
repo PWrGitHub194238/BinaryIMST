@@ -1,14 +1,61 @@
-#include <ilconcert/ilosys.h>
 #include <log4cxx/logger.h>
+#include <iostream>
+#include <set>
+#include <utility>
 
-#include "../include/cplex/CPLEX_LP_MSTSolverInclude.hpp"
+#include "../include/enums/Connectivity.hpp"
+#include "../include/enums/Visibility.hpp"
 #include "../include/log/utils/LocaleEnum.hpp"
 #include "../include/log/utils/LogUtils.hpp"
+#include "../include/rimstsolver/RIMSTSolverInclude.hpp"
+#include "../include/structures/EdgeIF.hpp"
 #include "../include/structures/EdgeSetIF.hpp"
+#include "../include/structures/GraphEdgeCostsIF.hpp"
+#include "../include/structures/GraphIF.hpp"
+#include "../include/typedefs/primitive.hpp"
+#include "../include/typedefs/struct.hpp"
 #include "../include/utils/enums/InputFormat.hpp"
 #include "../include/utils/enums/InputMode.hpp"
 #include "../include/utils/IOUtils.hpp"
 #include "../include/utils/MemoryUtils.hpp"
+
+// TODO Jeśli koszty grafu zmieni się poza solverem (nie w getMST()) to solver tego nie wykrywa, trzeba za każsym razem sprawdzać, nie tylko gdy nie null.
+
+
+void changeCostBack(GraphIF* g, GraphEdgeCostsIF* costs) {
+	costs->begin();
+	g->beginEdge();
+				while (g->hasNextEdge()) {
+					g->nextEdge()->setEdgeCost(costs->next());
+				}
+}
+
+EdgeCost edgeCostPerturbFunction(EdgeCount const numberOfEdges,
+		EdgeIdx const edgeIdx, EdgeCost const edgeCost) {
+	return edgeCost
+			+ (EdgeCost) (numberOfEdges * (edgeIdx * edgeIdx) + edgeIdx)
+					/ ((numberOfEdges + 1) * (numberOfEdges + 1)
+							* (numberOfEdges + 1));
+}
+
+void changeCost(GraphIF* g) {
+	int edgeIdx;
+		EdgeIF* edge;
+		g->beginEdge();
+
+			edgeIdx = 1;
+			while (g->hasNextEdge(Connectivity::CONNECTED, Visibility::VISIBLE)) {
+				edge = g->nextEdge();
+
+				edge->setEdgeCost(
+						edgeCostPerturbFunction(g->getNumberOfEdges(), edgeIdx,
+								edge->getEdgeCost()));
+				edgeIdx += 1;
+			}
+}
+
+
+
 
 int main(int argc, char **argv) {
 
@@ -18,54 +65,442 @@ int main(int argc, char **argv) {
 
 	LogUtils::setLocale(LocaleEnum::EN_US_UTF8);
 
+	// RIMST, 30 nodów
+
+	char * a0 = "/home/tomasz/Pulpit/TB_MST_Examples/1/s0.json";
+	char * a1 = "/home/tomasz/Pulpit/TB_MST_Examples/1/Adv/s1.json";
+	char * a2 = "/home/tomasz/Pulpit/TB_MST_Examples/1/Adv/s2.json";
+
+
+	GraphIF* g = InputUtils::readGraph(a0, InputFormat::VA, InputMode::HDD);
+	GraphEdgeCostsSet advScenarios { };
+	advScenarios.insert(InputUtils::readCosts(a1, InputFormat::VA, InputMode::HDD, "s1"));
+	advScenarios.insert(InputUtils::readCosts(a2, InputFormat::VA, InputMode::HDD, "s2"));
+
+	RIMSTSolverIF* rimstSolver = new RIMSTSolverImpl { g, advScenarios, 1 };
+
+	EdgeSetIF* solution = rimstSolver->getMST();
+
+	std::cout << "COST: " << solution->getTotalEdgeCost() << std::endl;
+
+	MemoryUtils::removeCollection(solution, false);
+	delete rimstSolver;
+	MemoryUtils::removeScenarioSet(advScenarios);
+	MemoryUtils::removeGraph(g);
+
+
+
+
+
+
+
+
+	/*// Kopia grafu, MST
+	char * a0 = "/home/tomasz/Pulpit/TB_MST_Examples/1/s0.json";
+	char * a1 = "/home/tomasz/Pulpit/TB_MST_Examples/1/Adv/s1.json";
+
+	GraphIF* g = InputUtils::readGraph(a0, InputFormat::VA, InputMode::HDD);
+	GraphEdgeCostsIF* costs = InputUtils::readCosts(a1, InputFormat::VA, InputMode::HDD);
+	GraphIF* g1 = new GraphImpl { g };
+	MemoryUtils::removeGraph(g);
+
+	MSTSolverIF* mstSolver = new MSTSolverImpl { g1 };
+	IMSTSolverIF* imstSolver = new IMSTSolverImpl { mstSolver, g1 };
+	EdgeSetIF* solution = imstSolver->getMST(1,costs);
+
+	std::cout << "COST: " << solution->getTotalEdgeCost() << std::endl;
+	MemoryUtils::removeCollection(solution, false);
+	delete imstSolver;
+	delete mstSolver;
+	delete costs;
+	MemoryUtils::removeGraph(g1);*/
+
+
+
+
+	/*// AIMST, 30 nodów
+	char * a0 = "/home/tomasz/Pulpit/TB_MST_Examples/1/s0.json";
+	char * a1 = "/home/tomasz/Pulpit/TB_MST_Examples/1/Adv/s1.json";
+	char * a2 = "/home/tomasz/Pulpit/TB_MST_Examples/1/Adv/s2.json";
+
+
+	GraphIF* g = InputUtils::readGraph(a0, InputFormat::VA, InputMode::HDD);
+
+	GraphEdgeCostsIF* s1 = InputUtils::readCosts(a1, InputFormat::VA, InputMode::HDD);
+
+	GraphEdgeCostsIF* s2 = InputUtils::readCosts(a2, InputFormat::VA, InputMode::HDD);
+
+
+	GraphEdgeCostsSet adv { };
+	adv.insert(s1);
+	adv.insert(s2);
+
+	AIMSTSolverIF* aimstSolver = new AIMSTSolverImpl { g, adv, 1 };
+
+	MSTSolverIF* mstSolver = new MSTSolverImpl { g };
+	EdgeSetIF* sol = mstSolver->getMST();
+	AIMSTSolution solution = aimstSolver->getMST(sol);
+
+	MemoryUtils::removeCollection(sol, false);
+	delete mstSolver;
+
+	EdgeSetIF* solutionSet = AIMSTUtils::getEdgeSet(solution);
+	GraphEdgeCostsIF* solutionScenario = AIMSTUtils::getScenario(solution);
+	EdgeCost solutionCost = AIMSTUtils::getSolutionCost(solution);
+
+	std::cout << "COST: " << solutionCost << std::endl;
+
+	MemoryUtils::removeCollection(solutionSet, false);
+	delete aimstSolver;
+	MemoryUtils::removeScenarioSet(adv);
+	MemoryUtils::removeGraph(g);*/
+
+
+
+
+
+
+
+
+
+
+
+
+	/*//Zaburzenie kosztów, MST, 30 nodów
+	char * a = "/home/tomasz/Pulpit/TB_MST_Examples/4/s0.json";
+
+	 GraphIF* g = InputUtils::readGraph(a, InputFormat::VA, InputMode::HDD);
+
+	 GraphEdgeCostsIF* costs = new GraphEdgeCostsImpl { g };
+
+	 MSTSolverIF* mstSolver = new MSTSolverImpl { g };
+
+	 EdgeSetIF* sol = mstSolver->getMST();
+
+	 std::cout << "COST: " << sol->getTotalEdgeCost() << std::endl;
+
+	changeCost(g);
+
+	sol = mstSolver->getMST();
+
+	changeCostBack(g,costs);
+
+		 std::cout << "COST: " << sol->getTotalEdgeCost() << std::endl;*/
+
+
+
+
+
+
+	/*// LP MST v2, 30 nodów
+	char * a = "/home/tomasz/Pulpit/TB_MST_Examples/4/s0.json";
+
+	 GraphIF* g = InputUtils::readGraph(a, InputFormat::VA, InputMode::HDD);
+
+	 //TODO zabronienie odpalenia 2 razy getMST() na tym samym obiecie
+	 CPLEX_LP_MSTSolverIF* mstSolver = new CPLEX_LP_MSTSolver_v2 { g };
+
+	 EdgeSetIF* solution = mstSolver->getMST();
+
+	MemoryUtils::removeCollection(solution, false);
+	delete mstSolver;
+	mstSolver = new CPLEX_LP_MSTSolver_v2 { g };
+
+	EdgeSetIF* smallSet = new EdgeSetImpl { };
+
+	g->beginEdge();
+	while(g->hasNextEdge()) {
+		smallSet->push_back(g->nextEdge());
+	}
+
+	solution = mstSolver->getMST(smallSet);
+	MemoryUtils::removeCollection(solution, false);
+	delete mstSolver;
+	mstSolver = new CPLEX_LP_MSTSolver_v2 { g };
+
+	MemoryUtils::removeCollection(smallSet, false);
+
+	solution = mstSolver->getMST();
+
+	MemoryUtils::removeCollection(solution, false);
+	delete mstSolver;
+	MemoryUtils::removeGraph(g);*/
+
+
+
+
+
+
+
+
+
+	/*// LP MST v3, 30 nodów
+	char * a = "/home/tomasz/Pulpit/TB_MST_Examples/4/s0.json";
+
+	 GraphIF* g = InputUtils::readGraph(a, InputFormat::VA, InputMode::HDD);
+
+	 //TODO zabronienie odpalenia 2 razy getMST() na tym samym obiecie
+	 CPLEX_LP_MSTSolverIF* mstSolver = new CPLEX_LP_MSTSolver_v3 { g };
+
+	 EdgeSetIF* solution = mstSolver->getMST();
+
+	MemoryUtils::removeCollection(solution, false);
+	delete mstSolver;
+	mstSolver = new CPLEX_LP_MSTSolver_v3 { g };
+
+	EdgeSetIF* smallSet = new EdgeSetImpl { };
+
+	g->beginEdge();
+	while(g->hasNextEdge()) {
+		smallSet->push_back(g->nextEdge());
+	}
+
+	solution = mstSolver->getMST(smallSet);
+	MemoryUtils::removeCollection(solution, false);
+	delete mstSolver;
+	mstSolver = new CPLEX_LP_MSTSolver_v3 { g };
+
+	MemoryUtils::removeCollection(smallSet, false);
+
+	solution = mstSolver->getMST();
+
+	MemoryUtils::removeCollection(solution, false);
+	delete mstSolver;
+	MemoryUtils::removeGraph(g);*/
+
+
+
+
+
+	/*//MST 30 nodów, normalnie, z selekcją, normalnie
+
+	char* a = "/home/tomasz/Pulpit/TB_MST_Examples/4/s0.json";
+	GraphIF* g = InputUtils::readGraph(a, InputFormat::VA, InputMode::HDD);
+	MSTSolverIF* mstSolver = new MSTSolverImpl { g };
+	EdgeSetIF* solution = mstSolver->getMST();
+
+	MemoryUtils::removeCollection(solution, false);
+
+	EdgeSetIF* smallSet = new EdgeSetImpl { };
+
+	g->beginEdge();
+	while(g->hasNextEdge()) {
+		smallSet->push_back(g->nextEdge());
+	}
+
+	solution = mstSolver->getMST(smallSet);
+	MemoryUtils::removeCollection(solution, false);
+
+	MemoryUtils::removeCollection(smallSet, false);
+
+	solution = mstSolver->getMST();
+
+	MemoryUtils::removeCollection(solution, false);
+	delete mstSolver;
+	MemoryUtils::removeGraph(g);*/
+
+
+
+
+	/*// IMST, 30 nodów
+	  char* a = "/home/tomasz/Pulpit/TB_MST_Examples/4/s0.json";
+	//char * a = "/home/tomasz/Pulpit/[WPPT W-11 194238] Praca magisterska/Thesis/Chapter_II/INC-MST-example/a.json";
+
+	char* b = "/home/tomasz/Pulpit/TB_MST_Examples/4/Adv/s1.json";
+	//char * b = "/home/tomasz/Pulpit/[WPPT W-11 194238] Praca magisterska/Thesis/Chapter_II/INC-MST-example/b.json";
+
+	GraphIF* g = InputUtils::readGraph(a, InputFormat::VA, InputMode::HDD);
+
+	GraphEdgeCostsIF* costs = InputUtils::readCosts(b, InputFormat::VA, InputMode::HDD);
+
+	MSTSolverIF* mstSolver = new MSTSolverImpl { g };
+
+	IMSTSolverIF* imstSolver = new IMSTSolverImpl { mstSolver, g };
+
+	EdgeSetIF* solution = imstSolver->getMST(1, costs);
+
+	std::cout << "COST: " << solution->getTotalEdgeCost() << std::endl;
+
+	MemoryUtils::removeCollection(solution, false);
+	delete imstSolver;
+	delete mstSolver;
+	delete costs;
+	MemoryUtils::removeGraph(g);*/
+
+
+
+
+
+	/*//LP IMST, 30 nodów, bez wymuszenia mst (różne wyniki LP i zwykłego imst)
+		char* a = "/home/tomasz/Pulpit/TB_MST_Examples/4/s0.json";
+		//char * a = "/home/tomasz/Pulpit/[WPPT W-11 194238] Praca magisterska/Thesis/Chapter_II/INC-MST-example/a.json";
+
+		char* b = "/home/tomasz/Pulpit/TB_MST_Examples/4/Adv/s2.json";
+		//char * b = "/home/tomasz/Pulpit/[WPPT W-11 194238] Praca magisterska/Thesis/Chapter_II/INC-MST-example/b.json";
+
+		GraphIF* g = InputUtils::readGraph(a, InputFormat::VA, InputMode::HDD);
+
+		GraphEdgeCostsIF* costs = InputUtils::readCosts(b, InputFormat::VA, InputMode::HDD);
+
+		CPLEX_LP_MSTSolverIF* lpMstSolver = new CPLEX_LP_MSTSolverImpl { g };
+		//MSTSolverIF* mstSolver = new MSTSolverImpl { g };
+
+		//EdgeSetIF* ee = mstSolver->getMST();
+
+		CPLEX_LP_IMSTSolverIF* imst = new CPLEX_LP_IMSTSolverImpl { lpMstSolver, g };//, ee };
+
+		//MemoryUtils::removeCollection(ee, false);
+		//delete mstSolver;
+
+		EdgeSetIF* e = imst->getMST(1, costs);
+
+		std::cout << "COST: " << e->getTotalEdgeCost() << std::endl;
+
+		delete costs;
+		delete lpMstSolver;
+		delete imst;
+
+		MemoryUtils::removeCollection(e, false);
+		MemoryUtils::removeGraph(g);*/
+
+
+
+
+
+
+	/*//LP IMST, 30 nodów z wymuszonym MST
+	char* a = "/home/tomasz/Pulpit/TB_MST_Examples/4/s0.json";
+	//char * a = "/home/tomasz/Pulpit/[WPPT W-11 194238] Praca magisterska/Thesis/Chapter_II/INC-MST-example/a.json";
+
+	char* b = "/home/tomasz/Pulpit/TB_MST_Examples/4/Adv/s1.json";
+	//char * b = "/home/tomasz/Pulpit/[WPPT W-11 194238] Praca magisterska/Thesis/Chapter_II/INC-MST-example/b.json";
+
+	GraphIF* g = InputUtils::readGraph(a, InputFormat::VA, InputMode::HDD);
+
+	GraphEdgeCostsIF* costs = InputUtils::readCosts(b, InputFormat::VA, InputMode::HDD);
+
+	MSTSolverIF* mstSolver = new MSTSolverImpl { g };
+
+	EdgeSetIF* ee = mstSolver->getMST();
+
+	CPLEX_LP_MSTSolverIF* mst = new CPLEX_LP_MSTSolverImpl { g };
+
+	CPLEX_LP_IMSTSolverIF* imst = new CPLEX_LP_IMSTSolverImpl { mst, g, ee };
+
+	MemoryUtils::removeCollection(ee, false);
+	delete mstSolver;
+
+	EdgeSetIF* e = imst->getMST(1, costs);
+
+	std::cout << "COST: " << e->getTotalEdgeCost() << std::endl;
+
+	delete costs;
+	delete mst;
+	delete imst;
+
+	MemoryUtils::removeCollection(e, false);
+	MemoryUtils::removeGraph(g);*/
+
+
+
+
+	/*char * a = "/home/tomasz/Pulpit/[WPPT W-11 194238] Praca magisterska/Thesis/Chapter_II/INC-MST-example/a.json";
+
+	char * b = "/home/tomasz/Pulpit/[WPPT W-11 194238] Praca magisterska/Thesis/Chapter_II/INC-MST-example/b.json";
+
+	GraphIF* g = InputUtils::readGraph(a, InputFormat::VA, InputMode::HDD);
+
+	GraphEdgeCostsIF* costs = InputUtils::readCosts(b, InputFormat::VA, InputMode::HDD);
+
+	MSTSolverIF* mst = new MSTSolverImpl { g };
+
+	IMSTSolverIF* imst = new IMSTSolverImpl { mst, g };
+
+	EdgeSetIF* e = imst->getMST(1, costs);
+
+	std::cout << e->getTotalEdgeCost() << std::endl;
+
+	delete costs;
+	delete mst;
+	delete imst;
+
+	MemoryUtils::removeCollection(e, false);
+	MemoryUtils::removeGraph(g);*/
+
+
+
+
+
+	/*
 	char * a = "/home/tomasz/Pulpit/TB_MST_Examples/1/s0.json";
 
 	GraphIF* g = InputUtils::readGraph(a, InputFormat::VA, InputMode::HDD);
 
-	CPLEX_LP_MSTSolverIF* solver = new CPLEX_LP_MSTSolverImpl { g };
+	CPLEX_LP_IMSTSolverIF* solver = new CPLEX_LP_IMSTSolverImpl { g };
 
-	EdgeSetIF* e = solver->getMST();
+	EdgeSetIF* e = solver->getMST(0);
 
 	delete solver;
 
 	MemoryUtils::removeCollection(e, false);
 
 	MemoryUtils::removeGraph(g);
+*/
 
 
 
 
 
-	/*char * a = "/home/tomasz/Pulpit/TB_MST_Examples/3/s0.json";
-	char * a1 = "/home/tomasz/Pulpit/TB_MST_Examples/3/Adv/s1.json";
-	char * a2 = "/home/tomasz/Pulpit/TB_MST_Examples/3/Adv/s2.json";
-
-	GraphIF* g = InputUtils::readGraph(a, InputFormat::VA, InputMode::HDD);
-
-	GraphEdgeCostsSet adversarialScenarioSet { };
-
-	adversarialScenarioSet.insert(
-			InputUtils::readCosts(a1, InputFormat::VA, InputMode::HDD, "s1"));
-
-	adversarialScenarioSet.insert(
-			InputUtils::readCosts(a2, InputFormat::VA, InputMode::HDD, "s2"));
-
-	RIMSTSolverIF* solver = new RIMSTSolverImpl { g, adversarialScenarioSet, 1,
-			4 };
-
-	EdgeSetIF* s = solver->getMST();
-
-	std::cout << "SOLUTION: " << s->toString() << "\nwith cost: " << s->getTotalEdgeCost() << std::endl;
-
-	MemoryUtils::removeCollection(s, false);
-
-	MemoryUtils::removeScenarioSet(adversarialScenarioSet);
-
-	MemoryUtils::removeGraph(g);
-
-	delete solver;*/
 
 
+
+
+
+
+	/*char * a = "/home/tomasz/Pulpit/TB_MST_Examples/1/s0.json";
+
+	 GraphIF* g = InputUtils::readGraph(a, InputFormat::VA, InputMode::HDD);
+
+	 CPLEX_LP_MSTSolverIF* solver = new CPLEX_LP_MSTSolverImpl { g };
+
+	 EdgeSetIF* e = solver->getMST();
+
+	 delete solver;
+
+	 MemoryUtils::removeCollection(e, false);
+
+	 MemoryUtils::removeGraph(g);*/
+
+
+
+
+	/*char * a = "/home/tomasz/Pulpit/TB_MST_Examples/4/s0.json";
+	 char * a1 = "/home/tomasz/Pulpit/TB_MST_Examples/4/Adv/s1.json";
+	 char * a2 = "/home/tomasz/Pulpit/TB_MST_Examples/4/Adv/s2.json";
+
+	 GraphIF* g = InputUtils::readGraph(a, InputFormat::VA, InputMode::HDD);
+
+	 GraphEdgeCostsSet adversarialScenarioSet { };
+
+	 adversarialScenarioSet.insert(
+	 InputUtils::readCosts(a1, InputFormat::VA, InputMode::HDD, "s1"));
+
+	 adversarialScenarioSet.insert(
+	 InputUtils::readCosts(a2, InputFormat::VA, InputMode::HDD, "s2"));
+
+	 RIMSTSolverIF* solver = new RIMSTSolverImpl { g, adversarialScenarioSet, 1 };
+
+	 EdgeSetIF* s = solver->getMST();
+
+	 std::cout << "SOLUTION: " << s->toString() << "\nwith cost: " << s->getTotalEdgeCost() << std::endl;
+
+	 MemoryUtils::removeCollection(s, false);
+
+	 MemoryUtils::removeScenarioSet(adversarialScenarioSet);
+
+	 MemoryUtils::removeGraph(g);
+
+	 delete solver;*/
 
 
 

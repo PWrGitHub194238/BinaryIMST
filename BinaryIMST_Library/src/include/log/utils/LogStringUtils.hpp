@@ -10,6 +10,7 @@
 
 #include <string>
 
+#include "../../enums/Connectivity.hpp"
 #include "../../enums/Visibility.hpp"
 #include "../../typedefs/primitive.hpp"
 #include "../bundle/Bundle.hpp"
@@ -77,6 +78,13 @@ std::string edgeVisualization(EdgeIF* const edge,
 		const char* newLinePrefix = "");
 
 std::string edgeSetVisualization(GraphIF* const graph,
+		Connectivity const connectivity, Visibility const visibility,
+		const char* newLinePrefix = "");
+
+std::string edgeSetVisualization(GraphIF* const graph,
+		Connectivity const connectivity, const char* newLinePrefix = "");
+
+std::string edgeSetVisualization(GraphIF* const graph,
 		Visibility const visibility, const char* newLinePrefix = "");
 
 std::string edgeSetVisualization(GraphIF* const graph,
@@ -132,6 +140,9 @@ extern const char* EDGE_LINE_HIDDEN;
 
 std::string visibleVertexCount(VertexCount overallCount,
 		VertexCount visibleCount);
+
+std::string connectedEdgeCount(EdgeCount overallCount,
+		EdgeCount connectedCount);
 
 std::string visibleEdgeCount(EdgeCount overallCount, EdgeCount visibleCount);
 

@@ -8,8 +8,6 @@
 #ifndef SRC_INCLUDE_UTILS_TABUSEARCHUTILS_HPP_
 #define SRC_INCLUDE_UTILS_TABUSEARCHUTILS_HPP_
 
-#include <tuple>
-
 #include "../typedefs/primitive.hpp"
 #include "../typedefs/struct.hpp"
 
@@ -19,7 +17,9 @@ class EdgeSetIF;
 
 namespace TabuSearchUtils {
 
-extern const TabuIterationCount TABU_ELEMENT_PERIOD;
+extern const TabuIterationCount TABU_ELEMENT_DEFAULT_PERIOD;
+extern const TabuIterationCount ITER_NUM_DEFAULT;
+extern const TabuIterationCount PATH_ITER_NUM_DEFAULT;
 
 SpanningTreeNeighbor createSpanningTreeNeighbor(EdgeIdx const removedEdgeIdx,
 		EdgeIdx const insertedEdgeIdx, EdgeSetIF * const spanningTree);
@@ -31,13 +31,11 @@ EdgeIdx getInsertedEdge(SpanningTreeNeighbor const spanningTreeNeighbor);
 EdgeSetIF* getEdgeSet(SpanningTreeNeighbor const spanningTreeNeighbor);
 
 SpanningTreeNeighbor getMove(
-		std::tuple<SpanningTreeNeighbor, EdgeCost> const & spanningTreeNeighborWithCost);
+		NeighborSolution const & spanningTreeNeighborWithCost);
 
-EdgeSetIF* getEdgeSet(
-		std::tuple<SpanningTreeNeighbor, EdgeCost> const & spanningTreeNeighborWithCost);
+EdgeSetIF* getEdgeSet(NeighborSolution const & spanningTreeNeighborWithCost);
 
-EdgeCost getEdgeSetCost(
-		std::tuple<SpanningTreeNeighbor, EdgeCost> const & spanningTreeNeighborWithCost);
+EdgeCost getEdgeSetCost(NeighborSolution const & spanningTreeNeighborWithCost);
 
 }  // namespace TabuSearchUtils
 

@@ -48,6 +48,8 @@ public:
 
 	//************************************ CONSTRUCTOR & DESTRUCTOR ************************************//
 
+	VertexIF(VertexIF * vertex);
+
 	VertexIF(VertexIdx vertexIdx, Visibility const visibility);
 
 	VertexIF(VertexIdx vertexIdx);
@@ -68,7 +70,8 @@ public:
 	 */
 	void addOutputEdge(EdgeIF * outputEdge);
 
-	EdgeIF * findInputEdge(VertexIdx const vertexId, bool searchOutputIfNoResult);
+	EdgeIF * findInputEdge(VertexIdx const vertexId,
+			bool searchOutputIfNoResult);
 
 	EdgeIF * findInputEdge(VertexIdx const vertexId);
 
@@ -76,7 +79,8 @@ public:
 
 	EdgeIF * findInputEdge(VertexIF * vertex);
 
-	EdgeIF * findOutputEdge(VertexIdx const vertexId, bool searchInputIfNoResult);
+	EdgeIF * findOutputEdge(VertexIdx const vertexId,
+			bool searchInputIfNoResult);
 
 	EdgeIF * findOutputEdge(VertexIdx const vertexId);
 

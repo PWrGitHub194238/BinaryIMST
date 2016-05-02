@@ -7,12 +7,280 @@
 
 const char* logDictionary[] = {
 
-	//*********************************** LP_MSTSolverIF.cpp ***********************************//
+	//*********************************** CPLEX_LP_AIMSTSolver.cpp ***********************************//
 	//**************** Trace ****************//
-	// LPMSTIF_INIT
+	//**************** Debug ****************//
+	//**************** Info *****************//
+	// AIMST_THREAD_RUN
+	"Running Incremental Minimum Spanning Tree solver on thread %ThreadId%.",
+	// AIMST_THREAD_END
+	"Incremental Minimum Spanning Tree solver on thread %ThreadId% has found a solution.",
+	// AIMST_RESOLVE_INIT
+	"Solver for adversarial version of Incremental Minimum Spanning Tree will find the best scenario for adversary among %ScenarioCount% scenarios given.",
+	// AIMST_RESOLVE_RUN_THREAD
+	"Running Incremental Minimum Spanning Tree solver on thread %ThreadId% with given adversarial scenario:\n%s.",
+	// AIMST_RESOLVE_JOIN
+	"Awaits for every thread to be joined into main thread...",
+	// AIMST_RESOLVE_JOINED
+	"Incremental Minimum Spanning Tree instances for all %ScenarioCount% adversarial scenarios have been solved.",
+	// AIMST_RESOLVE_THREAD_SOL
+	"Solution given by thread %ThreadId%:\n%s\nhas total cost: %EdgeCost%.",
+	// AIMST_RESOLVE_THREAD_BETTER_SOL
+	"Solution given by thread %ThreadId% has better (bigger) cost that previously selected solution:\n\told solution's cost:\t:\t%EdgeCost%,\n\tnew solution's cost\t:\t%EdgeCost%.",
+	// AIMST_RESOLVE_THREAD_SOLUTION
+	"From solutions for %ScenarioCount% adversarial scenarios, solution for following scenario:\n%s\nwas selected. Given solution has following edges:\n%s\nand total cost: %EdgeCost%.",
+
+	//**************** Warn *****************//
+	// AIMST_RESOLVE_NO_SCENARIO
+	"No adversarial scenarios have been given. Solution for Minimum Spanning Tree will be returned.",
+
+	//**************** Error ****************//
+	//**************** Fatal ****************//
+
+	//*********************************** CPLEX_LP_IMSTSolverIF.cpp ***********************************//
+	//**************** Trace ****************//
+	// CPLPIMSTIF_INIT
+	"Linear model for graph:\n%s\nwill be constructed for Incremental Minimum Spanning Tree problem.",
+	//**************** Debug ****************//
+	//**************** Info *****************//
+	// CPLPIMSTIF_IF_FORCE_NEW_BASE_MST
+	"Changing base set of edges from original set:\n%s\nwith total edge cost: %EdgeCost%\nto new set:\n%s\nwith total edge cost: %EdgeCost%.",
+	// CPLPIMSTIF_IF_BASE_MST_NOT_CHANGED
+	"No new base edge set was used. Running Incremental MST Solver on previous solution:\n%s\nwith total edge costs: %EdgeCost%.",
+	// CPLPIMSTIF_BUILD_EDGE_SET
+	"Solution given by CPLEX will be transformed into set of edges.",
+	// CPLPIMSTIF_BUILD_EDGE_SET_ADD
+	"Adding following edge to solution set:\n%s.",
+	// CPLPIMSTIF_SOLUTION
+	"CPLEX optimization package has found given solution for IMST problem:\n%s\nwith total cost: %EdgeCost%.",
+	// CPLPIMSTIF_IF_CHANGE_EDGE_COST
+	"Edge cost change request. Changing edge cost as shown below:\n%s.",
+	// CPLPIMSTIF_IF_CHANGE_EDGE_NOT_REQUIRED
+	"There is no need to update cost of the following edge:\n%s.",
+
+	//**************** Warn *****************//
+	//**************** Error ****************//
+	// CPLPIMSTIF_SOLVER_ERROR
+	"Concert exception caught: %s.",
+	//**************** Fatal ****************//
+
+	//*********************************** CPLEX_LP_IMSTSolver_v2.cpp ***********************************//
+	//**************** Trace ****************//
+	//**************** Debug ****************//
+	//**************** Info *****************//
+	// CPLPIMST2_BUILD_MODEL
+	"Building model for LP version of Incremental Minimum Spanning Tree problem.",
+	// CPLPIMST2_BUILD_MODEL_FLOW_CONSTRAINTS
+	"Generating flow constraints.",
+	// CPLPIMST2_BUILD_MODEL_FLOW_SRC_CONSTRAINT
+	"Generating flow constraint for source node with ID: %VertexIdx%.",
+	// CPLPIMST2_BUILD_MODEL_FLOW_CONSTRAINT
+	"Generating flow constraint for node with ID: %VertexIdx%.",
+	// CPLPIMST2_BUILD_MODEL_FLOW_CONSTRAINT_ADD_OUT
+	"Output flow variable f_{%VertexIdx%,%VertexIdx%} (%s) was added to constraint expression.",
+	// CPLPIMST2_BUILD_MODEL_FLOW_CONSTRAINT_ADD_IN
+	"Input flow variable f_{%VertexIdx%,%VertexIdx%} (%s) was added to constraint expression.",
+	// CPLPIMST2_BUILD_MODEL_FLOW_BOUNDS_CONSTRAINTS
+	"Generating flow bounds constraints.",
+	// CPLPIMST2_BUILD_MODEL_FLOW_BOUNDS_CONSTRAINT
+	"Constraint that limits upper value of flow variable: f_{%VertexIdx%,%VertexIdx%} <= %VertexCount% * y_{%VertexIdx%,%VertexIdx%} (%s <= %VertexCount% * %s) has been added.",
+	// CPLPIMST2_BUILD_MODEL_IMST_CONSTRAINT
+	"Generating constraint for IMST with only %EdgeCount% edges to be selected.",
+	// CPLPIMST2_BUILD_MODEL_INC_CONSTRTAINT
+	"Generating additional constraints for incremental problem.",
+	// CPLPIMST2_BUILD_MODEL_ADD_VAR_CONSTRAINT_1
+	"Generating constraint for adding vertex and edge:\n%s\nwhich is a part of old solution: z^{+}_{%VertexIdx%,%VertexIdx%}\t<=\t1 - x_{%VertexIdx%,%VertexIdx%} (%s <= 1 - 1).",
+	// CPLPIMST2_BUILD_MODEL_ADD_VAR_CONSTRAINT_0
+	"Generating constraint for adding vertex and edge:\n%s\nwhich is a not part of old solution:\n\tz^{+}_{%VertexIdx%,%VertexIdx%}\t<=\t1\t-\tx_{%VertexIdx%,%VertexIdx%}\t(%s <= 1 - 0).",
+	// CPLPIMST2_BUILD_MODEL_DROP_VAR_CONSTRAINT_1
+	"Generating constraint for dropping vertex and edge:\n%s\nwhich is a part of old solution:\n\tz^{-}_{%VertexIdx%,%VertexIdx%}\t<=\tx_{%VertexIdx%,%VertexIdx%}\t(%s <= 1).",
+	// CPLPIMST2_BUILD_MODEL_DROP_VAR_CONSTRAINT_0
+	"Generating constraint for dropping vertex and edge:\n%s\nwhich is a not part of old solution:\n\tz^{-}_{%VertexIdx%,%VertexIdx%}\t<=\tx_{%VertexIdx%,%VertexIdx%}\t(%s <= 0).",
+	// CPLPIMST2_BUILD_MODEL_SOLUTION_VAR_CONSTRAINT
+	"Bounding solution variable to incremental variables:\n\ty_{%VertexIdx%,%VertexIdx%}\t=\tz^{+}_{%VertexIdx%,%VertexIdx%}\t-\tz^{-}_{%VertexIdx%,%VertexIdx%}\t+\tx_{%VertexIdx%,%VertexIdx%}\n\t(%s = %s - %s + %c)",
+	// CPLPIMST2_BUILD_MODEL_GOAL_CONSTRAINT
+	"Generating original solution part of goal constraint.",
+	// CPLPIMST2_BUILD_MODEL_GOAL_ADD
+	"Expression: c_{%VertexIdx%,%VertexIdx%} * x_{%VertexIdx%,%VertexIdx%} (%EdgeCost% * %c) was added to goal function.",
+	// CPLPIMST2_BUILD_MODEL_GOAL_INCR_CONSTRAINT
+	"Generating new solution part of goal constraint.",
+	// CPLPIMST2_BUILD_MODEL_GOAL_INCR_ADD
+	"Expression: c_{%VertexIdx%,%VertexIdx%} * ( z^{+}_{%VertexIdx%,%VertexIdx%} - z^{-}_{%VertexIdx%,%VertexIdx%} ) (%EdgeCost% * ( %s - %s)) was added to goal function.",
+	// CPLPIMST2_SOLVE_INIT
+	"Generated model was extracted, trying to resolve given IMST problem.",
+	// CPLPIMST2_SOLUTION_FOUND
+	"Solution for Incremental Minimum Spanning Tree problem was found and it is %s solution. Total cost of selected edges is: %EdgeCost%.",
+	// CPLPIMST2_SOL_VAR_VALUE_OLD
+	"Following variable for generated solution: y_{%VertexIdx%,%VertexIdx%} has value:\n\tz^{+}_{%VertexIdx%,%VertexIdx%} - z^{-}_{%VertexIdx%,%VertexIdx%} + x_{%VertexIdx%,%VertexIdx%} = %d - %d + %d = %d.\nThis solution represents the old edge configuration.%s",
+	// CPLPIMST2_SOL_VAR_VALUE_ADDED
+	"Following variable for generated solution: y_{%VertexIdx%,%VertexIdx%} has value:\n\tz^{+}_{%VertexIdx%,%VertexIdx%} - z^{-}_{%VertexIdx%,%VertexIdx%} + x_{%VertexIdx%,%VertexIdx%} = %d - %d + %d = %d.\nThat means that to the solution of IMST  the following edge was added:\n%s.",
+	// CPLPIMST2_SOL_VAR_VALUE_DROPPED
+	"Following variable for generated solution: y_{%VertexIdx%,%VertexIdx%} has value:\n\tz^{+}_{%VertexIdx%,%VertexIdx%} - z^{-}_{%VertexIdx%,%VertexIdx%} + x_{%VertexIdx%,%VertexIdx%} = %d - %d + %d = %d.\nThat means that the following edge was removed from previous solution:\n%s.",
+	// CPLPIMST2_EDGE_VAR_GEN
+	"Generating %EdgeCount% CPLEX variables of type: %s.",
+	// CPLPIMST2_EDGE_VAR_ADD
+	"Adding new variable that represents given edge:\n%s.\nVariable description: y_{%VertexIdx%,%VertexIdx%}\t=\t%s.",
+	// CPLPIMST2_EDGE_ADD_DROP_VAR_GEN
+	"Generating support variables that indicates if particular edge was inserted or dropped from original solution. %EdgeCount% variables of type: %s will be created.",
+	// CPLPIMST2_EDGE_ADD_VAR_ADD
+	"Adding new variable that represents given edge added to incremental new solution:\n%s.\nVariable description: z^{+}_{%VertexIdx%,%VertexIdx%}\t=\t%s.",
+	// CPLPIMST2_EDGE_DROP_VAR_ADD
+	"Adding new variable that represents given edge dropped from incremental new solution:\n%s.\nVariable description: z^{-}_{%VertexIdx%,%VertexIdx%}\t=\t%s.",
+	// CPLPIMST2_FLOW_GEN
+	"Generating flow variables.",
+	// CPLPIMST2_FLOW_GEN_INIT_NODE
+	"Flow variables for model will be generated with vertex with ID: %VertexIdx% as source node.",
+	// CPLPIMST2_FLOW_GEN_VAR
+	"Flow variable f_{%VertexIdx%,%VertexIdx%} was added to model. New variable is defined as: %s.",
+
+	//**************** Warn *****************//
+	// CPLPIMST2_SOLVE_NO_SOLUTION
+	"No feasible solution for given model was found.",
+
+	//**************** Error ****************//
+	//**************** Fatal ****************//
+
+	//*********************************** CPLEX_LP_MSTSolverIF.cpp ***********************************//
+	//**************** Trace ****************//
+	// CPLPMSTIF_INIT
 	"Linear model for graph:\n%s\nwill be constructed for Minimum Spanning Tree problem.",
 	//**************** Debug ****************//
 	//**************** Info *****************//
+	// CPLPMSTIF_BUILD_EDGE_SET
+	"Solution given by CPLEX will be transformed into set of edges.",
+	// CPLPMSTIF_BUILD_EDGE_SET_ADD
+	"Adding following edge to solution set:\n%s.",
+	// CPLPMSTIF_BUILD_RAW_SET
+	"Solution given by CPLEX will be transformed into raw set of boolean values.",
+	// CPLPMSTIF_SOLUTION
+	"CPLEX optimization package has found given solution for MST problem:\n%s\nwith total cost: %EdgeCost%.",
+
+	//**************** Warn *****************//
+	//**************** Error ****************//
+	// CPLPMSTIF_SOLVER_ERROR
+	"Concert exception caught: %s.",
+	//**************** Fatal ****************//
+
+	//*********************************** CPLEX_LP_MSTSolver_v2.cpp ***********************************//
+	//**************** Trace ****************//
+	//**************** Debug ****************//
+	//**************** Info *****************//
+	// CPLPMST2_BUILD_MODEL
+	"Building model for LP version of Minimum Spanning Tree problem.",
+	// CPLPMST2_BUILD_MODEL_FLOW_CONSTRAINTS
+	"Generating flow constraints.",
+	// CPLPMST2_BUILD_MODEL_FLOW_SRC_CONSTRAINT
+	"Generating flow constraint for source node with ID: %VertexIdx%.",
+	// CPLPMST2_BUILD_MODEL_FLOW_CONSTRAINT
+	"Generating flow constraint for node with ID: %VertexIdx%.",
+	// CPLPMST2_BUILD_MODEL_FLOW_CONSTRAINT_ADD_OUT
+	"Output flow variable f_{%VertexIdx%,%VertexIdx%} (%s) was added to constraint expression.",
+	// CPLPMST2_BUILD_MODEL_FLOW_CONSTRAINT_ADD_IN
+	"Input flow variable f_{%VertexIdx%,%VertexIdx%} (%s) was added to constraint expression.",
+	// CPLPMST2_BUILD_MODEL_FLOW_BOUNDS_CONSTRAINTS
+	"Generating flow bounds constraints.",
+	// CPLPMST2_BUILD_MODEL_FLOW_BOUNDS_CONSTRAINT
+	"Constraint that limits upper value of flow variable: f_{%VertexIdx%,%VertexIdx%} <= %VertexCount% * y_{%VertexIdx%,%VertexIdx%} (%s <= %VertexCount% * %s) has been added.",
+	// CPLPMST2_BUILD_MODEL_MST_CONSTRAINT
+	"Generating constraint for MST with only %EdgeCount% edges to be selected.",
+	// CPLPMST2_BUILD_MODEL_GOAL_CONSTRAINT
+	"Generating goal constraint.",
+	// CPLPMST2_BUILD_MODEL_GOAL_ADD
+	"Expression: c_{%VertexIdx%,%VertexIdx%} * y_{%VertexIdx%,%VertexIdx%} (%EdgeCost% * %s) was added to goal function.",
+	// CPLPMST2_SOLVE_INIT
+	"Generated model was extracted, trying to resolve given MST problem.",
+	// CPLPMST2_SOLUTION_FOUND
+	"Solution for Minimum Spanning Tree problem was found and it is %s solution. Total cost of selected edges is: %EdgeCost%.",
+	// CPLPMST2_EDGE_VAR_GEN
+	"Generating %EdgeCount% CPLEX variables of type: %s.",
+	// CPLPMST2_EDGE_VAR_ADD
+	"Adding new variable that represents given edge:\n%s.\nVariable description: y_{%VertexIdx%,%VertexIdx%}\t=\t%s.",
+	// CPLPMST2_FLOW_GEN
+	"Generating flow variables.",
+	// CPLPMST2_FLOW_GEN_INIT_NODE
+	"Flow variables for model will be generated with vertex with ID: %VertexIdx% as source node.",
+	// CPLPMST2_FLOW_GEN_VAR
+	"Flow variable f_{%VertexIdx%,%VertexIdx%} was added to model. New variable is defined as: %s.",
+
+	//**************** Warn *****************//
+	//CPLPMST2_SOLVE_NO_SOLUTION,
+	"No feasible solution for given model was found.",
+
+	//**************** Error ****************//
+	//**************** Fatal ****************//
+
+	//*********************************** CPLEX_LP_MSTSolver_v3.cpp ***********************************//
+	//**************** Trace ****************//
+	//**************** Debug ****************//
+	//**************** Info *****************//
+	// CPLPMST3_BUILD_MODEL
+	"Building model for LP version of Minimum Spanning Tree problem.",
+	// CPLPMST3_BUILD_MODEL_MOVES_SRC
+	"Generating flow constraints for source vertex with ID: %VertexIdx%.",
+	// CPLPMST3_BUILD_MODEL_MOVES_SRC1
+	"Generating flow constraint for source vertex and commodity (target vertex) with ID: %VertexIdx%.",
+	// CPLPMST3_BUILD_MODEL_MOVES_OUT_TO_SRC
+	"Input source variable (from node with ID: %VertexIdx% to source vertex) for given commodity was added to constraint. Variable is defined as:\n\tf^{k}_{%VertexIdx%,%VertexIdx%}\t=\t%s.",
+	// CPLPMST3_BUILD_MODEL_MOVES_FROM_SRC_OUT
+	"Output source variable (from source node to vertex with ID: %VertexIdx%) for given commodity was added to constraint. Variable is defined as:\n\tf^{k}_{%VertexIdx%,%VertexIdx%}\t=\t%s.",
+	// CPLPMST3_BUILD_MODEL_PASS_MOVES
+	"Generating transit constraints for nodes that are either receptor nor acceptor for given commodity.",
+	// CPLPMST3_BUILD_MODEL_PASS_MOVES1
+	"Generating transit constraint for commodity (target node) with ID: %VertexIdx%.",
+	// CPLPMST3_BUILD_MODEL_PASS_IN_NODE
+	"Generating transit constraint for node with ID: %VertexIdx% which is neither source node (with ID: %VertexIdx%) nor target vertex (ID: %VertexIdx%).",
+	// CPLPMST3_BUILD_MODEL_PASS_IN_TO_NODE
+	"Input transit variable (from node with ID: %VertexIdx% to vertex with ID: %VertexIdx%) for given commodity was added to constraint. Variable is defined as:\n\tf^{k}_{%VertexIdx%,%VertexIdx%}\t=\t%s.",
+	// CPLPMST3_BUILD_MODEL_PASS_FROM_NODE_OUT
+	"Output transit variable (from node with ID: %VertexIdx% to vertex with ID: %VertexIdx%) for given commodity was added to constraint. Variable is defined as:\n\tf^{k}_{%VertexIdx%,%VertexIdx%}\t=\t%s.",
+	// CPLPMST3_BUILD_MODEL_STORE
+	"Generating store constraints for commodities.",
+	// CPLPMST3_BUILD_MODEL_STORE1
+	"Generating store constraint for commodity (target vertex) with ID: %VertexIdx%.",
+	// CPLPMST3_BUILD_MODEL_STORE_TO_NODE
+	"Input store variable (from node with ID: %VertexIdx% to target vertex with ID: %VertexIdx%) was added to store constraint for commodity %VertexIdx%. Variable is defined as:\n\tf^{%VertexIdx%}_{%VertexIdx%,%VertexIdx%}\t=\t%s.",
+	// CPLPMST3_BUILD_MODEL_STORE_FROM_NODE
+	"Output store variable (from node with ID: %VertexIdx% to target vertex with ID: %VertexIdx%) was added to store constraint for commodity %VertexIdx%. Variable is defined as:\n\tf^{%VertexIdx%}_{%VertexIdx%,%VertexIdx%}\t=\t%s.",
+	// CPLPMST3_BUILD_MODEL_FLOW_CONSTRAINTS
+	"Generating constraints for solution in form of: f^{k}_{ij} <= y_{ij}.",
+	// CPLPMST3_BUILD_MODEL_FLOW_CONSTRAINTS1
+	"Generating flow constraint:\n\tf^{%VertexIdx%}_{%VertexIdx%,%VertexIdx%}\t<=\ty_{%VertexIdx%,%VertexIdx%} (%s\t<=\t%s).",
+	// CPLPMST3_BUILD_MODEL_MST_CONSTRAINT
+	"Generating constraint for MST with only %EdgeCount% edges to be selected.",
+	// CPLPMST3_BUILD_MODEL_GOAL_CONSTRAINT
+	"Generating goal constraint.",
+	// CPLPMST3_BUILD_MODEL_GOAL_ADD
+	"Expression: c_{%VertexIdx%,%VertexIdx%} * ( y_{%VertexIdx%,%VertexIdx%} + y_{%VertexIdx%,%VertexIdx%} ) (%EdgeCost% * ( %s + %s)) was added to goal function.",
+	// CPLPMST3_SOLVE_INIT
+	"Generated model was extracted, trying to resolve given MST problem.",
+	// CPLPMST3_SOLUTION_FOUND
+	"Solution for Minimum Spanning Tree problem was found and it is %s solution. Total cost of selected edges is: %EdgeCost%.",
+	// CPLPIMST3_EDGE_VAR_GEN
+	"Generating %EdgeCount% CPLEX variables of type: %s.",
+	// CPLPIMST3_EDGE_VAR_ADD
+	"Adding new variable that represents given edge:\n%s.\nVariable description: y_{%VertexIdx%,%VertexIdx%}\t=\t%s.",
+	// CPLPMST3_FLOW_GEN
+	"Generating flow variables.",
+	// CPLPMST3_FLOW_GEN_INIT_NODE
+	"Flow variables for model will be generated with vertex with ID: %VertexIdx% as source node.",
+	// CPLPMST3_FLOW_GEN_COMMODITY
+	"Generating %EdgeCount% flow variables for commodity (target vertex) with ID: %VertexIdx%.",
+	// CPLPMST3_FLOW_GEN_COMMODITY_VAR
+	"Flow variable f^{%VertexIdx%}_{%VertexIdx%,%VertexIdx%} was added to model. New variable is defined as: %s.",
+
+	//**************** Warn *****************//
+	// CPLPMST3_SOLVE_NO_SOLUTION
+	"No feasible solution for given model was found.",
+
+	//**************** Error ****************//
+	//**************** Fatal ****************//
+
+	//*********************************** CPLEXUtils.cpp ***********************************//
+	//**************** Trace ****************//
+	//**************** Debug ****************//
+	//**************** Info *****************//
+	// CPU_EDGESET_TO_RAW
+	"Generating solution binary vector based on given edge set:\n%s.",
 
 	//**************** Warn *****************//
 	//**************** Error ****************//
@@ -337,12 +605,16 @@ const char* logDictionary[] = {
 	"Performing search for minimal index 'j' such that:\n\tλ_{LB}\t<=\tλ(%LambdaIdx%,j),\n\tλ_{LB}\t=\t%LambdaValue%.",
 	// BS_V1_SEARCHING_MIN_EDGE_IDX_LAMBDA
 	"Search for minimal index 'j'...\n\t(%LambdaValue%\t<=\tλ(%LambdaIdx%,%LambdaIdx%)\t=\t%LambdaValue%)",
+	// BS_V1_NO_FOUND_MIN_EDGE_IDX_LAMBDA
+	"Minimal index 'j' such that:\n\tλ_{LB}\t<=\tλ(%LambdaIdx%,j),\n\tλ_{LB}\t=\t%LambdaValue%\nwas not found and out of bounds index will be returned: %LambdaIdx%.",
 	// BS_V1_FOUND_MIN_EDGE_IDX_LAMBDA
 	"Minimal index 'j' such that:\n\tλ_{LB}\t<=\tλ(%LambdaIdx%,j),\n\tλ_{LB}\t=\t%LambdaValue%\nhas been found and it equals %LambdaIdx%.",
 	// BS_V1_FIND_MAX_EDGE_IDX_LAMBDA
 	"Performing search for maximal index 'j' such that:\n\tλ(%LambdaIdx%,j)\t<=\tλ_{UB},\n\tλ_{UB}\t=\t%LambdaValue%.",
 	// BS_V1_SEARCHING_MAX_EDGE_IDX_LAMBDA
 	"Search for maximal index 'j'...\n\t(%LambdaValue%\t=\tλ(%LambdaIdx%,%LambdaIdx%)\t<=\t%LambdaValue%)",
+	// BS_V1_NO_FOUND_MAX_EDGE_IDX_LAMBDA
+	"Maximal index 'j' such that:\n\tλ(%LambdaIdx%,j)\t<=\tλ_{UB},\n\tλ_{UB}\t=\t%LambdaValue%\nwas not found and min value of index will be returned: %LambdaIdx%.",
 	// BS_V1_FOUND_MAX_EDGE_IDX_LAMBDA
 	"Maximal index 'j' such that:\n\tλ(%LambdaIdx%,j)\t<=\tλ_{UB},\n\tλ_{UB}\t=\t%LambdaValue%\nhas been found and it equals %LambdaIdx%.",
 	// BS_V1_IMST_BIN_SEARCH_GEN_LAMBDA_SET
@@ -383,7 +655,7 @@ const char* logDictionary[] = {
 	// BS_V1_UNBOUNDED_SOLVE
 	"There are some changes it costs of graph's edges. New unbounded solution will be calculated for k parameter value: %EdgeCount%.",
 	// BS_V1_UNBOUNDED_OPTIMAL
-	"Unbounded solution that was found has got less or equal number of edges that are not in base solution than %EdgeCount% so it is an optimal solution (with total cost of edges: %Edgecost%). Solution includes following edges:\n%s\nin which there are edges that are not in base edge set:\n%s.",
+	"Unbounded solution that was found has got less or equal number of edges that are not in base solution than %EdgeCount%\nso it is an optimal solution (with total cost of edges: %EdgeCost%). Solution includes following edges:\n%s\nin which there are edges that are not in base edge set:\n%s.",
 	// BS_V1_UNBOUNDED_UNACCEPTABLE
 	"Unbounded solution that was found has got unacceptable number of edges that are not in base solution. Looking for 1-bounded optimal solution for Incremental MST problem...",
 	// BS_V1_NO_CHANGE
@@ -398,10 +670,10 @@ const char* logDictionary[] = {
 	"Using median value of λ parameter (%LambdaValue%) from generated set of %LambdaCount% feasible λ values to calculate new MST starting point.",
 	// BS_V1_IMST_BIN_SEARCH_SOLUTION
 	"For median λ parameter value %LambdaValue% an optimal solution has been found (with total cost of edges: %EdgeCost%). Solution includes following edges:\n%s\nin which there are %EdgeCount% edges that are not in base edge set:\n%s.",
-	// BS_V1_IMST_BIN_SEARCH_TO_BIGGER
-	"For median λ parameter value %LambdaValue% a feasible solution has been found (with total cost of edges: %EdgeCost%). Solution includes following edges:\n%s\nin which there are %EdgeCount% edges that are not in base edge set:\n%s. The number of these edges is too small for an optimal solution (should be %EdgeCount%). λ lower bound will be increased (from %LambdaValue% to %LambdaValue%).",
+	// BS_V1_IMST_BIN_SEARCH_TO_BIGGER_LAMBDA
+	"For median λ parameter value %LambdaValue% a feasible solution has been found (with total cost of edges: %EdgeCost%). Solution includes following edges:\n%s\nin which there are %EdgeCount% edges that are not in base edge set:\n%s.\nThe number of these edges is too big for an optimal solution (should be %EdgeCount%). λ lower bound will be increased (from %LambdaValue% to %LambdaValue%).",
 	// BS_V1_IMST_BIN_SEARCH_TO_LOWER
-	"For median λ parameter value %LambdaValue% a feasible solution has been found (with total cost of edges: %EdgeCost%). Solution includes following edges:\n%s\nin which there are %EdgeCount% edges that are not in base edge set:\n%s. The number of these edges is too big for an optimal solution (should be %EdgeCount%). λ upper bound will be decreased (from %LambdaValue% to %LambdaValue%).",
+	"For median λ parameter value %LambdaValue% a feasible solution has been found (with total cost of edges: %EdgeCost%). Solution includes following edges:\n%s\nin which there are %EdgeCount% edges that are not in base edge set:\n%s.\nThe number of these edges is too small for an optimal solution (should be %EdgeCount%). λ upper bound will be decreased (from %LambdaValue% to %LambdaValue%).",
 
 	//**************** Warn *****************//
 	// BS_V1_MST_BIN_SEARCH_PART_SOLUTION
@@ -473,13 +745,30 @@ const char* logDictionary[] = {
 	"Generating new neighbor edge set by removing edge with ID: %EdgeIdx% and adding edge with ID: %EdgeIdx% results in better cost value. New edge set:\n%s\nhas cost: %EdgeCost% (old solution has cost: %s).",
 	// TS_FIND_NEIGHBORHOOD_END
 	"All neighborhoods for original set of edges:\n%s\n was checked with following edge set:\n%s\nas the best neighborhood solution with cost: %EdgeCost%.",
-	// TS_UPDATE_TABU
-	"Updating tabu list...",
 	// TS_FIND_NEIGHBORHOOD_ADD_TABU_DROP
 	"Updating tabu list. New element that prohibits removing edge with ID: %EdgeIdx% from edge set for next %TabuIterationCount% iterations was added.",
 	// TS_FIND_NEIGHBORHOOD_ADD_TABU_ADD
 	"Updating tabu list. New element that prohibits adding new edge with ID: %EdgeIdx% to edge set for next %TabuIterationCount% iterations was added.",
-
+	// TS_UPDATE_TABU
+	"Updating tabu list...",
+	// TS_RESOLVE_CHECK_STOP
+	"Checking if next iteration of Tabu Search should be run (current iteration: %TabuIterationCount% / %TabuIterationCount%).",
+	// TS_RESOLVE_INIT
+	"Initialization of Tabu Search algorithm with given graph:\n%s.",
+	// TS_RESOLVE_INIT_RANDOM
+	"Initial random spanning tree for Tabu Search was generated and it looks like follows:\n%s.\nTotal cost of this random tree is: %EdgeCost%.",
+	// TS_RESOLVE_INIT_SOL
+	"Initial solution for robust optimization problem was generated. Following set was generated:\n%s.\nThe worst cost of adversarial subproblem was achieved with scenario:\n%s.\nFor this set of costs, value of solution of adversarial problem is: %EdgeCost%.\nCost of base solution for that set of edges is: %EdgeCost%, %EdgeCost% in total.",
+	// TS_RESOLVE_NEIGHBOR_SOL
+	"New neighbor solution was selected from neighborhood:\n%s.\nTotal cost of this solution is: %EdgeCost% (best found value so far is: %EdgeCost%).",
+	// TS_RESOLVE_STATE
+	"Tabu search state:\n\tcurrent iteration\t\t:\t%TabuIterationCount%,\n\titerations for path\t\t:\t%TabuIterationCount%,\n\toverall iterations allowed\t:\t%TabuIterationCount%.",
+	// TS_RESOLVE_BETTER
+	"Better solution has been found:\n%s.\nCost of this solution is %EdgeCost% (was %EdgeCost%).",
+	// TS_RESOLVE_RESTART
+	"Tabu search had made %TabuIterationCount% iterations out of %TabuIterationCount% on the same path. Cost of the best solution found is: %EdgeCost%.\nTabu Search will be restarted with given new initial solution, generated by Adversarial Inc. MST solver:\n%s.\nThe worst value was found for scenario:\n%s.\nCost of this solution is: %EdgeCost%. Cost of base solution for this edge set is: %EdgeCost%.\nOverall cost of new solution is: %EdgeCost%.",
+	// TS_RESOLVE_END
+	"Tabu search ends. Given solution was found:\n%s\nwith total cost: %EdgeCost%.",
 	//**************** Warn *****************//
 
 	//**************** Error ****************//

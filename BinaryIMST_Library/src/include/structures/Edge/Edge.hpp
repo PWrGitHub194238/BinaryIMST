@@ -39,6 +39,8 @@ public:
 
 	//************************************ CONSTRUCTOR & DESTRUCTOR ************************************//
 
+	Edge(EdgeIF * edge);
+
 	Edge(EdgeIdx const edgeIdx, VertexPair const & edgeConnections,
 			EdgeCost const edgeCost, EdgeConnectionType connectionType,
 			Visibility visibility);

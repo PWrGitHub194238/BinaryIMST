@@ -11,6 +11,7 @@
 #include <map>
 #include <vector>
 
+#include "../../enums/Connectivity.hpp"
 #include "../../enums/Visibility.hpp"
 #include "../../typedefs/primitive.hpp"
 #include "../EdgeIF.hpp"
@@ -44,10 +45,22 @@ private:
 	bool hasNext(std::vector<EdgeIF*>::const_iterator & iterator,
 			Visibility const visibility);
 
+	bool hasNext(std::vector<EdgeIF*>::const_iterator & iterator,
+			Connectivity const connectivity);
+
+	bool hasNext(std::vector<EdgeIF*>::const_iterator & iterator,
+			Connectivity const connectivity, Visibility const visibility);
+
 	bool hasPrevious(std::vector<EdgeIF*>::const_iterator & iterator);
 
 	bool hasPrevious(std::vector<EdgeIF*>::const_iterator & iterator,
 			Visibility const visibility);
+
+	bool hasPrevious(std::vector<EdgeIF*>::const_iterator & iterator,
+			Connectivity const connectivity);
+
+	bool hasPrevious(std::vector<EdgeIF*>::const_iterator & iterator,
+			Connectivity const connectivity, Visibility const visibility);
 
 	EdgeIF * next(std::vector<EdgeIF*>::const_iterator & iterator);
 
@@ -76,9 +89,11 @@ public:
 
 	//************************************ CONSTRUCTOR & DESTRUCTOR ************************************//
 
+	EdgeArray();
+
 	EdgeArray(EdgeSetIF * edgeArray);
 
-	EdgeArray();
+	EdgeArray(EdgeSetIF * edgeArray, bool deepCopy);
 
 	EdgeArray(EdgeCount numberOfEdges);
 
@@ -91,8 +106,6 @@ public:
 	void pop_back();
 
 	void remove(EdgeIF * const & edge);
-
-	EdgeIF * getElementAt(EdgeIdx const edgeIdx);
 
 	EdgeCount size() const;
 
@@ -112,6 +125,15 @@ public:
 
 	bool hasNext(IteratorId const iteratorId, Visibility const visibility);
 
+	bool hasNext(Connectivity const connectivity);
+
+	bool hasNext(IteratorId const iteratorId, Connectivity const connectivity);
+
+	bool hasNext(Connectivity const connectivity, Visibility const visibility);
+
+	bool hasNext(IteratorId const iteratorId, Connectivity const connectivity,
+			Visibility const visibility);
+
 	bool hasPrevious();
 
 	bool hasPrevious(IteratorId const iteratorId);
@@ -119,6 +141,17 @@ public:
 	bool hasPrevious(Visibility const visibility);
 
 	bool hasPrevious(IteratorId const iteratorId, Visibility const visibility);
+
+	bool hasPrevious(Connectivity const connectivity);
+
+	bool hasPrevious(IteratorId const iteratorId,
+			Connectivity const connectivity);
+
+	bool hasPrevious(Connectivity const connectivity,
+			Visibility const visibility);
+
+	bool hasPrevious(IteratorId const iteratorId,
+			Connectivity const connectivity, Visibility const visibility);
 
 	EdgeIF * next();
 

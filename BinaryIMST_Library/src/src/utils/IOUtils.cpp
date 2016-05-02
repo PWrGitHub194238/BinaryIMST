@@ -50,9 +50,8 @@
 #include "../../include/utils/GraphVizUtils.hpp"
 #include "../../include/utils/StringUtils.hpp"
 
-namespace IOExceptions {
-class InvalidArcWrite;
-} /* namespace IOExceptions */
+#include "../../include/exp/IOExceptions.hpp"
+
 
 class EdgeSetIF;
 class VertexSetIF;

@@ -38,6 +38,10 @@ const static log4cxx::LoggerPtr logger(
 
 //************************************ CONSTRUCTOR & DESTRUCTOR ************************************//
 
+VertexIF::VertexIF(VertexIF * vertex) :
+		VertexIF::VertexIF(vertex->getVertexIdx(), vertex->getVisibility()) {
+}
+
 VertexIF::VertexIF(VertexIdx vertexIdx, Visibility const visibility) {
 	this->vertexIdx = vertexIdx;
 	this->visibility = visibility;

@@ -36,6 +36,10 @@ public:
 
 	//************************************ CONSTRUCTOR & DESTRUCTOR ************************************//
 
+	Vertex(VertexIF* vertex);
+
+	Vertex(VertexIdx vertexIdx, Visibility visibility);
+
 	Vertex(VertexIdx vertexIdx);
 
 	virtual ~Vertex();

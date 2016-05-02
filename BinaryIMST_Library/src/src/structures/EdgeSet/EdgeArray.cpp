@@ -18,6 +18,7 @@
 #include "../../../include/exp/LogicExceptions.hpp"
 #include "../../../include/log/bundle/Bundle.hpp"
 #include "../../../include/log/utils/LogUtils.hpp"
+#include "../../../include/structures/EdgeInclude.hpp"
 
 const static log4cxx::LoggerPtr logger(
 		log4cxx::Logger::getLogger("structures.EdgeArray"));
@@ -54,6 +55,28 @@ bool EdgeArray::hasNext(std::vector<EdgeIF*>::const_iterator & iterator,
 	return hasNext(iterator);
 }
 
+bool EdgeArray::hasNext(std::vector<EdgeIF*>::const_iterator & iterator,
+		Connectivity const connectivity) {
+	while (hasNext(iterator)
+			&& (connectivity != Connectivity::BOTH
+					&& !current(iterator)->isInState(connectivity))) {
+		next(iterator);
+	}
+	return hasNext(iterator);
+}
+
+bool EdgeArray::hasNext(std::vector<EdgeIF*>::const_iterator & iterator,
+		Connectivity const connectivity, Visibility const visibility) {
+	while (hasNext(iterator)
+			&& (((connectivity != Connectivity::BOTH
+					&& !current(iterator)->isInState(connectivity)))
+					|| (visibility != Visibility::BOTH
+							&& current(iterator)->getVisibility() != visibility))) {
+		next(iterator);
+	}
+	return hasNext(iterator);
+}
+
 bool EdgeArray::hasPrevious(std::vector<EdgeIF*>::const_iterator & iterator) {
 	return iterator != this->edgeIteratorBegin;
 }
@@ -63,6 +86,28 @@ bool EdgeArray::hasPrevious(std::vector<EdgeIF*>::const_iterator & iterator,
 	while (hasPrevious(iterator)
 			&& (visibility != Visibility::BOTH
 					&& current(iterator)->getVisibility() != visibility)) {
+		previous(iterator);
+	}
+	return hasPrevious(iterator);
+}
+
+bool EdgeArray::hasPrevious(std::vector<EdgeIF*>::const_iterator & iterator,
+		Connectivity const connectivity) {
+	while (hasPrevious(iterator)
+			&& (connectivity != Connectivity::BOTH
+					&& !current(iterator)->isInState(connectivity))) {
+		previous(iterator);
+	}
+	return hasPrevious(iterator);
+}
+
+bool EdgeArray::hasPrevious(std::vector<EdgeIF*>::const_iterator & iterator,
+		Connectivity const connectivity, Visibility const visibility) {
+	while (hasPrevious(iterator)
+			&& (((connectivity != Connectivity::BOTH
+					&& !current(iterator)->isInState(connectivity)))
+					|| (visibility != Visibility::BOTH
+							&& current(iterator)->getVisibility() != visibility))) {
 		previous(iterator);
 	}
 	return hasPrevious(iterator);
@@ -129,17 +174,23 @@ void EdgeArray::createIteratorIfNotExists(IteratorId const iteratorId) {
 
 //************************************ CONSTRUCTOR & DESTRUCTOR ************************************//
 
+EdgeArray::EdgeArray() :
+		EdgeSetIF() {
+}
+
 EdgeArray::EdgeArray(EdgeSetIF * edgeArray) :
+		EdgeArray(edgeArray, true) {
+}
+
+EdgeArray::EdgeArray(EdgeSetIF * edgeArray, bool deepCopy) :
 		EdgeSetIF(edgeArray) {
 	this->edges.reserve(numberOfEdges);
 	edgeArray->begin();
 	while (edgeArray->hasNext()) {
-		this->edges.push_back(edgeArray->next());
+		this->edges.push_back(
+				deepCopy ?
+						new EdgeImpl { edgeArray->next() } : edgeArray->next());
 	}
-}
-
-EdgeArray::EdgeArray() :
-		EdgeSetIF() {
 }
 
 EdgeArray::EdgeArray(EdgeCount numberOfEdges) :
@@ -206,6 +257,25 @@ bool EdgeArray::hasNext(IteratorId const iteratorId,
 	return hasNext(iteratorMap.at(iteratorId), visibility);
 }
 
+bool EdgeArray::hasNext(Connectivity const connectivity) {
+	return hasNext(this->edgeIterator, connectivity);
+}
+
+bool EdgeArray::hasNext(IteratorId const iteratorId,
+		Connectivity const connectivity) {
+	return hasNext(iteratorMap.at(iteratorId), connectivity);
+}
+
+bool EdgeArray::hasNext(Connectivity const connectivity,
+		Visibility const visibility) {
+	return hasNext(this->edgeIterator, connectivity, visibility);
+}
+
+bool EdgeArray::hasNext(IteratorId const iteratorId,
+		Connectivity const connectivity, Visibility const visibility) {
+	return hasNext(iteratorMap.at(iteratorId), connectivity, visibility);
+}
+
 bool EdgeArray::hasPrevious() {
 	return hasPrevious(this->edgeIterator);
 }
@@ -221,6 +291,25 @@ bool EdgeArray::hasPrevious(Visibility const visibility) {
 bool EdgeArray::hasPrevious(IteratorId const iteratorId,
 		Visibility const visibility) {
 	return hasPrevious(iteratorMap.at(iteratorId), visibility);
+}
+
+bool EdgeArray::hasPrevious(Connectivity const connectivity) {
+	return hasPrevious(this->edgeIterator, connectivity);
+}
+
+bool EdgeArray::hasPrevious(IteratorId const iteratorId,
+		Connectivity const connectivity) {
+	return hasPrevious(iteratorMap.at(iteratorId), connectivity);
+}
+
+bool EdgeArray::hasPrevious(Connectivity const connectivity,
+		Visibility const visibility) {
+	return hasPrevious(this->edgeIterator, connectivity, visibility);
+}
+
+bool EdgeArray::hasPrevious(IteratorId const iteratorId,
+		Connectivity const connectivity, Visibility const visibility) {
+	return hasPrevious(iteratorMap.at(iteratorId), connectivity, visibility);
 }
 
 EdgeIF * EdgeArray::next() {
